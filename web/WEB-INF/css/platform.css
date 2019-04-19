@@ -1,0 +1,1407 @@
+a{
+	cursor: pointer;
+}
+
+/*主页的导航栏部分*/
+
+
+.write-block :hover{
+	color: #fff;
+}
+
+.write-btn{
+	padding-top: 5px;
+	width: 100px;
+    height: 40px;
+    line-height: 24px;
+    border-radius: 20px;
+    font-size: 15px;
+    color: #fff;
+    background-color: #ea6f5a;
+}
+
+.dropdown-menu i{
+	color: #ea6f5a ;
+}
+
+
+/*主页中的推荐文章部分*/
+.note-list{
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.note-list .title {
+	color: #000000;
+    margin: -7px 0 4px;
+    display: inherit;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.5;
+}
+
+.note-list .title:visited {
+    color: #969696;
+}
+
+.note-list .abstract {
+    margin: 0 0 8px;
+    font-size: 13px;
+    line-height: 24px;
+    color: #999;
+}
+
+.note-list li{
+	position: relative;
+	width: 100%;
+	margin: 0 0 15px;
+	padding: 15px 2px 20px 0;
+	border-bottom: 1px solid #F0F0F0;
+	color: #b4b4b4;
+}
+
+
+.note-list li .have-img{
+	min-height: 140px;
+}
+
+.note-list .wrap-img{
+	width: 150px;
+	height: 100px;
+	position: absolute;
+	top: 15%;
+	right: 0;
+}
+
+.note-list .have-img .wrap-img img {
+    width: 100%;
+    height: 100%;
+    border-radius: 4px;
+    border: 1px solid #f0f0f0;
+}
+
+
+.note-list .have-img .content {
+    padding-right: 165px;
+}
+
+.note-list .meta {
+    padding-right: 0!important;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 20px;
+}
+
+.note-list .meta span{
+    margin-right: 10px;
+}
+
+.note-list .meta a{
+	color: #b4b4b4;
+	text-decoration: none;
+    margin-right: 10px;
+}
+.note-list .meta a:hover{
+    color: #787878;
+}
+
+
+/*推荐作者,广告部分*/
+.recommend .advertise a{
+	position: relative;
+    border-radius: 4px;
+    display: block;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 160px;
+    width: 100%;
+    margin-bottom: 20px;
+    overflow: hidden;
+    background-color: RGB(241, 243, 244);
+}
+.recommend .advertise .ad{
+	position: absolute;
+    bottom: 0;
+    right: 0;
+    color: #fff;
+    background-color: #000;
+    padding: 0 5px;
+    font-size: 12px;
+    line-height: 20px;
+    opacity: 0.7;
+}
+
+.recommended-authors{
+	margin-bottom: 20px;
+    padding-top: 0;
+    font-size: 13px;
+}
+
+.recommended-authors .title {
+    text-align: left;
+}
+
+.recommended-authors .title span {
+    font-size: 14px;
+    color: #969696;
+}
+
+.recommended-authors .title .page-change {
+    float: right;
+    display: inline;
+    font-size: 14px;
+    color: #969696;
+}
+
+
+
+/*footer部分*/
+footer .main{
+	font-size: 13px;
+    color: #969696;
+}
+
+footer .main a {
+	text-decoration: none;
+    color: #969696;
+}
+
+footer .main .icp, footer .main .icp a , footer .main .icp p{
+    font-size: 12px;
+    color: #c8c8c8;
+    margin-bottom: 0;
+    padding-bottom: 3px;
+}
+
+/*个人主页部分*/
+.main-top{
+	margin-bottom: 20px;
+}
+
+.main-top a{
+	text-decoration: none;
+	color: #333;
+}
+
+.main-top .avatar{
+	float: left;
+    width: 80px;
+    height: 80px;
+    margin-left: -2px;
+}
+
+.avatar img {
+    width: 100%;
+    height: 100%;
+    border: 1px solid #ddd;
+    border-radius: 50%;
+}
+
+.main-top .title {
+    padding: 5px 0 0 100px;
+}
+
+.main-top .title .name {
+    display: inline;
+    font-size: 21px;
+    font-weight: 700;
+    vertical-align: middle;
+}
+
+.main-top .info {
+    margin-top: 5px;
+    padding-left: 100px;
+    font-size: 14px;
+}
+
+.main-top .info ul {
+    font-size: 0;
+    padding-left: 0;
+}
+
+.main-top .info ul li {
+    display: inline-block;
+    line-height: 20px;
+}
+
+.main-top .info ul .meta-block {
+    font-size: 12px;
+    margin: 0 7px 6px 0;
+    padding: 0 7px 0 0;
+    border-right: 1px solid #f0f0f0;
+}
+
+.main-top .info ul a, .main-top .info ul div {
+    color: #969696;
+}
+
+.main-top .info ul p {
+	margin: 0 0 10px;
+    margin-bottom: -3px;
+    font-size: 15px;
+    color: #333;
+}
+
+
+.trigger-menu {
+    margin-bottom: 20px;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 0;
+    list-style: none;
+    padding-left: 0px;
+}
+
+.trigger-menu a {
+	text-decoration: none;
+    padding: 13px 20px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #969696;
+    line-height: 25px;
+}
+
+.trigger-menu li {
+    position: relative;
+    display: inline-block;
+    padding: 8px 0;
+    margin-bottom: -1px;
+    line-height: 20px;
+}
+
+.trigger-menu li.active {
+    border-bottom: 2px solid #646464;
+}
+
+
+.trigger-menu li:after{
+	content:"";
+	position:absolute;
+	left:50%;
+	bottom:-2px;
+	width:100%;
+	opacity:0;
+	border-bottom:2px solid #646464;
+	-webkit-transform:translate(-50%) scaleX(0);
+	transform:translate(-50%) scaleX(0);
+	transition:.2s ease-in-out;
+}
+.trigger-menu li:hover:after{
+	opacity:1;
+	-webkit-transform:translate(-50%) scaleX(1);
+	transform:translate(-50%) scaleX(1);
+	transition:.2s ease-in-out;
+}
+
+
+
+.trigger-menu i {
+    margin-right: 5px;
+    font-size: 17px;
+}
+
+.trigger-menu .active a, .trigger-menu a:hover {
+    color: #646464;
+}
+
+
+
+.note-list .author a {
+    color: #333;
+    text-decoration: none;
+}
+
+.note-list .author {
+    margin-bottom: 14px;
+    font-size: 13px;
+}
+
+.avatar {
+    width: 24px;
+    height: 24px;
+    display: block;
+    cursor: pointer;
+}
+
+.note-list .author .avatar, .note-list .author .info {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.note-list .author .avatar {
+    margin: 0 5px 0 0;
+}
+
+
+.aside .title {
+    float: left;
+    margin-bottom: 10px;
+    font-size: 14px;
+    color: #969696;
+}
+
+.aside .function-btn {
+    float: right;
+    font-size: 13px;
+    color: #969696;
+    text-decoration: none;
+}
+
+.aside .function-btn:hover {
+    color: #2f2f2f;
+}
+
+.aside .description {
+    position: relative;
+    margin-bottom: 16px;
+    padding: 0 0 16px;
+    text-align: left;
+    font-size: 0;
+    border-bottom: 1px solid #f0f0f0;
+    clear: both;
+    word-break: break-word!important;
+}
+
+.aside .description .js-intro {
+    margin-bottom: 10px;
+    line-height: 20px;
+    font-size: 14px;
+}
+.aside ul{
+    padding-left: 0;
+}
+.aside .list {
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    list-style: none;
+    border-bottom: 1px solid #f0f0f0;
+    clear: both;
+}
+
+.aside .list li {
+	line-height: 20px;
+    margin-bottom: 10px;
+}
+.aside .list a {
+	text-decoration: none;
+    font-size: 14px;
+    color: #333;
+    line-height: 30px;
+}
+.aside .list span {
+    vertical-align: middle;
+}
+.aside .list i {
+    margin-right: 10px;
+    font-size: 20px;
+    vertical-align: middle;
+}
+
+.aside .profile-edit{
+	/*display:none;*/
+	margin-bottom:20px;
+}
+
+.aside .profile-edit textarea{
+	margin-bottom:5px;
+	width:100%;
+	height:125px;
+	padding:5px 10px;
+	font-size:14px;
+	background-color:hsla(0,0%,71%,.1);
+	border:1px solid #c8c8c8;
+	order-radius:4px;
+	resize:none;
+	outline:none;
+}
+.aside .profile-edit .btn-hollow{
+	padding:5px 20px;
+	font-size:14px
+}
+	
+.aside .profile-edit a{
+	text-decoration: none;
+	margin-left:10px;
+	font-size:14px;
+	color:#969696;
+	line-height:34px;
+	vertical-align:middle
+}
+
+.aside .profile-edit a:hover{
+	color:#2f2f2f;
+}
+
+
+
+.note-list .comment {
+	color: #333333;
+    font-size: 15px;
+    line-height: 1.7;
+}
+
+.note-list .single-line {
+    display: inline;
+    margin-bottom: 5px;
+    font-size: 12px;
+    color: #969696;
+}
+
+.note-list .single-line a{
+	color: #333333;
+	margin-right: 5px;
+	text-decoration: none;
+}
+
+
+
+.note-list .follow-detail {
+    padding: 20px;
+    background-color: hsla(0,0%,71%,.1);
+    border: 1px solid #e1e1e1;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+.note-list .follow-detail .avatar{
+    float: left;
+    margin-right: 10px;
+    width: 48px;
+    height: 48px;
+}
+
+.following {
+    border-radius: 40px;
+    color: #8c8c8c;
+    font-size: 16px;
+    font-weight: 400;
+    border: 1px solid hsla(0,0%,59%,.6);
+    background: none;
+    float: right;
+    margin-top: 4px;
+    padding: 8px 0;
+    width: 100px;
+}
+
+.note-list .follow-detail .info .title {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 400;
+}
+
+.note-list .follow-detail .info p {
+    margin-bottom: 0;
+    color: #969696;
+}
+
+.note-list .follow-detail .signature {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #e1e1e1;
+    color: #969696;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}	
+
+.user-list {
+    list-style: none;
+    clear: both;
+    padding-left: 0;
+}
+
+.user-list li{
+	padding-bottom: 20px;
+	margin-bottom: 20px;
+	border-bottom: 1px solid #F0F0F0;
+}
+
+.user-list .name{
+	text-decoration: none;
+	font-size: 15px;
+	font-weight: 700;
+	color: #333333;
+}
+
+.user-list .avatar{
+    width: 52px;
+    height: 52px;
+    margin-right: 8px;
+    vertical-align: middle;
+    display: inline-block;
+}
+
+.user-list .info {
+    vertical-align: middle;
+    display: inline-block;
+    max-width: 450px;
+}
+
+.user-list .meta {
+    padding-top: 2px;
+    font-size: 12px;
+    color: #969696;
+}
+
+.user-list .meta span {
+    margin-right: 10px;
+    padding-right: 10px;
+    border-right: 1px solid #969696;
+}
+
+
+
+/*文章部分*/
+.note{
+	position: relative;
+	padding-top: 10px;
+}
+
+.note .post{
+	margin: 0px auto;
+	padding-top: 20px;
+	padding-bottom: 40px;
+	width: 620px;
+}
+
+.note .post .article .title {
+    word-break: break-word!important;
+    word-break: break-all;
+    margin: 20px 0 0;
+    font-family: -apple-system,SF UI Display,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei,WenQuanYi Micro Hei,sans-serif;
+    font-size: 34px;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.note .post .article .author {
+    margin: 30px 0 40px;
+}
+
+.note .post .article .author .avatar {
+    width: 48px;
+    height: 48px;
+    vertical-align: middle;
+    display: inline-block;
+}
+
+.note .post .article .author .info {
+    vertical-align: middle;
+    display: inline-block;
+    margin-left: 8px;
+}
+
+.note .post .article .author .info span a{
+	text-decoration: none;
+	color: #333333;
+}
+
+.note .post .article .author .name {
+    margin-right: 3px;
+    font-size: 16px;
+    vertical-align: middle;
+}
+
+.note .post .article .follow{
+    padding: 0 7px 0 5px;
+    font-size: 12px;
+    border-color: #42c02e;
+    margin-left: 10px;
+}
+
+.note .post .article .author .meta{
+    margin-top: 5px;
+    font-size: 12px;
+    color: #969696;
+}
+
+/*文本部分*/
+.note .post .article .show-content {
+    color: #2f2f2f;
+    word-break: break-word!important;
+    word-break: break-all;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.7;
+}
+
+.note .post .article .show-content blockquote {
+    padding: 20px;
+    margin-bottom: 25px;
+    background-color: #f7f7f7;
+    border-left: 6px solid #b4b4b4;
+    word-break: break-word!important;
+    word-break: break-all;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 30px;
+}
+
+.note .post .article .show-content p {
+    margin: 0 0 25px;
+}
+
+.note .post .article .show-content .image-container{
+	padding-bottom: 20px;
+	max-width: 700px;
+    /*max-height: 457px;*/
+    width: 700px;
+    position: relative;
+    margin-left: -25px;
+}
+.note .post .article .show-content .image-container img {
+    margin: 10px -15px;
+    vertical-align: middle;
+    max-width: 700px;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+/*文章下面部分以及右侧部分*/
+.show-foot{
+	margin-top: 20px;
+	font-size: 12px;
+	color: #c8c8c8;
+	margin-bottom: 40px;
+}
+
+.show-foot .notebook{
+	float: left;
+}
+
+.show-foot .copyright{
+	float:right;
+}
+
+
+.meta-bottom{
+	margin-top: 70px;
+	margin-bottom: 80px;
+	padding-bottom: 30px;
+}
+
+.meta-bottom a{
+	text-decoration: none;
+}
+
+.meta-bottom .like-group{
+	float: left;
+	font-size: 19px;
+	border: 1px solid #EA6F5A;
+    border-radius: 40px
+}
+
+.meta-bottom .like-group a{
+	padding: 13px 0 15px 0;
+	color: #EA6F5A;
+}
+
+.meta-bottom .like-group .like{
+	padding: 10px 10px 10px 20px;
+	float: left;
+}
+.meta-bottom .like-group .like-wrap{
+	display: inline-block;
+	padding: 10px 20px 10px 10px;
+}
+.meta-bottom .like-group .like span{
+	padding-right: 10px;
+    border-right: 1px solid rgba(236, 97, 73, 0.4);
+}
+
+.meta-bottom .like-group:hover{
+    background-color: rgba(236, 97, 73, 0.05);
+}
+
+.meta-bottom .share-group{
+	/*margin-bottom: 50px;*/
+	margin-top: 6px;
+	float: right;
+}
+
+.meta-bottom .share-group .share-circle  {
+    width: 50px;
+    height: 50px;
+    margin-left: 5px;
+    text-align: center;
+    border: 1px solid #dcdcdc;
+    border-radius: 50%;
+    vertical-align: middle;
+    display: inline-block;
+    position: relative;
+}
+.meta-bottom .share-group .more-share  {
+    width: auto;
+    padding: 4px 18px;
+    font-size: 14px;
+    color: #9b9b9b;
+    line-height: 40px;
+    border-radius: 50px;
+}
+
+.meta-bottom .share-group .share-circle i {
+    margin-top: 10px;
+    font-size: 24px;
+    line-height: 2;
+}
+
+.side-tool{
+	position: fixed;
+    bottom: 40px;
+    right: 40px;
+}
+
+.side-tool a{
+	font-size: 20px;
+	color: #5E5E5E;
+	text-decoration: none;
+	width: 50px;
+	height: 50px;
+	text-align: center;
+	display: block;
+}
+.side-tool i{
+	padding-top: 16px;
+    font-size: 20px;
+    display: block;
+}
+
+.side-tool ul{
+	padding-left: 0;
+	list-style: none;
+}
+
+.side-tool ul li{
+	border-bottom: none;
+    background-color: #fff;
+	border: 1px solid #dcdcdc;
+}
+
+.side-tool ul li:hover{
+    background-color: hsla(0,0%,71%,.1);
+    transition: .1s ease-in;
+}
+
+
+/*文章部分右侧图片*/
+.fixed-ad-container {
+    position: fixed;
+    top: 80px;
+    right: 50%;
+    margin-right: -560px;
+    width: 180px;
+}
+
+.fixed-ad-container .web-note-ad-fixed{
+	display: block;
+    width: 100%;
+    height: 260px;
+    background-image: url(../img/jianshu-ad.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: 50%;
+    margin-bottom: 15px;
+}
+
+.web-note-ad-fixed span {
+    /*float: right;*/
+    /*padding-right: 10px;*/
+   
+   /*上面或下面写法均可*/
+   
+    font-size: 26px;
+    font-weight: 200;
+    width: 20px;
+    height: 20px;
+    right: 10px;
+    top: 0;
+    color: #;
+    color: #999999 ;
+    position: absolute;
+}
+
+.web-note-ad-fixed a{
+	text-decoration: none;
+}
+
+
+.web-note-ad-fixed span:hover{
+	color: #333;
+}
+
+
+/*评论部分*/
+
+
+.note .post .comment-list {
+	padding-top: 20px;
+    margin-top: 20px;
+}
+
+.note .post .comment-list .new-comment{
+    position: relative;
+    margin-left: 48px;
+}
+
+.note .post .comment-list .new-comment .avatar {
+    position: absolute;
+    left: -48px;
+    margin-right: 5px;
+    width: 38px;
+    height: 38px;
+    vertical-align: middle;
+    display: inline-block;
+}
+.note .post .comment-list form {
+    margin: 0 0 20px;
+}
+
+.note .post .comment-list .new-comment textarea {
+    padding: 10px 15px;
+    width: 100%;
+    height: 80px;
+    font-size: 13px;
+    border: 1px solid #dcdcdc;
+    border-radius: 4px;
+    background-color: hsla(0,0%,71%,.1);
+    resize: none;
+    display: inline-block;
+    vertical-align: top;
+    outline-style: none;
+}
+
+.write-function-block{
+	height: 50px;
+}
+
+.note .post .comment-list .new-comment .hint {
+    float: left;
+    margin: 20px 0 0 20px;
+    font-size: 13px;
+    color: #969696;
+}
+
+.note .post .comment-list .new-comment .btn-send {
+    float: right;
+    width: 78px;
+    margin: 10px 0;
+    padding: 8px 18px;
+    font-size: 16px;
+    border: none;
+    border-radius: 20px;
+    color: #fff!important;
+    background-color: #42c02e;
+    cursor: pointer;
+    outline: none;
+    display: block;
+}
+
+.note .post .comment-list .new-comment .cancel {
+	text-decoration: none;
+    float: right;
+    margin: 18px 30px 0 0;
+    font-size: 16px;
+    color: #969696;
+}
+
+/*评论回复区*/
+
+.comment-list a{
+	text-decoration: none;
+}
+
+.note .post .comment-list .normal-comment-list{
+	margin-top:30px;
+}
+
+.note .post .comment-list .normal-comment-list .top-title{
+	padding-bottom: 20px;
+	border-bottom: 1px solid #f0f0f0;
+	font-size: 17px;
+	font-weight: 700;
+}
+.note .post .comment-list .normal-comment-list .top-title .pull-right{
+	float: right !important;
+}
+
+.note .post .comment-list .normal-comment-list .top-title .pull-right a {
+    margin-left: 10px;
+    font-size: 12px;
+    font-weight: 400;
+    color: #969696;
+    display: inline-block;
+}
+
+.note .post .comment-list .normal-comment-list .top-title .pull-right .active{
+	color: #2f2f2f;
+}
+
+
+/*评论内容部分*/
+.note .post .comment-list .comment {
+    padding: 20px 0 30px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.note .post .comment-list .author {
+    margin-bottom: 15px;
+}
+
+.note .post .comment-list .avatar {
+    margin-right: 5px;
+    width: 38px;
+    height: 38px;
+    vertical-align: middle;
+    display: inline-block;
+}
+
+.note .post .comment-list .info {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.note .post .comment-list .name {
+    font-size: 15px;
+    color: #333;
+}
+
+.note .post .comment-list .meta {
+    font-size: 12px;
+    color: #969696;
+}
+
+.note .post .comment-list .comment p {
+    font-size: 16px;
+    margin: 10px 0;
+    line-height: 1.5;
+    word-break: break-word!important;
+}
+
+.note .post .comment-list .tool-group a {
+	font-size: 14px;
+    margin-right: 15px;
+    color: #969696;
+    display: inline-block;
+}
+
+.note .post .comment-list .tool-group a:hover {
+	color: #333333;
+}
+
+.note .post .comment-list .sub-comment-list {
+    margin-top: 20px;
+    padding: 5px 0 5px 20px;
+    border-left: 2px solid #d9d9d9;
+}
+
+.note .post .comment-list .sub-comment-list p {
+    margin: 0 0 5px;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.note .post .comment-list .sub-comment-list p a {
+    color: #3194d0;
+}
+.note .post .comment-list .sub-tool-group {
+    font-size: 12px;
+    color: #969696;
+}
+.note .post .comment-list .sub-tool-group a {
+    margin-left: 10px;
+    color: #969696;
+}
+.note .post .comment-list .sub-tool-group a i {
+    margin-right: 5px;
+    font-size: 14px;
+    /*vertical-align: middle;*/
+}
+
+.note .post .comment-list .sub-comment {
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px dashed #f0f0f0;
+}
+
+.note .post .comment-list .more-comment a{
+    font-size: 14px;
+    color: #969696;
+    border: none;
+}
+
+/*举报*/
+.note .post .comment-list .sub-comment-list .report {
+    float: right;
+    margin: 1px 0 0 10px;
+    display: none;
+}
+
+
+/*登陆注册部分*/
+.sign {
+    height: 100%;
+    min-height: 750px;
+    text-align: center;
+    font-size: 14px;
+    background-color: #f1f1f1;
+}
+
+.sign a{
+	text-decoration: none;
+}
+
+.sign .logo {
+    position: absolute;
+    top: 56px;
+    margin-left: 50px;
+}
+
+.sign .main {
+    width: 400px;
+    margin: 60px auto 0;
+    padding: 50px 50px 30px;
+    background-color: #fff;
+    border-radius: 4px;
+    box-shadow: 0 0 8px rgba(0,0,0,.1);
+    vertical-align: middle;
+    display: inline-block;
+}
+
+.sign .reset-title, .sign .title {
+    margin: 0 auto 50px;
+    padding: 10px;
+    font-weight: 400;
+    color: #969696;
+}
+
+.sign .title a {
+    padding: 10px;
+    color: #969696;
+}
+.sign .title b {
+    padding: 10px;
+}
+
+.sign .title .active {
+    font-weight: 700;
+    color: #ea6f5a;
+    border-bottom: 2px solid #ea6f5a;
+}
+
+.sign .title a:hover {
+    border-bottom: 2px solid #ea6f5a;
+}
+
+.sign form {
+    margin-bottom: 30px;
+}
+
+.sign form .input-prepend {
+    position: relative;
+    width: 100%;
+}
+.sign form .input-prepend input{
+	width: 100%;
+    height: 50px;
+    padding: 4px 12px 4px 35px;
+    border: 1px solid #c8c8c8;
+    background-color: hsla(0,0%,71%,.1);
+    vertical-align: middle;
+}
+
+.sign form .restyle{
+    margin-bottom: 0;
+	border-bottom:none;
+	border-radius:4px 4px 0 0;
+}
+
+
+.sign form .style{
+    border-radius: 0 0 4px 4px;
+}
+
+
+.sign form .input-prepend i {
+    position: absolute;
+    top: 14px;
+    left: 10px;
+    font-size: 18px;
+    color: #969696;
+}
+
+.sign .remember-btn {
+    float: left;
+    margin: 15px 0;
+}
+
+.sign .forget-btn {
+	position: relative;
+    float: right;
+    margin: 15px 0;
+}
+
+.sign .forget-btn a{
+	color: #999999;
+}
+
+.sign .forget-btn a:hover{
+	color: #333333;
+}
+
+
+.sign .forget-btn .dropdown-menu {
+    top: 20px;
+    left: auto;
+    right: 0;
+    border-radius: 4px;
+}
+
+.sign .forget-btn .dropdown-menu a {
+    padding: 10px 20px;
+    color: #333;
+}
+
+
+
+.sign .sign-in-button, .sign .sign-up-button {
+    margin-top: 20px;
+    width: 100%;
+    padding: 9px 18px;
+    font-size: 18px;
+    border: none;
+    border-radius: 25px;
+    color: #fff;
+    background: #42c02e;
+    cursor: pointer;
+    outline: none;
+    display: block;
+    clear: both;
+}
+
+.sign .sign-in-button {
+    background: #3194d0;
+}
+
+.sign .more-sign {
+    margin-top: 50px;
+}
+
+.sign .more-sign h6 {
+    position: relative;
+    margin: 0 0 10px;
+    font-size: 12px;
+    color: #b5b5b5;
+}
+
+.sign .more-sign ul {
+    margin-bottom: 10px;
+    list-style: none;
+    padding-left: 0;
+}
+
+.sign .more-sign ul li {
+	line-height: 20px;
+    margin: 0 5px;
+    display: inline-block;
+}
+
+.sign .more-sign ul a {
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    display: block;
+}
+
+.sign .more-sign ul i {
+    font-size: 28px;
+}
+
+.sign .more-sign ul span {
+	font-size: 20px;
+	font-weight: 900;
+}
+
+
+/*重置密码*/
+.sign .reset-title {
+    color: #333;
+    font-weight: 700;
+}
+
+.sign .btn-in-resend, .sign .btn-up-resend {
+	
+	/*取消button的边框*/
+	border-width: 0px;
+    position: absolute;
+    top: 7px;
+    right: 7px;
+    width: 100px;
+    height: 36px;
+    font-size: 13px;
+    color: #fff;
+    background-color: #42c02e;
+    border-radius: 20px;
+    line-height: 36px;
+}
+
+.sign .btn-in-resend {
+    background-color: #3194d0;
+}
+
+.sign .disable, .sign .disable-gray {
+    opacity: .5;
+    pointer-events: none;
+}
+
+
+.sign .return {
+    margin-left: -8px;
+    color: #969696;
+}
+
+
+
+/*分页*/
+.comment-list .pagination {
+    margin: 20px 0;
+    text-align: center;
+    display: block;
+}
+
+.comment-list .pagination li {
+    margin: 0 5px;
+    display: inline-block;
+}
+
+.comment-list .pagination li a{
+    border-radius: 20px;
+}
+
+.comment-list .pagination li a:hover{
+	background-color: #eee
+}
+
+.comment-list .pagination>li>a {
+    position: relative;
+    float: left;
+    padding: 6px 12px;
+    line-height: 1.42857;
+    text-decoration: none;
+    color: #337ab7;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    margin-left: -1px;
+}
+
+.comment-list .pagination a {
+    font-size: 14px;
+    color: #969696!important;
+}
+
+.comment-list .pagination .active {
+    font-weight: 700;
+    border: none;
+    pointer-events: none;
+}
+
+
+/*帮助页面*/
+.help a{
+	text-decoration: none;
+}
+.help .help-title{
+	color: #333333;
+    position: absolute;
+    left: 20px;
+    top: 20px;
+    width: 300px;
+    font-size: 30px;
+    color: #ea6f5a;
+    font-family:'YouYuan' ;
+}
+
+.help .container .row{
+	margin-top: 100px;
+}
+
+.help .col-xs-18 {
+    width: 60%;
+}
+
+.help .col-xs-offset-3{
+	margin-left: 25%;
+}
+.help .main{
+	margin-bottom: 60px;
+}
+
+.help  .main table {
+    width: 100%;
+    margin-top: 20px;
+}
+.help .main h3 {
+    margin: 10px 0 20px;
+    font-size: 21px;
+    font-weight: 700;
+    color: #333;
+}
+
+.help .main h6 {
+    margin: 0;
+    padding: 10px 0 0;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.7;
+    color: #333;
+    clear: both;
+}
+
+
+.help .main td {
+    padding: 16px 0;
+    font-size: 15px;
+}
+
+.help .main .setting-input {
+    line-height: 33px;
+    font-size: 15px;
+    color: #969696;
+}
+
+.help .main textarea {
+    width: 100%;
+    height: 100px;
+    margin-bottom: 10px;
+    padding: 10px 15px;
+    font-size: 15px;
+    border: 1px solid #c8c8c8;
+    border-radius: 4px;
+    background-color: hsla(0,0%,71%,.1);
+    display: block;
+    resize: none;
+    outline-style: none;
+}
+
+.help .main table input {
+	width: 100%;
+    padding: 10px 15px;
+    font-size: 15px;
+    border: 1px solid #c8c8c8;
+    border-radius: 4px;
+    background-color: hsla(0,0%,71%,.1);
+}
+
+.help .main p {
+    margin: 0;
+    padding: 10px 0 0;
+    font-size: 12px;
+    color: #969696;
+    clear: both;
+}
+.help .main input.btn-success {
+    padding: 8px 22px;
+    background: #42c02e;
+    border: none;
+}

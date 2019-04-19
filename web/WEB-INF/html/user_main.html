@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	
+		
+	<link rel="stylesheet" href="css/bootstrap.min.css" />
+	<link rel="stylesheet" href="css/font-awesome.min.css" />
+	<link rel="stylesheet" href="css/platform.css" />
+	<script type="text/javascript" src="js/jquery.min.js" ></script>
+	<script type="text/javascript" src="js/bootstrap.min.js" ></script>
+	<body>
+		
+		
+		<!--导航栏部分-->
+		<div class="navbar navbar-default navbar-fixed-top" role="navigation" style="background-color: #FFFFFF; font-size: 20px; ">
+			<div class="navbar-header" style="margin-left: 50px; width: 300px;" >
+				<!--version 1  ： 一个LOGO -->
+				<a href="index.html" class="navbar-brand" style="font-size: 25px; color: #ea6f5a; font-family:'微软雅黑' ;">文章创作交流网站</a>
+			
+			</div>
+			
+			<ul class="nav navbar-nav">
+				<!--<li class="active"><a href="#">hah1</a></li>-->
+				<li><a href="index.html"><i class="icon-home"></i>首页</a></li>
+				<li class="logIn"><a href="user_main.html"><i class="icon-bell-alt"></i>消息</a></li>
+				<li class="logIn"><a href="followFan.html"><i class="icon-file"></i>关注</a></li>	
+			</ul>
+			
+			
+			<form action="#" class="navbar-form navbar-left">
+				
+				<!--version 1-->
+				<!--<div class="form-group">
+					<input type="text" class="form-control" placeholder="搜索" />
+					<button type="submit" class="btn btn-default">搜索</button>
+				</div>-->
+				
+				<!--version 2 搜索框 + icon-->
+				<!--<div class="form-group">
+					<input type="text" class="form-control" placeholder="搜索" />
+					<a href="#"><i class="icon-search"></i></a>
+				</div>-->
+				
+				<!--version 3 搜索框里 包含icon -->
+				<div class="input-group">
+					<input type="text" class="form-control" placeholder="搜索" style="font-size:13px ;background-color: #EEEEEE; border: 0px; border-bottom-left-radius :40px ; border-top-left-radius: 40px;" />
+					<a href="#" class="input-group-addon" style="text-decoration: none; border: 0px; border-bottom-right-radius: 40px; border-top-right-radius: 40px; box-shadow: none;"><i class="icon-search"></i></a>
+				</div>
+			</form>
+			
+			
+			<ul class="nav navbar-nav navbar-right">	
+				<li class="logOut"><a href="register.html">登录</a></li>
+	
+				<li class="dropdown logIn">
+					<a class="dropdown-toggle"  data-toggle="dropdown" style="padding: 5px 15px" >
+						<img src="img/profile.JPG" class="img-circle" width="40px" height="40px">
+						<span class="caret"></span>
+					</a>
+	
+					<ul class="dropdown-menu" style="position: absolute; left: 0px; top: 50px; font-size: 17px;">
+						<li style="padding: 5px 20px 5px 0px;"><a href="user_main.html"><i class="icon-user"></i>我的主页</a></li>
+						<li style="padding: 5px 20px 5px 0px;"><a href="user_main.html"><i class="icon-heart"></i>喜欢的文章</a></li>
+						<li style="padding: 5px 20px 5px 0px;"><a href="help.html"><i class="icon-wrench"></i>帮助与反馈</a></li>
+						<li style="padding: 5px 20px 5px 0px;"><a href="index.html"><i class="icon-signout"></i>退出</a></li>
+					</ul>
+					
+				</li>
+				<!--<li><img src="img/调档函.JPG" class="img-circle" width="40px" height="40px" style="margin-top: 5px;"></li>-->
+				<!--<li><a href="#">123</a></li>-->
+				
+				
+				<!--版本一 ： 直接一个写文章的li-->
+				<!--<li style="margin-right: 80px;"><a href="#"><i class="icon-pencil"></i>写文章</a></li>-->
+				
+				<!--版本二： 拿button封装起来的写文章，且自带红色背景-->
+				<li style="margin-right: 80px;">
+					<a href="#" class="write-block" style="padding-top: 5px; padding-bottom: 5px;">
+						<button class="btn write-btn">
+							<i class="icon-pencil"></i>写文章
+						</button>
+					</a>
+				</li>
+			</ul>
+
+		</div> 
+		
+		
+		<div style="margin-top: 70px;">
+		
+			<div class="container" style="padding-left: 200px; padding-right: 130px;">
+				
+				<div class="row">
+					<div class="col-md-8" >
+						<div class="main-top">
+							<a class="avatar" href="#">
+								<img src="img/profile.JPG" />
+							</a>
+							<div class="title">
+								<a class="name" href="#">OrzcO</a>
+							</div>
+							<div class="info">
+								<ul>
+									<li>
+										<div class="meta-block">
+											<a href="#">
+												<p>1</p>
+												关注&nbsp;<i class="icon-angle-right"></i>
+											</a>
+										</div>
+									</li>
+									
+									<li>
+										<div class="meta-block">
+											<a href="#">
+												<p>2</p>
+												粉丝&nbsp;<i class="icon-angle-right"></i>
+											</a>
+										</div>
+									</li>
+									
+									<li>
+										<div class="meta-block">
+											<a href="#">
+												<p>0</p>
+												文章&nbsp;<i class="icon-angle-right"></i>
+											</a>
+										</div>
+									</li>
+									
+									<li>
+										<div class="meta-block">
+											<a href="#">
+												<p>0</p>
+												字数
+											</a>
+										</div>
+									</li>
+									
+									<li>
+										<div class="meta-block">
+											<p>2</p>
+											收藏喜欢
+										</div>
+									</li>
+								</ul>
+							</div>
+						</div>
+						
+						<div class="outer-container">
+							<ul class="trigger-menu">
+								<li>
+									<a>
+										<i class="icon-file"></i>
+										文章
+									</a>
+								</li>
+								
+								
+								<li class="active">
+									<a>
+										<i class="icon-bell-alt"></i>
+										动态
+									</a>
+								</li>
+								
+								<li>
+									<a>
+										<i class="icon-comments"></i>
+										最新评论
+									</a>
+								</li>
+								
+								<li>
+									<a>
+										<i class="icon-star"></i>
+										热门
+									</a>
+								</li>
+							</ul>
+							
+							<div>
+								<ul class="note-list">
+									
+									<li>
+										<div class="content">
+											<div class="author">
+												<a class="avatar" href="#">
+													<img src="img/调档函.JPG" />
+												</a>
+												<div class="info">
+													<a href="#">OrzcO</a>
+													<em>·</em>
+													<span>赞了评论 · 2019.04.15</span>
+												</div>
+											</div>
+											<p class="comment">
+												写得真好啊👏👏👏👏👏👏👏读起来一把心酸一把泪。我妈也常常跟我讲她小时候的事。
+												她那时十四五岁常常背四五十斤的煤炭从很远的地方回家，晚上和我舅舅就在桔子林里守到八九点，防止别的人偷。
+												<br />
+												我外公喜欢喝酒，从我妈妈的描述里大概也知道也是一个在村子里很威风的人，他是打铁的。
+												也有些大男子主义，但我外婆也不简单，有时他们两个意见不合，我外婆就和他吵起来。
+												<br />
+												外公去世的时候了，家里没钱了，妈妈就没能上初中，而舅舅呢，听说打都打不去的。
+												这也就是那句，有心无命，有命无心了。
+											</p>
+											<blockquote>
+												<div class="single-line">
+													<a href="#">萧萧梅</a>
+													<span>
+														评论自
+														<a href="#">一个土家族80后的家庭简史（1985年——2018年）</a>
+													</span>
+												</div>
+											</blockquote>
+										</div>
+									</li>
+									
+									
+									<li>
+										<div class="content">
+											<div class="author">
+												<a class="avatar" href="#">
+													<img src="img/调档函.JPG" />
+												</a>
+												<div class="info">
+													<a href="#">OrzcO</a>
+													<em>·</em>
+													<span>发表了评论 · 2019.04.15</span>
+												</div>
+											</div>
+											<p class="comment">
+												很受启发，感谢
+											</p>
+											<blockquote>
+												<a class="title" href="#">
+													一个土家族80后的家庭简史（1985年——2018年）
+												</a>
+												<p class="abstract">
+													【 文：李砍柴】 引子 今年四月的时候，母亲给我打电话说，她不在镇上我姐家里住，
+													她回家了。 其实姐姐也是心疼母亲，
+													才接她去镇上，名义上是照看外孙女，其实并没有太多的事。在家里...
+												</p>
+												<div class="meta">
+													<a href="#">李砍柴</a>
+													<span><i class="icon-eye-open"></i>191</span>
+													<a><i class="icon-comment"></i>121</a>
+													<span><i class="icon-heart"></i>101</span>
+												</div>
+											</blockquote>
+										</div>
+									</li>
+									
+									
+									<li>
+										<div class="content">
+											<div class="author">
+												<a class="avatar" href="#">
+													<img src="img/调档函.JPG" />
+												</a>
+												<div class="info">
+													<a href="#">OrzcO</a>
+													<em>·</em>
+													<span>关注了作者 · 2019.04.15 13:15</span>
+												</div>
+											</div>
+											<div class="follow-detail">
+												<div class="info">
+													<a class="avatar">
+														<img src="img/调档函.JPG" />
+													</a>
+													<a class="btn btn-default following">
+														<i class="icon-ok"></i>
+														<span>已关注</span>
+														
+															
+														<!--hover-->
+														<!--<i class="icon-remove"></i>
+														<span>取消关注</span>-->
+														
+													</a>
+													<a class="title">梅拾璎</a>
+													<p>写了 282558 字，被 67166 人关注，获得了 24128 个喜欢</p>
+													<div class="signature">
+														打马跃青山，长河扬其波 。     爱皎月清风，恋人间烟火
+														文章均为原创。版权合作事宜请联系行距文化：pub@hangju-pub.com
+													</div>
+												</div>
+											</div>
+										</div>
+									</li>
+									
+									
+									<li class="have-img">
+										<a href="#" class="wrap-img">
+											<img src="img/调档函.JPG" />
+										</a>
+										<div class="content">
+											<div class="author">
+												<a class="avatar" href="#">
+													<img src="img/调档函.JPG" />
+												</a>
+												<div class="info">
+													<a href="#">OrzcO</a>
+													<span>喜欢了文章 · 2019.04.09 21:46</span>
+												</div>
+											</div>
+											<a class="title" href="#">
+												纳兰词：一往而情深，醉里何知岁月年华？
+											</a>
+											<p class="abstract">
+												1. 人生若只如初见，何事秋风悲画扇？等闲变却故人心，却道故人心易变。——《木兰花·拟古决绝词柬友》 
+												2. 我是人间惆怅客，知君何事泪纵横。断肠声里忆平生。——《浣溪沙》 3...
+											</p>
+											<div class="meta">
+												<a>nickname</a>
+												<span><i class="icon-eye-open"></i>191</span>
+												<a><i class="icon-comment"></i>121</a>
+												<span><i class="icon-heart"></i>101</span>
+											</div>
+										</div>
+									</li>
+									
+									<li class="have-img">
+										<a href="#" class="wrap-img">
+											<img src="img/调档函.JPG" />
+										</a>
+										<div class="content">
+											<div class="author">
+												<a class="avatar" href="#">
+													<img src="img/调档函.JPG" />
+												</a>
+												<div class="info">
+													<a href="#">OrzcO</a>
+													<span>喜欢了文章 · 2019.04.09 21:46</span>
+												</div>
+											</div>
+											<a class="title" href="#">
+												纳兰词：一往而情深，醉里何知岁月年华？
+											</a>
+											<p class="abstract">
+												1. 人生若只如初见，何事秋风悲画扇？等闲变却故人心，却道故人心易变。——《木兰花·拟古决绝词柬友》 
+												2. 我是人间惆怅客，知君何事泪纵横。断肠声里忆平生。——《浣溪沙》 3...
+											</p>
+											<div class="meta">
+												<a>nickname</a>
+												<span><i class="icon-eye-open"></i>191</span>
+												<a><i class="icon-comment"></i>121</a>
+												<span><i class="icon-heart"></i>101</span>
+											</div>
+										</div>
+									</li>
+									
+									
+									<li class="have-img">
+										<a href="#" class="wrap-img">
+											<img src="img/调档函.JPG" />
+										</a>
+										<div class="content">
+											<div class="author">
+												<a class="avatar" href="#">
+													<img src="img/调档函.JPG" />
+												</a>
+												<div class="info">
+													<a href="#">OrzcO</a>
+													<span>喜欢了文章 · 2019.04.09 21:46</span>
+												</div>
+											</div>
+											<a class="title" href="#">
+												纳兰词：一往而情深，醉里何知岁月年华？
+											</a>
+											<p class="abstract">
+												1. 人生若只如初见，何事秋风悲画扇？等闲变却故人心，却道故人心易变。——《木兰花·拟古决绝词柬友》 
+												2. 我是人间惆怅客，知君何事泪纵横。断肠声里忆平生。——《浣溪沙》 3...
+											</p>
+											<div class="meta">
+												<a>nickname</a>
+												<span><i class="icon-eye-open"></i>191</span>
+												<a><i class="icon-comment"></i>121</a>
+												<span><i class="icon-heart"></i>101</span>
+											</div>
+										</div>
+									</li>
+								</ul>
+							</div>
+						
+						</div>
+					</div>
+					
+					
+					
+					<div class="col-md-3 col-md-offset-1 aside">
+						<div class="title">
+							个人介绍
+						</div>
+						<a class="function-btn" href="#">
+							<i class="icon-pencil"></i>&nbsp;编辑
+						</a>
+						<form class="profile-edit">
+							<textarea>=w=</textarea>
+							<input type="submit" value="提交" class="btn btn-hollow" />
+							<a href="#">取消</a>
+						</form>
+						<div class="description">
+							<div class="js-intro">
+								=w=
+							</div>
+						</div>
+						
+						<ul class="list">
+							<li>
+								<a href="#">
+									<i class="icon-heart-empty"></i>
+									<span>我喜欢的文章</span>
+								</a>
+							</li>
+							
+							<li>
+								<a href="#">
+									<i class="icon-heart-empty"></i>
+									<span>我喜欢的文章</span>
+								</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			
+		
+	
+	</div>
+	</body>
+</html>

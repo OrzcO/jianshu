@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		
+		<link rel="stylesheet" href="css/bootstrap.min.css" />
+		<link rel="stylesheet" href="css/font-awesome.min.css" />
+		<link rel="stylesheet" href="css/platform.css" />
+		<script type="text/javascript" src="js/jquery.min.js" ></script>
+		<script type="text/javascript" src="js/bootstrap.min.js" ></script>
+	
+	</head>
+	<body>
+		
+		<!--导航栏部分-->
+		<div class="navbar navbar-default navbar-fixed-top" role="navigation" style="background-color: #FFFFFF; font-size: 20px; ">
+			<div class="navbar-header" style="margin-left: 50px; width: 300px;" >
+				<!--version 1  ： 一个LOGO -->
+				<a href="index.html" class="navbar-brand" style="font-size: 25px; color: #ea6f5a; font-family:'微软雅黑' ;">文章创作交流网站</a>
+			
+			</div>
+			
+			<ul class="nav navbar-nav">
+				<!--<li class="active"><a href="#">hah1</a></li>-->
+				<li><a href="index.html"><i class="icon-home"></i>首页</a></li>
+				<li class="logIn"><a href="user_main.html"><i class="icon-bell-alt"></i>消息</a></li>
+				<li class="logIn"><a href="followFan.html"><i class="icon-file"></i>关注</a></li>	
+			</ul>
+			
+			
+			<form action="#" class="navbar-form navbar-left">
+				
+				<!--version 1-->
+				<!--<div class="form-group">
+					<input type="text" class="form-control" placeholder="搜索" />
+					<button type="submit" class="btn btn-default">搜索</button>
+				</div>-->
+				
+				<!--version 2 搜索框 + icon-->
+				<!--<div class="form-group">
+					<input type="text" class="form-control" placeholder="搜索" />
+					<a href="#"><i class="icon-search"></i></a>
+				</div>-->
+				
+				<!--version 3 搜索框里 包含icon -->
+				<div class="input-group">
+					<input type="text" class="form-control" placeholder="搜索" style="font-size:13px ;background-color: #EEEEEE; border: 0px; border-bottom-left-radius :40px ; border-top-left-radius: 40px;" />
+					<a href="#" class="input-group-addon" style="text-decoration: none; border: 0px; border-bottom-right-radius: 40px; border-top-right-radius: 40px; box-shadow: none;"><i class="icon-search"></i></a>
+				</div>
+			</form>
+			
+			
+			<ul class="nav navbar-nav navbar-right">	
+				<li class="logOut"><a href="register.html">登录</a></li>
+	
+				<li class="dropdown logIn">
+					<a class="dropdown-toggle"  data-toggle="dropdown" style="padding: 5px 15px" >
+						<img src="img/profile.JPG" class="img-circle" width="40px" height="40px">
+						<span class="caret"></span>
+					</a>
+	
+					<ul class="dropdown-menu" style="position: absolute; left: 0px; top: 50px; font-size: 17px;">
+						<li style="padding: 5px 20px 5px 0px;"><a href="user_main.html"><i class="icon-user"></i>我的主页</a></li>
+						<li style="padding: 5px 20px 5px 0px;"><a href="user_main.html"><i class="icon-heart"></i>喜欢的文章</a></li>
+						<li style="padding: 5px 20px 5px 0px;"><a href="help.html"><i class="icon-wrench"></i>帮助与反馈</a></li>
+						<li style="padding: 5px 20px 5px 0px;"><a href="index.html"><i class="icon-signout"></i>退出</a></li>
+					</ul>
+					
+				</li>
+				<!--<li><img src="img/调档函.JPG" class="img-circle" width="40px" height="40px" style="margin-top: 5px;"></li>-->
+				<!--<li><a href="#">123</a></li>-->
+				
+				
+				<!--版本一 ： 直接一个写文章的li-->
+				<!--<li style="margin-right: 80px;"><a href="#"><i class="icon-pencil"></i>写文章</a></li>-->
+				
+				<!--版本二： 拿button封装起来的写文章，且自带红色背景-->
+				<li style="margin-right: 80px;">
+					<a href="#" class="write-block" style="padding-top: 5px; padding-bottom: 5px;">
+						<button class="btn write-btn">
+							<i class="icon-pencil"></i>写文章
+						</button>
+					</a>
+				</li>
+			</ul>
+
+		</div> 
+		
+		<div class="note" style="margin-top: 70px;">
+			
+			<div class="fixed-ad-container">
+				<div style="display: block;">
+					<a class="web-note-ad-fixed" href="#">
+						<span>×</span>
+					</a>
+				</div>
+			</div>
+			
+			<!--文章主题内容的显示-->
+			<div class="post">
+				<!--显示文章主题内容 包括文字、图片、引用-->
+				<div class="article">
+					<h1 class="title">去年9月到今年4月，我记录下了旅途中的这些小惊喜</h1>
+					
+					<!--作者部分-->
+					<div class="author">
+						<a class="avatar">
+							<img src="img/author.jpg" />
+						</a>
+						<div class="info">
+							<span>
+								<a href="#">杨小蟹</a>
+							</span>
+							<a class="btn btn-success follow">
+								<i class="icon-plus"></i>
+								<span>关注</span>
+							</a>
+							<div class="meta">
+								<span>2019.04.11 21:13</span>
+								<span>字数 1568</span>
+								<span>阅读 7872</span>
+								<span>评论 56</span>
+								<span>喜欢 99</span>
+							</div>
+						</div>
+					</div>
+					
+					<!--文章部分-->
+					<div class="show-content">
+						<div class="image-container">
+							<img src="img/photo1.jpg" />
+						</div>
+						<blockquote>
+							<p>
+								<b>
+									回过头来才发现，原来那些当时用心记录下来的画面，都是流逝时光里不可多得的小美好。
+								</b>
+							</p>
+						</blockquote>
+						<p>2019年4月11日  星期四  阴</p>
+						<p>文/杨小蟹</p>
+						<p><br></p>
+						<p>从去年9月到现在，转改有半年多了。</p>
+						<p>细细数来，也走过了很多地方，城市和乡野，古镇和寺庙，大山和湖泊。</p>
+						<p>
+							<b>
+								说走就走的旅行，不是不管不顾不闻不问的去往某一个地方，而是今晚决定了，就妥善处理好工作，再做好攻略，明天一早就启程。
+							</b>
+						</p>
+						<div class="image-container">
+							<img src="img/photo2.jpg" />
+						</div>
+						<p>喜欢在高铁上听着喜欢的歌，看着窗外发呆，想到些什么就记下来。</p>
+						<p>我喜欢走累了，就坐在湖边，听着民谣，静看夕阳西下。</p>
+						<p>喜欢夜里独自在街头游荡，或者去逛夜市，记录下那些各自忙碌的身影。</p>
+						<div class="image-container">
+							<img src="img/photo3.jpg" />
+						</div>
+						<p>也特别喜欢旅途中遇到的那些个萌娃，微笑打个招呼，逗逗乐。</p>
+						<p>为什么喜欢小孩子？</p>
+						<p>
+							<b>
+								因为她们的世界干净，天真童心，思维简单，心灵单纯，相处很舒服很放松。
+							</b>
+						</p>
+						<div class="image-container">
+							<img src="img/photo4.jpg" />
+						</div>
+						<div class="image-container">
+							<img src="img/photo5.jpg" />
+						</div>
+						
+						<p>
+							<b>
+								回过头来才发现，原来那些当时用心记录下来的画面，都是流逝时光里不可多得的小美好。
+							</b>
+						</p>
+						<p>
+							很多东西，转瞬即逝，即使放进记忆里，时间久了也会淡忘。
+						</p>
+						<p>
+							恰好文字和照片可以帮我们记得。
+						</p>
+						<p>
+							做一个用心记录生活的人，将来一定可以转化为某种“财富”。
+						</p>
+					</div>
+				</div>
+				
+				<!--显示文章类型、以及版权问题-->
+				<div class="show-foot">
+					<div class="notebook">
+						<i class="icon-bookmark"></i>
+						<span>旅行、摄影</span>
+					</div>
+					<div class="copyright">
+						© 著作权归作者所有
+					</div>
+				</div>
+			
+				<!--显示喜欢、以及分享部分-->
+				<div class="meta-bottom">
+					<div class="btn like-group">
+						<div class="like">
+							<a>
+								<i class="icon-heart-empty"></i>
+								<span>喜欢</span>
+							</a>
+						</div>
+						<div class="like-wrap">
+							<a>117</a>
+						</div>
+					</div>
+					<div class="share-group">
+						<a class="share-circle">
+							<i class="icon-facebook" style="color: #00bb29;"></i>
+						</a>
+						
+						<a class="share-circle">
+							<i class="icon-twitter" style="color: #e05244;"></i>
+						</a>
+						
+						<a class="share-circle">
+							<i class="icon-linkedin" style="color: #9b9b9b;"></i>
+						</a>
+						
+						<a class="share-circle more-share">
+							更多分享
+						</a>
+					</div>
+				</div>
+			
+				<!--评论部分-->
+				
+				<div class="comment-list">
+					
+					<!--自己写评论部分-->
+					<form class="new-comment">
+						<a class="avatar">
+							<img src="img/profile.jpg" />
+						</a>
+						<textarea placeholder="请写下你的评论"></textarea>
+						
+						<div class="write-function-block">
+							<div class="hint">Enter 发表</div>
+							<a class="btn btn-send">发送</a>
+							<a class="cancel">取消</a>
+						</div>
+					</form>
+					
+					<!--评论列表-->
+					<div class="normal-comment-list">
+						<div class="top-title">
+							<span>79条评论</span>
+							<div class="pull-right">
+								<a class="active">按时间倒序</a>
+								<a>按时间正序</a>
+							</div>
+						</div>
+					</div>
+					
+					<!--评论内容-->
+					
+					<!--未点击回复，没回复的评论-->
+					<div class="comment">
+						<div class="author">
+							<a class="avatar">
+								<img src="img/comment1.jpg" />
+							</a>
+							<div class="info">
+								<a href="#" class="name">喵媛</a>
+								<div class="meta">
+									<span>45楼 · 2019.04.16 16:06</span>
+								</div>
+							</div>
+						</div>
+						<div class="comment-wrap">
+							<p>善于发现小美好的小哥哥</p>
+							<div class="tool-group">
+								<a>
+									<i class="icon-thumbs-up"></i>
+									<span>赞</span>
+								</a>
+								
+								<a>
+									<i class="icon-comment-alt"></i>
+									<span>回复</span>
+								</a>
+							</div>
+						</div>
+					</div>
+					
+					<!--没有回复，点击回复后，多了一个<div class="sub-comment">-->
+					<div class="comment">
+						<div class="author">
+							<a class="avatar">
+								<img src="img/comment1.jpg" />
+							</a>
+							<div class="info">
+								<a href="#" class="name">喵媛</a>
+								<div class="meta">
+									<span>45楼 · 2019.04.16 16:06</span>
+								</div>
+							</div>
+						</div>
+						<div class="comment-wrap">
+							<p>善于发现小美好的小哥哥</p>
+							<div class="tool-group">
+								<a>
+									<i class="icon-thumbs-up"></i>
+									<span>赞</span>
+								</a>
+								
+								<a>
+									<i class="icon-comment-alt"></i>
+									<span>回复</span>
+								</a>
+							</div>
+						</div>
+						
+						<div class="sub-comment-list">
+							<form class="new-comment" style="margin-left: 0;">
+								
+								<textarea placeholder="请写下你的评论"></textarea>
+								
+								<div class="write-function-block">
+									<div class="hint">Enter 发表</div>
+									<a class="btn btn-send">发送</a>
+									<a class="cancel">取消</a>
+								</div>
+							</form>
+						</div>
+					</div>
+					
+					
+					<!--多条评论的回复，点击回复后-->
+					<div class="comment">
+						<div class="author">
+							<a class="avatar">
+								<img src="img/comment2.jpg" />
+							</a>
+							<div class="info">
+								<a href="#" class="name">名言诗句</a>
+								<div class="meta">
+									<span>33楼 · 2019.04.15 17:53</span>
+								</div>
+							</div>
+						</div>
+						<div class="comment-wrap">
+							<p>做一个用心记录生活的人。这个想法很好。点赞！</p>
+							<div class="tool-group">
+								<a>
+									<i class="icon-thumbs-up"></i>
+									<span>赞</span>
+								</a>
+								
+								<a>
+									<i class="icon-comment-alt"></i>
+									<span>回复</span>
+								</a>
+							</div>
+						</div>
+						
+						<!--多出来的部分-->
+						<div class="sub-comment-list">
+							<div class="sub-comment">
+								<p>
+									<a href="#">杨小蟹</a> :
+									<span>
+										<a href="#">@名言诗句</a>
+										 嘿嘿，谢谢啦。我们都可以用心去记录
+									</span>
+								</p>
+								<div class="sub-tool-group">
+									<span>2019.04.16 12:17</span>
+									<a>
+										<i class="icon-comment-alt"></i>
+										<span>回复</span>
+									</a>
+									<a class="report">
+										<span>举报</span>
+									</a>
+								</div>
+							</div>
+							
+							<div class="sub-comment">
+								<p>
+									<a href="#">微风缓缓</a> :
+									<span>
+										<!--<a href="#">@名言诗句</a>-->
+										 回忆的祈祷。好美，舒服的感觉，也安静怡然。
+									</span>
+								</p>
+								<div class="sub-tool-group">
+									<span>2019.04.16 15:59</span>
+									<a>
+										<i class="icon-comment-alt"></i>
+										<span>回复</span>
+									</a>
+									<a class="report">
+										<span>举报</span>
+									</a>
+								</div>
+							</div>
+							
+							<div class="more-comment">
+								<a href="#">
+									<i class="icon-pencil"></i>
+									<span>添加新评论</span>
+								</a>
+							</div>
+							
+							<form class="new-comment" style="margin-left: 0;">
+								
+								<textarea placeholder="请写下你的评论"></textarea>
+								
+								<div class="write-function-block">
+									<div class="hint">Enter 发表</div>
+									<a class="btn btn-send">发送</a>
+									<a class="cancel">取消</a>
+								</div>
+							</form>
+						</div>
+					</div>
+					
+				
+					<ul class="pagination">
+						<li>
+							<a class="active" href="#">1</a>
+						</li>
+						<li>
+							<a href="#">2</a>
+						</li>
+						<li>
+							<a href="#">3</a>
+						</li>
+						<li>
+							<a href="#">4</a>
+						</li>
+						<li>
+							<a href="#">下一页</a>
+						</li>
+					</ul>
+					
+				</div>
+				
+			</div>
+			
+			<!--右下角的几个快捷按钮组-->
+			<div class="side-tool">
+				<ul>
+					<li>
+						<a>
+							<i class="icon-angle-up"></i>
+						</a>
+					</li>
+					
+					<li>
+						<a>
+							<i class="icon-bookmark-empty"></i>
+						</a>
+					</li>
+					
+					<li>
+						<a>
+							<i class="icon-heart-empty"></i>
+						</a>
+					</li>
+					
+					<li>
+						<a>
+							<i class="icon-angle-down"></i>
+						</a>
+					</li>
+					
+					<!--分享 按钮-->
+					<!--<li>
+						<a>
+							<i class="icon-angle-up"></i>
+						</a>
+					</li>-->
+				</ul>
+			</div>
+			
+			
+		</div>
+		
+		
+	</body>
+</html>

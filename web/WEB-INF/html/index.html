@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	
+	
+	<link rel="stylesheet" href="css/bootstrap.min.css" />
+	<link rel="stylesheet" href="css/font-awesome.min.css" />
+	<link rel="stylesheet" href="css/platform.css" />
+	<script type="text/javascript" src="js/jquery.min.js" ></script>
+	<script type="text/javascript" src="js/bootstrap.min.js" ></script>
+	
+	<style type="text/css">
+		.input:focus{
+			box-shadow: none;
+			outline: none;
+		}
+	</style>
+	
+	<script type="text/javascript">
+		var login = 1;
+		setPage();
+		
+		
+//		function setPage() {
+//			var i = $('input').length;
+//			alert(i);
+//			$('input').hide();
+//			alert($("h1").length);
+//			alert("haha");
+//			if (login == 1) {
+//				$("li[class='logIn']").prop("display" , true);
+//				$("li[class='logOut']").prop("display" , "none");
+//			} else {
+//				$("li[class='logIn']").attr("display" , false);
+//				$("li[class='logOut']").attr("display" , true);
+//			}
+//			alert("haha");
+//		}
+		
+	</script>
+	
+	
+	<!--
+    	作者：orzco
+    	时间：2019-04-12
+    	描述：千万不要把 jquery.js 和 bootstrap.min.js位置放反了
+    -->
+	
+	
+	
+	<body>
+		
+		
+		<!--导航栏部分-->
+		<div class="navbar navbar-default navbar-fixed-top" role="navigation" style="background-color: #FFFFFF; font-size: 20px; ">
+			<div class="navbar-header" style="margin-left: 50px; width: 300px;" >
+				<!--version 1  ： 一个LOGO -->
+				<a href="index.html" class="navbar-brand" style="font-size: 25px; color: #ea6f5a; font-family:'微软雅黑' ;">文章创作交流网站</a>
+			
+			</div>
+			
+			<ul class="nav navbar-nav">
+				<!--<li class="active"><a href="#">hah1</a></li>-->
+				<li><a href="index.html"><i class="icon-home"></i>首页</a></li>
+				<li class="logIn"><a href="user_main.html"><i class="icon-bell-alt"></i>消息</a></li>
+				<li class="logIn"><a href="followFan.html"><i class="icon-file"></i>关注</a></li>	
+			</ul>
+			
+			
+			<form action="#" class="navbar-form navbar-left">
+				
+				<!--version 1-->
+				<!--<div class="form-group">
+					<input type="text" class="form-control" placeholder="搜索" />
+					<button type="submit" class="btn btn-default">搜索</button>
+				</div>-->
+				
+				<!--version 2 搜索框 + icon-->
+				<!--<div class="form-group">
+					<input type="text" class="form-control" placeholder="搜索" />
+					<a href="#"><i class="icon-search"></i></a>
+				</div>-->
+				
+				<!--version 3 搜索框里 包含icon -->
+				<div class="input-group">
+					<input type="text" class="form-control" placeholder="搜索" style="font-size:13px ;background-color: #EEEEEE; border: 0px; border-bottom-left-radius :40px ; border-top-left-radius: 40px;" />
+					<a href="#" class="input-group-addon" style="text-decoration: none; border: 0px; border-bottom-right-radius: 40px; border-top-right-radius: 40px; box-shadow: none;"><i class="icon-search"></i></a>
+				</div>
+			</form>
+			
+			
+			<ul class="nav navbar-nav navbar-right">	
+				<li class="logOut"><a href="register.html">登录</a></li>
+	
+				<li class="dropdown logIn">
+					<a class="dropdown-toggle"  data-toggle="dropdown" style="padding: 5px 15px" >
+						<img src="img/profile.JPG" class="img-circle" width="40px" height="40px">
+						<span class="caret"></span>
+					</a>
+	
+					<ul class="dropdown-menu" style="position: absolute; left: 0px; top: 50px; font-size: 17px;">
+						<li style="padding: 5px 20px 5px 0px;"><a href="user_main.html"><i class="icon-user"></i>我的主页</a></li>
+						<li style="padding: 5px 20px 5px 0px;"><a href="user_main.html"><i class="icon-heart"></i>喜欢的文章</a></li>
+						<li style="padding: 5px 20px 5px 0px;"><a href="help.html"><i class="icon-wrench"></i>帮助与反馈</a></li>
+						<li style="padding: 5px 20px 5px 0px;"><a href="index.html"><i class="icon-signout"></i>退出</a></li>
+					</ul>
+					
+				</li>
+				<!--<li><img src="img/调档函.JPG" class="img-circle" width="40px" height="40px" style="margin-top: 5px;"></li>-->
+				<!--<li><a href="#">123</a></li>-->
+				
+				
+				<!--版本一 ： 直接一个写文章的li-->
+				<!--<li style="margin-right: 80px;"><a href="#"><i class="icon-pencil"></i>写文章</a></li>-->
+				
+				<!--版本二： 拿button封装起来的写文章，且自带红色背景-->
+				<li style="margin-right: 80px;">
+					<a href="#" class="write-block" style="padding-top: 5px; padding-bottom: 5px;">
+						<button class="btn write-btn">
+							<i class="icon-pencil"></i>写文章
+						</button>
+					</a>
+				</li>
+			</ul>
+
+		</div> 
+	<!--<hr />
+	<hr />
+	<hr />
+	<hr />
+	<hr />
+	<hr />
+	<hr />
+	<hr />
+	<hr />
+	<hr />
+	hahahah-->
+	
+	<div style="margin-top: 70px;">
+		
+		<div class="container" style="padding-left: 200px; padding-right: 130px;">
+			
+			<div class="row">
+				<div class="col-md-8" >
+
+					<ul class="note-list">
+						<li class="have-img">
+							<a class="wrap-img" href="article.html">
+								<img src="img/index0.jpg" />
+							</a>
+							<div class="content">
+								<a href="article.html" class="title">聊出感情 就删了吧</a>
+								<p class="abstract">你是不是遇到过这样一个人， 每天陪你聊天，从不熟到无话不谈， 从微不足道到占据你的生活，
+									 感觉你们之间有种说不清道不明的情愫， 但恋人未达可又在...
+								</p>
+								<div class="meta">
+									<span><i class="icon-eye-open"></i>191</span>
+									<a href="user_main.html">nickname</a>
+									<a href="article.html"><i class="icon-comment"></i>121</a>
+									<span><i class="icon-heart"></i>101</span>
+								</div>
+							</div>
+						</li>
+						
+						<li class="have-img">
+							<a class="wrap-img" href="article.html">
+								<img src="img/index1.jpg" />
+							</a>
+							<div class="content">
+								<a href="article.html" class="title">是不是想要我做梦笑醒啊！赐给我这么漂亮可爱的萌娃！</a>
+								<p class="abstract">
+							        今天有两个简友问我怎么这么久不更文了，上次也有简友回帖说为了继续看我幸福而点了关注我，
+							      	  可我确实是生了孩子以后没有精力写文记录了，手机都很少拿...
+    
+								</p>
+								<div class="meta">
+									<span><i class="icon-eye-open"></i>191</span>
+									<a href="user_main.html">刘井宝儿</a>
+									<a href="article.html"><i class="icon-comment"></i>103</a>
+									<span><i class="icon-heart"></i>247</span>
+								</div>
+							</div>
+						</li>
+						
+						
+						<li class="have-img">
+							<a class="wrap-img" href="article.html">
+								<img src="img/index2.jpg" />
+							</a>
+							<div class="content">
+								<a href="article.html" class="title">拍过很多的美女，但我妈是最美的那个</a>
+								<p class="abstract">
+      1995年，我出生在广东揭阳的一个普通家庭，父母白手起家，供我上学；2014年，我离开家来到广州读大学。 2018年，我毕业了。 毕业后，我给自...
+    
+								</p>
+								<div class="meta">
+									<span><i class="icon-eye-open"></i>191</span>
+									<a href="user_main.html">流浪摄影师</a>
+									<a href="article.html"><i class="icon-comment"></i>54</a>
+									<span><i class="icon-heart"></i>431</span>
+								</div>
+							</div>
+						</li>
+						
+						
+						<li class="have-img">
+							<a class="wrap-img" href="article.html">
+								<img src="img/index3.jpg" />
+							</a>
+							<div class="content">
+								<a href="article.html" class="title">简书一年，我找到了一份好工作</a>
+								<p class="abstract">
+      这是我的亲身经历，没有虚构，虽然它听起来不像真的。 2017年11月7日 星期二 晴 说起来很惭愧，在简书写了一年的文，至今，我还是原来的我，既...
+    
+								</p>
+								<div class="meta">
+									<span><i class="icon-eye-open"></i>191</span>
+									<a href="user_main.html">陌上红裙</a>
+									<a href="article.html"><i class="icon-comment"></i>1775</a>
+									<span><i class="icon-heart"></i>3710</span>
+								</div>
+							</div>
+						</li>
+						
+						
+						<!--无图片， li少了一个class属性，并且把<a>和<img>去掉即可-->
+						<li>
+							<div class="content">
+								<a href="article.html" class="title">公告</a>
+								<p class="abstract">
+      亲爱的简书用户 「简书」因违反《网络安全法》《互联网信息服务管理办法》《互联网新闻信息服务管理规定》等相关法律法规，严重危害互联网信息传播秩序，...
+    
+								</p>
+								<div class="meta">
+									<span><i class="icon-eye-open"></i>191</span>
+									<a href="user_main.html">简书</a>
+									<a href="article.html"><i class="icon-comment"></i>892</a>
+									<span><i class="icon-heart"></i>0</span>
+								</div>
+							</div>
+						</li>
+					</ul>
+					
+				</div>
+				
+				
+				
+				<div class="col-md-3 col-md-offset-1">
+					<div class="recommend">
+						<div  class="advertise">
+							<a href="#" style="background-image: url(img/调档函.JPG);">
+								<span class="ad">广告</span>
+							</a>
+						</div>
+						
+						
+						<div class="recommended-authors">
+							<div class="title">
+								<span>推荐作者</span>
+								<a class="page-change" href="#">
+									<i class="icon-refresh"></i>换一批
+								</a>
+							</div>
+						</div>
+						
+					</div>
+					
+				</div>
+			</div>
+		</div>
+		
+		
+	
+	</div>
+	
+	
+	
+	<footer class="container" style="padding-left: 200px; padding-right: 130px; padding-top: 10px;">
+		<div class="row">
+			<div class="col-md-8 main">
+				<a href="#">关于网站</a>
+				<em> · </em>
+				<a href="#">联系我们</a>
+				<em> · </em>
+				<a href="#">加入我们</a>
+				<em> · </em>
+				<a href="#">网站出版</a>
+				<em> · </em>
+				<a href="#">品牌与徽标</a>
+				<em> · </em>
+				<a href="#">帮助中心</a>
+				<em> · </em>
+				<a href="#">合作伙伴</a>
+				<em> · </em>
+				
+				<div class="icp">
+					<p  style="	margin-top: 10px;">2019 东北大学浑南校区 / 文章创作交流平台  /  by orzco</p>
+					<a href="#"><i class="icon-envelope"></i>邮箱：523407249@qq.com</a>
+					<a href="#"><i class="icon-github"></i>Git: orzco</a>
+				</div>
+			</div>
+		</div>
+	</footer>
+	
+	
+	
+	
+
+	</body>
+</html>
