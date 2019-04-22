@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		
+		<link rel="stylesheet" href="css/bootstrap.min.css" />
+		<link rel="stylesheet" href="css/font-awesome.min.css" />
+		<link rel="stylesheet" href="css/platform.css" />
+		<script type="text/javascript" src="js/jquery.min.js" ></script>
+		<script type="text/javascript" src="js/bootstrap.min.js" ></script>
+	
+	
+	</head>
+	<body>
+		
+		<!--导航栏部分-->
+		<div class="navbar navbar-default navbar-fixed-top" role="navigation" style="background-color: #FFFFFF; font-size: 20px; ">
+			<div class="navbar-header" style="margin-left: 50px; width: 300px;" >
+				<!--version 1  ： 一个LOGO -->
+				<a href="index.html" class="navbar-brand" style="font-size: 25px; color: #ea6f5a; font-family:'微软雅黑' ;">文章创作交流网站</a>
+			
+			</div>
+			
+			<ul class="nav navbar-nav">
+				<!--<li class="active"><a href="#">hah1</a></li>-->
+				<li><a href="index.html"><i class="icon-home"></i>首页</a></li>
+				<li class="logIn"><a href="user_main.html"><i class="icon-bell-alt"></i>消息</a></li>
+				<li class="logIn"><a href="followFan.html"><i class="icon-file"></i>关注</a></li>	
+			</ul>
+			
+			
+			<form action="#" class="navbar-form navbar-left">
+				
+				<!--version 1-->
+				<!--<div class="form-group">
+					<input type="text" class="form-control" placeholder="搜索" />
+					<button type="submit" class="btn btn-default">搜索</button>
+				</div>-->
+				
+				<!--version 2 搜索框 + icon-->
+				<!--<div class="form-group">
+					<input type="text" class="form-control" placeholder="搜索" />
+					<a href="#"><i class="icon-search"></i></a>
+				</div>-->
+				
+				<!--version 3 搜索框里 包含icon -->
+				<div class="input-group">
+					<input type="text" class="form-control" placeholder="搜索" style="font-size:13px ;background-color: #EEEEEE; border: 0px; border-bottom-left-radius :40px ; border-top-left-radius: 40px;" />
+					<a href="#" class="input-group-addon" style="text-decoration: none; border: 0px; border-bottom-right-radius: 40px; border-top-right-radius: 40px; box-shadow: none;"><i class="icon-search"></i></a>
+				</div>
+			</form>
+			
+			
+			<ul class="nav navbar-nav navbar-right">	
+				<li class="logOut"><a href="register.html">登录</a></li>
+	
+				<li class="dropdown logIn">
+					<a class="dropdown-toggle"  data-toggle="dropdown" style="padding: 5px 15px" >
+						<img src="img/profile.JPG" class="img-circle" width="40px" height="40px">
+						<span class="caret"></span>
+					</a>
+	
+					<ul class="dropdown-menu" style="position: absolute; left: 0px; top: 50px; font-size: 17px;">
+						<li style="padding: 5px 20px 5px 0px;"><a href="user_main.html"><i class="icon-user"></i>我的主页</a></li>
+						<li style="padding: 5px 20px 5px 0px;"><a href="user_main.html"><i class="icon-heart"></i>喜欢的文章</a></li>
+						<li style="padding: 5px 20px 5px 0px;"><a href="help.html"><i class="icon-wrench"></i>帮助与反馈</a></li>
+						<li style="padding: 5px 20px 5px 0px;"><a href="index.html"><i class="icon-signout"></i>退出</a></li>
+					</ul>
+					
+				</li>
+				<!--<li><img src="img/调档函.JPG" class="img-circle" width="40px" height="40px" style="margin-top: 5px;"></li>-->
+				<!--<li><a href="#">123</a></li>-->
+				
+				
+				<!--版本一 ： 直接一个写文章的li-->
+				<!--<li style="margin-right: 80px;"><a href="#"><i class="icon-pencil"></i>写文章</a></li>-->
+				
+				<!--版本二： 拿button封装起来的写文章，且自带红色背景-->
+				<li style="margin-right: 80px;">
+					<a href="#" class="write-block" style="padding-top: 5px; padding-bottom: 5px;">
+						<button class="btn write-btn">
+							<i class="icon-pencil"></i>写文章
+						</button>
+					</a>
+				</li>
+			</ul>
+
+		</div> 
+		
+		
+		
+		<div class="container search"  style="margin-top: 70px;">
+			<div class="row">
+			
+				<div class="aside">
+					<div>
+						<ul class="menu">
+							<li>
+								<a>
+									<div class="setting-icon">
+										<i class="icon-file-alt"></i>
+									</div>
+									<span>文章</span>
+								</a>
+							</li>
+							
+							<li class="active">
+								<a>
+									<div class="setting-icon">
+										<i class="icon-user"></i>
+									</div>
+									<span>用户</span>
+								</a>
+							</li>
+						</ul>
+					</div>
+					
+					
+					<div class="search-trending">
+						<div class="search-trending-header">
+							<span>热门搜索</span>
+							<a>
+								<i class="icon-refresh"></i>
+								换一批
+							</a>
+						</div>
+						
+						<ul class="search-trending-tag-wrap">
+							<li>
+								<a href="#">手账</a>
+							</li>
+							<li>
+								<a href="#">书法</a>
+							</li>
+							<li>
+								<a href="#">PPT</a>
+							</li>
+							<li>
+								<a href="#">穿搭</a>
+							</li>
+							<li>
+								<a href="#">简书</a>
+							</li>
+							<li>
+								<a href="#">打碗碗花</a>
+							</li>
+							<li>
+								<a href="#">设计</a>
+							</li>
+						</ul>
+					</div>
+					
+					
+					<div class="search-recent">
+						<div class="search-recent-header">
+							<span>最近搜索</span>
+							<a>清空</a>
+						</div>
+						<ul class="search-recent-item-wrap">
+							<li>
+								<a>
+									<i class="icon-time"></i>
+									<span>区块链</span>
+									<i class="icon-remove"></i>
+								</a>
+							</li>
+							
+							<li>
+								<a>
+									<i class="icon-time"></i>
+									<span>qq</span>
+									<i class="icon-remove"></i>
+								</a>
+							</li>
+						</ul>
+					</div>
+					
+				</div>
+			
+				<div class="col-xs-16 col-xs-offset-8 main">
+					<div class="search-content">
+						
+						<div class="sort-type">
+							<a class="active">综合排序</a>
+							<span>&nbsp;</span>
+							<a>时间排序</a>
+						</div>
+						
+						<div class="result">3001 个结果</div>
+						
+						<ul class="user-list">
+							<li>
+								<a href="#" class="avatar">
+									<img src="img/author.jpg" />
+								</a>
+								
+								<div class="info">
+									<a href="#" class="name">区块链</a>
+									<div class="meta">
+										<span>关注 0</span>
+										<span>粉丝 1411</span>
+										<span>文章 1</span>
+									</div>
+									<div class="meta">
+										<span>写了 1139 字，获得了 48 个喜欢</span>
+									</div>
+								</div>
+								
+								<a class="btn btn-default following">
+									<i class="icon-ok"></i>
+									<span>已关注</span>
+									<!--<span>X取消关注</span>-->
+								</a>
+							</li>
+							
+							<li>
+								<a href="#" class="avatar">
+									<img src="img/search-item1.jpg" />
+								</a>
+								
+								<div class="info">
+									<a href="#" class="name">区块链传播者</a>
+									<div class="meta">
+										<span>关注 28</span>
+										<span>粉丝 11</span>
+										<span>文章 0</span>
+									</div>
+									<div class="meta">
+										<span>写了 0 字，获得了 0 个喜欢</span>
+									</div>
+								</div>
+								
+								<a class="btn btn-success follow">
+									<i class="icon-plus"></i>
+									<span>关注</span>
+								</a>
+							</li>
+							
+							<li>
+								<a href="#" class="avatar">
+									<img src="img/author.jpg" />
+								</a>
+								
+								<div class="info">
+									<a href="#" class="name">区块链</a>
+									<div class="meta">
+										<span>关注 0</span>
+										<span>粉丝 1411</span>
+										<span>文章 1</span>
+									</div>
+									<div class="meta">
+										<span>写了 1139 字，获得了 48 个喜欢</span>
+									</div>
+								</div>
+								
+								<a class="btn btn-default following">
+									<i class="icon-ok"></i>
+									<span>已关注</span>
+									<!--<span>X取消关注</span>-->
+								</a>
+							</li>
+							
+							<li>
+								<a href="#" class="avatar">
+									<img src="img/search-item1.jpg" />
+								</a>
+								
+								<div class="info">
+									<a href="#" class="name">区块链传播者</a>
+									<div class="meta">
+										<span>关注 28</span>
+										<span>粉丝 11</span>
+										<span>文章 0</span>
+									</div>
+									<div class="meta">
+										<span>写了 0 字，获得了 0 个喜欢</span>
+									</div>
+								</div>
+								
+								<a class="btn btn-success follow">
+									<i class="icon-plus"></i>
+									<span>关注</span>
+								</a>
+							</li>
+							
+							<li>
+								<a href="#" class="avatar">
+									<img src="img/author.jpg" />
+								</a>
+								
+								<div class="info">
+									<a href="#" class="name">区块链</a>
+									<div class="meta">
+										<span>关注 0</span>
+										<span>粉丝 1411</span>
+										<span>文章 1</span>
+									</div>
+									<div class="meta">
+										<span>写了 1139 字，获得了 48 个喜欢</span>
+									</div>
+								</div>
+								
+								<a class="btn btn-default following">
+									<i class="icon-ok"></i>
+									<span>已关注</span>
+									<!--<span>X取消关注</span>-->
+								</a>
+							</li>
+							
+							<li>
+								<a href="#" class="avatar">
+									<img src="img/search-item1.jpg" />
+								</a>
+								
+								<div class="info">
+									<a href="#" class="name">区块链传播者</a>
+									<div class="meta">
+										<span>关注 28</span>
+										<span>粉丝 11</span>
+										<span>文章 0</span>
+									</div>
+									<div class="meta">
+										<span>写了 0 字，获得了 0 个喜欢</span>
+									</div>
+								</div>
+								
+								<a class="btn btn-success follow">
+									<i class="icon-plus"></i>
+									<span>关注</span>
+								</a>
+							</li>
+							
+							<li>
+								<a href="#" class="avatar">
+									<img src="img/author.jpg" />
+								</a>
+								
+								<div class="info">
+									<a href="#" class="name">区块链</a>
+									<div class="meta">
+										<span>关注 0</span>
+										<span>粉丝 1411</span>
+										<span>文章 1</span>
+									</div>
+									<div class="meta">
+										<span>写了 1139 字，获得了 48 个喜欢</span>
+									</div>
+								</div>
+								
+								<a class="btn btn-default following">
+									<i class="icon-ok"></i>
+									<span>已关注</span>
+									<!--<span>X取消关注</span>-->
+								</a>
+							</li>
+							
+							<li>
+								<a href="#" class="avatar">
+									<img src="img/search-item1.jpg" />
+								</a>
+								
+								<div class="info">
+									<a href="#" class="name">区块链传播者</a>
+									<div class="meta">
+										<span>关注 28</span>
+										<span>粉丝 11</span>
+										<span>文章 0</span>
+									</div>
+									<div class="meta">
+										<span>写了 0 字，获得了 0 个喜欢</span>
+									</div>
+								</div>
+								
+								<a class="btn btn-success follow">
+									<i class="icon-plus"></i>
+									<span>关注</span>
+								</a>
+							</li>
+							
+						</ul>
+						
+						
+						<!--分页-->
+						<div>
+							<ul class="pagination">
+								<li>
+									<a href="#">上一页</a>
+								</li>
+								<li>
+									<a href="#">1</a>
+								</li>
+								<li>
+									<a href="#">2</a>
+								</li>
+								<li>
+									<a href="#">3</a>
+								</li>
+								<li>
+									<a class="active">4</a>
+								</li>
+								<li>
+									<a href="#">5</a>
+								</li>
+								<li>
+									<a href="#">6</a>
+								</li>
+								<li>
+									<a href="#">7</a>
+								</li>
+								<li>
+									<a href="#">下一页</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			
+			</div>
+		</div>
+
+
+
+	</body>
+</html>
