@@ -24,6 +24,40 @@ a{
 	color: #ea6f5a ;
 }
 
+.nav .sign-up {
+    float: right;
+    width: 80px;
+    height: 38px;
+    line-height: 24px;
+    margin: 7px 5px 0 15px;
+    border: 1px solid rgba(236,97,73,.7);
+    border-radius: 20px;
+    font-size: 15px;
+    color: #ea6f5a;
+    background-color: transparent;
+    vertical-align: middle;
+    padding: 6px 12px;
+}
+
+.nav .sign-up:hover {
+    color: #ec6149;
+    border-color: #ec6149;
+    background-color: rgba(236,97,73,.05);
+}
+
+.nav .log-in, .nav .log-in:hover {
+	font-size: 15px;
+    color: #969696;
+}
+
+.navbar-default .navbar-nav>li.logOut:nth-child(2)>a:hover {
+    color: #ec6149;
+    border-color: #ec6149;
+    background-color: rgba(236,97,73,.05);
+}
+
+
+
 
 /*主页中的推荐文章部分*/
 .note-list{
@@ -115,7 +149,10 @@ a{
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
-    height: 160px;
+
+	/*heght 的高度 要按照 图片的长：宽 = 自己的img的长 ： 宽*/    
+    height: 130px;
+    
     width: 100%;
     margin-bottom: 20px;
     overflow: hidden;
@@ -1264,26 +1301,26 @@ footer .main .icp, footer .main .icp a , footer .main .icp p{
 
 
 /*分页*/
-.comment-list .pagination {
+.comment-list .pagination , .search .pagination {
     margin: 20px 0;
     text-align: center;
     display: block;
 }
 
-.comment-list .pagination li {
+.comment-list .pagination li ,.search .pagination li {
     margin: 0 5px;
     display: inline-block;
 }
 
-.comment-list .pagination li a{
+.comment-list .pagination li a , .search .pagination li a{
     border-radius: 20px;
 }
 
-.comment-list .pagination li a:hover{
+.comment-list .pagination li a:hover , .search .pagination li a:hover{
 	background-color: #eee
 }
 
-.comment-list .pagination>li>a {
+.comment-list .pagination>li>a ,.search .pagination>li>a {
     position: relative;
     float: left;
     padding: 6px 12px;
@@ -1295,12 +1332,12 @@ footer .main .icp, footer .main .icp a , footer .main .icp p{
     margin-left: -1px;
 }
 
-.comment-list .pagination a {
+.comment-list .pagination a ,.search .pagination a {
     font-size: 14px;
     color: #969696!important;
 }
 
-.comment-list .pagination .active {
+.comment-list .pagination .active ,.search .pagination .active {
     font-weight: 700;
     border: none;
     pointer-events: none;
@@ -1404,4 +1441,379 @@ footer .main .icp, footer .main .icp a , footer .main .icp p{
     padding: 8px 22px;
     background: #42c02e;
     border: none;
+}
+
+
+/*推荐作者*/
+
+ul {
+    padding-left: 0;
+}
+.recommended-authors a{
+	color: #000000;
+	text-decoration: none;
+}
+.recommended-authors .list {
+    margin: 0 0 20px;
+    text-align: left;
+    list-style: none;
+}
+
+.recommended-authors .list li {
+    margin-top: 15px;
+    line-height: 20px;
+}
+
+.recommended-authors .list .avatar {
+    float: left;
+    width: 48px;
+    height: 48px;
+    margin-right: 10px;
+}
+
+.recommended-authors .list .follow {
+    float: right;
+    margin-top: 5px;
+    padding: 0;
+    font-size: 13px;
+    color: #42c02e;
+}
+
+.recommended-authors .list .name {
+    padding-top: 5px;
+    margin-right: 60px;
+    font-size: 14px;
+    display: block;
+}
+
+.recommended-authors .list p {
+    margin-top: 2px;
+    font-size: 12px;
+    color: #969696;
+}
+
+
+
+/*主页阅读更多*/
+
+.load-more {
+    width: 100%;
+    height: 40px;
+    margin: 30px auto 60px;
+    padding: 10px 15px;
+    text-align: center;
+    font-size: 15px;
+    border-radius: 20px;
+    color: #fff;
+    background-color: #a5a5a5;
+    display: block;
+}
+
+.row .load-more {
+	text-decoration: none;
+    width: 100%;
+    border-radius: 20px;
+    background-color: #a5a5a5;
+}
+
+.row .load-more:hover {
+	color: #fff;
+    background-color: #9b9b9b;
+}
+
+
+/*搜索部分*/
+
+.search .aside>div:not(:last-child) {
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+
+.aside a{
+	color: #000000;
+	text-decoration: none;
+}
+
+.search .aside {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    margin: 86px 0 0;
+    padding: 0 0 30px;
+    width: 280px;
+    overflow: auto;
+}
+
+.search .aside ul {
+    margin-bottom: 0;
+    list-style: none;
+}
+
+.search .aside .menu li.active a, .search .aside .menu li:hover a {
+    background-color: #f0f0f0;
+    border-radius: 4px;
+}
+
+.search .aside .menu a {
+    padding: 10px 15px;
+    font-size: 15px;
+    display: block;
+}
+
+.search .aside .menu .setting-icon {
+    margin-right: 15px;
+    width: 32px;
+    height: 32px;
+    text-align: center;
+    color: #fff;
+    background-color: #a0a0a0;
+    border-radius: 4px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.search .aside .menu span {
+    vertical-align: middle;
+}
+
+.search .aside .menu .setting-icon i {
+    margin-top: 7px;
+    font-size: 17px;
+    display: block;
+}
+
+ .search .aside .search-trending {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+.search-trending .search-trending-header {
+    height: 20px;
+    margin-bottom: 10px;
+}
+.search-trending .search-trending-header span {
+    float: left;
+    font-size: 14px;
+    color: #969696;
+}
+.search-trending .search-trending-header a {
+    float: right;
+    font-size: 13px;
+    color: #969696;
+    background-color: transparent;
+    border-width: 0;
+    padding: 0;
+}
+
+/*不换行 设置成inline-block*/
+.search-trending .search-trending-tag-wrap li {
+    margin-right: 10px;
+    display: inline-block;
+    line-height: 28px;
+}
+
+.search-trending .search-trending-tag-wrap li a {
+    padding: 2px 6px;
+    font-size: 12px;
+    color: #787878;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+}
+
+.search-recent .search-recent-header {
+    height: 20px;
+    margin-bottom: 10px;
+}
+
+.search-recent .search-recent-header span {
+    float: left;
+    font-size: 14px;
+    color: #969696;
+}
+
+.search-recent .search-recent-header a {
+    float: right;
+    font-size: 13px;
+    color: #969696;
+    background-color: transparent;
+    border-width: 0;
+    padding: 0;
+}
+
+.search-recent .search-recent-item-wrap li a {
+    display: block;
+    height: 40px;
+    line-height: 20px;
+    padding: 10px 15px;
+    font-size: 14px;
+    color: #333;
+    position: relative;
+}
+
+.search-recent .search-recent-item-wrap li a i {
+    float: left;
+    margin-right: 10px;
+    font-size: 18px;
+    color: #787878;
+}
+
+.search-recent .search-recent-item-wrap li a span {
+    vertical-align: middle;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
+    padding-right: 30px;
+}
+
+.search-recent .search-recent-item-wrap li a .icon-remove {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    color: #a0a0a0;
+    font-weight: 100;
+    /*display: none;*/
+}
+
+/*搜索用户页面 右侧搜索结果-用户*/
+
+.search .main a{
+	text-decoration: none;
+}
+
+.col-xs-16 {
+    width: 66.66667%;
+}
+.col-xs-offset-8 {
+    margin-left: 33.33333%;
+}
+
+.search .main .sort-type {
+    padding-bottom: 20px;
+    font-size: 13px;
+}
+
+.search .main .sort-type a.active, .search .main .sort-type a:hover {
+    color: #2f2f2f;
+}
+
+.search .main .sort-type a, .search .main .sort-type span {
+    color: #969696;
+}
+
+.search .main .result {
+    position: absolute;
+    top: 70px;
+    right: 200px;
+    font-size: 13px;
+    color: #b4b4b4;
+}
+
+/*取消最后一个span右面的border*/
+.search .main .user-list .meta span:last-child {
+    border: none;
+}
+
+.search .main .user-list .follow{
+    float: right;
+    margin-top: 8px;
+    padding: 8px 0;
+    width: 100px;
+    font-size: 15px;
+}
+
+.follow {
+    border-color: #42c02e;
+}
+
+.btn-success {
+    border-radius: 40px;
+    color: #fff;
+    background-color: #42c02e;
+    border-color: #42c02e;
+}
+
+.btn-success:hover {
+    color: 0;
+    background-color: #3db922;
+    border-color: #3db922;
+}
+
+
+/*搜索文章页面 右侧搜索结果*/
+
+.search .main .top {
+    margin-bottom: 30px;
+    background-color: hsla(0,0%,71%,.1);
+    border: 1px solid #f0f0f0;
+    border-radius: 4px;
+}
+
+.search .main .top a{
+	color: #000000;
+}
+
+.search .main .top .relevant {
+    padding: 20px 0;
+}
+
+.search .main .top .title {
+	float: left;
+    font-size: 14px;
+    margin-left: 18px;
+    color: #333;
+}
+
+.search .main .top .function-btn {
+	float: right;
+    margin-right: 18px;
+    color: #3194d0;
+    /*color: #ea6f5a;*/
+}
+
+.search .main .top .list {
+    padding-top: 10px;
+    clear: both;
+}
+
+.search .main .top .col-xs-8 {
+	width: 33.33333%;
+    float: left;
+    padding: 0 3px;
+}
+
+.search .main .top .list .avatar{
+    float: left;
+    margin-right: 6px;
+    width: 48px;
+    height: 48px;
+}
+
+.search .main .top .list .name {
+    margin-top: 3px;
+    font-size: 15px;
+    font-weight: 700;
+    vertical-align: middle;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    display: block;
+}
+
+.search .main .top .list .meta {
+    margin-top: 5px;
+    font-size: 12px;
+    color: #969696;
+}
+
+
+/*注册部分*/
+.sign .sign-up-msg {
+    margin: 10px 0;
+    padding: 0;
+    text-align: center;
+    font-size: 12px;
+    line-height: 20px;
+    color: #969696;
 }
