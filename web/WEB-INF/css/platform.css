@@ -397,7 +397,7 @@ footer .main .icp, footer .main .icp a , footer .main .icp p{
     font-size: 0;
     border-bottom: 1px solid #f0f0f0;
     clear: both;
-    word-break: break-word!important;
+    /*word-break: break-word!important;*/
 }
 
 .aside .description .js-intro {
@@ -448,7 +448,7 @@ footer .main .icp, footer .main .icp a , footer .main .icp p{
 	font-size:14px;
 	background-color:hsla(0,0%,71%,.1);
 	border:1px solid #c8c8c8;
-	order-radius:4px;
+	border-radius:4px;
 	resize:none;
 	outline:none;
 }
@@ -603,7 +603,7 @@ footer .main .icp, footer .main .icp a , footer .main .icp p{
 }
 
 .note .post .article .title {
-    word-break: break-word!important;
+    /*word-break: break-word!important;*/
     word-break: break-all;
     margin: 20px 0 0;
     font-family: -apple-system,SF UI Display,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei,WenQuanYi Micro Hei,sans-serif;
@@ -656,7 +656,7 @@ footer .main .icp, footer .main .icp a , footer .main .icp p{
 /*文本部分*/
 .note .post .article .show-content {
     color: #2f2f2f;
-    word-break: break-word!important;
+    /*word-break: break-word!important;*/
     word-break: break-all;
     font-size: 16px;
     font-weight: 400;
@@ -668,7 +668,7 @@ footer .main .icp, footer .main .icp a , footer .main .icp p{
     margin-bottom: 25px;
     background-color: #f7f7f7;
     border-left: 6px solid #b4b4b4;
-    word-break: break-word!important;
+    /*word-break: break-word!important;*/
     word-break: break-all;
     font-size: 16px;
     font-weight: 400;
@@ -811,7 +811,7 @@ footer .main .icp, footer .main .icp a , footer .main .icp p{
 }
 
 .side-tool ul li{
-	border-bottom: none;
+	/*border-bottom: none;*/
     background-color: #fff;
 	border: 1px solid #dcdcdc;
 }
@@ -854,7 +854,7 @@ footer .main .icp, footer .main .icp a , footer .main .icp p{
     height: 20px;
     right: 10px;
     top: 0;
-    color: #;
+    /*color: #;*/
     color: #999999 ;
     position: absolute;
 }
@@ -1013,7 +1013,7 @@ footer .main .icp, footer .main .icp a , footer .main .icp p{
     font-size: 16px;
     margin: 10px 0;
     line-height: 1.5;
-    word-break: break-word!important;
+    /*word-break: break-word!important;*/
 }
 
 .note .post .comment-list .tool-group a {
@@ -1349,7 +1349,7 @@ footer .main .icp, footer .main .icp a , footer .main .icp p{
 	text-decoration: none;
 }
 .help .help-title{
-	color: #333333;
+	/*color: #333333;*/
     position: absolute;
     left: 20px;
     top: 20px;
@@ -1735,7 +1735,7 @@ ul {
 }
 
 .btn-success:hover {
-    color: 0;
+    /*color: 0;*/
     background-color: #3db922;
     border-color: #3db922;
 }
