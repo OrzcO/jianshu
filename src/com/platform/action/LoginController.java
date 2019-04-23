@@ -11,7 +11,7 @@ public class LoginController {
 
     @RequestMapping("main.action")
     public String main(){
-        return "login";
+        return "index";
     }
 
     @RequestMapping("login.action")
