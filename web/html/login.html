@@ -3,12 +3,49 @@
 	<head>
 		<meta charset="UTF-8">
 		<title></title>
-		
-		<link rel="stylesheet" href="css/bootstrap.min.css" />
-		<link rel="stylesheet" href="css/font-awesome.min.css" />
-		<link rel="stylesheet" href="css/platform.css" />
-		<script type="text/javascript" src="js/jquery.min.js" ></script>
-		<script type="text/javascript" src="js/bootstrap.min.js" ></script>
+
+		<link rel="stylesheet" href="../css/bootstrap.min.css" />
+		<link rel="stylesheet" href="../css/font-awesome.min.css" />
+		<link rel="stylesheet" href="../css/platform.css" />
+		<script type="text/javascript" src="../js/jquery.min.js" ></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js" ></script>
+
+		<script type="text/javascript">
+
+			$(function () {
+
+//			    登录按钮
+				$("#sub-btn").click(function () {
+					var username = $("#username").val().trim();
+					var passwd = $("#passwd").val().trim();
+
+					if (username != "" && passwd != "") {
+                        $.ajax({
+							url : "/user/login.action" ,
+							type : "post" ,
+							data : {
+							    username : username,
+								passwd : passwd
+							},
+							dataType : "text",
+							success : function (data) {
+								if (data == 1) {
+								    alert("登录成功");
+								    window.location = "/html/index.html";
+								} else if (data == 0) {
+								    alert("账号密码错误");
+								} else {
+								    alert("server wrong");
+								}
+                            }
+						});
+					}
+
+                });
+
+            });
+
+		</script>
 		
 	</head>
 	<body>
@@ -29,13 +66,13 @@
 				</h4>
 				
 				<div>
-					<form>
+					<form onclick="return false">
 						<div class="input-prepend">
-							<input placeholder="手机号或邮箱" type="text" class="restyle"" />
+							<input id="username" placeholder="手机号或邮箱" type="text" class="restyle" />
 							<i class="icon-user"></i>
 						</div>
 						<div class="input-prepend">
-							<input placeholder="密码" type="password" class="style" />
+							<input id="passwd" placeholder="密码" type="password" class="style" />
 							<i class="icon-lock"></i>
 						</div>
 						
@@ -56,7 +93,7 @@
 							</ul>
 						</div>
 						
-						<button class="sign-in-button" type="submit">
+						<button id="sub-btn" class="sign-in-button" type="submit">
 							<span class="sign-in-loading" style="display: none;"></span>
 							登录
 						</button>

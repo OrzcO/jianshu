@@ -7,9 +7,13 @@ public class User {
 
     private String username;
 
+    private String phone;
+
     private String passwd;
 
     private Date createtime;
+
+    private String info;
 
     public Integer getId() {
         return id;
@@ -27,6 +31,14 @@ public class User {
         this.username = username == null ? null : username.trim();
     }
 
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone == null ? null : phone.trim();
+    }
+
     public String getPasswd() {
         return passwd;
     }
@@ -41,5 +53,13 @@ public class User {
 
     public void setCreatetime(Date createtime) {
         this.createtime = createtime;
+    }
+
+    public String getInfo() {
+        return info;
+    }
+
+    public void setInfo(String info) {
+        this.info = info == null ? null : info.trim();
     }
 }

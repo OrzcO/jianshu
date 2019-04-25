@@ -21,6 +21,11 @@
 			$(function () {
 
 
+			    var username_status = 0;
+			    var phone_status = 0;
+			    var passwd_status = 0;
+
+
 			    // username判重操作
 				$("#username").on('change' , function () {
 					var text = $("#username").val().trim();
@@ -35,13 +40,13 @@
 //                            },
 							dataType : "text" ,
                             success : function (data) {
-							    alert(data);
+//							    alert(data);
                                 if(data == 1){
                                     $('#username_info').html("username重复");
-//                                    $('#submit').attr({"disabled" : "disabled"});
+                                    username_status = 0;
                                 }else{
                                     $('#username_info').html("username未重复，可用");
-//                                    $('#submit').removeAttr("disabled");
+                                    username_status = 1;
                                 }
                             },
                             error : function (error) {
@@ -50,12 +55,110 @@
 						});
 					}
                 });
+
+
+                // phone判重操作
+                $("#phone").on('change' , function () {
+                    var text = $("#phone").val().trim();
+                    if (text != "") {
+                        $.ajax({
+                            url : '/user/searchPhoneDup.action' ,
+                            data :{
+                                phone : text
+                            },
+                            dataType : "text" ,
+                            success : function (data) {
+//                                alert(data);
+                                if(data == 1){
+                                    $('#phone_info').html("phone重复");
+                                    phone_status = 0;
+                                }else{
+                                    $('#phone_info').html("phone未重复，可用");
+                                    phone_status = 1;
+                                }
+                            },
+                            error : function (error) {
+                                alert("no")
+                            }
+                        });
+                    }
+                });
+
+//                密码检验
+                $("#passwd").on('change' , function () {
+
+                    var text = $("#passwd").val();
+
+//                    alert(text);
+
+                    if (text != "") {
+                        if (text.indexOf(" ") != -1) {
+                            alert("密码中不能含空格");
+                            passwd_status = 0;
+						} else {
+
+                            if (text.length < 6) {
+                                alert("密码不能少于6位");
+                                passwd_status = 0;
+							} else {
+                                passwd_status = 1;
+							}
+
+						}
+                    }
+                });
+
+
+//                注册按钮点击
+				$("#sign-btn").click(function () {
+					if (username_status == 1 && passwd_status == 1 && phone_status == 1) {
+					    var username = $("#username").val().trim();
+					    var phone = $("#phone").val().trim();
+					    var passwd = $("#passwd").val();
+
+					    $.ajax({
+							url : "/user/register.action",
+							type : "post",
+							data : {
+							    username : username,
+								phone : phone,
+								passwd : passwd
+							},
+							dataType : "text" ,
+							success : function (data) {
+								if (data == 1) {
+								    alert("注册成功");
+								    window.location = "/html/login.html";
+								}
+                            },
+							error : function (data) {
+								alert("注册失败");
+                            }
+						});
+					} else {
+					    alert("请正确填写注册信息");
+					}
+                });
+
+
+//				测试用的跳转按钮
+				$("#jump_btn").click(function () {
+					window.location = "/html/index.html";
+                });
+
             });
+
+
+
 
 		</script>
 		
 	</head>
 	<body>
+
+	<!--测试跳转按钮-->
+	<!--<button id="jump_btn">点我跳转</button>-->
+
 		<div class="sign">
 			<div class="logo">
 				<a href="index.html" style="font-size: 40px; color: #ea6f5a; font-family:'YouYuan' ;">
@@ -75,23 +178,25 @@
 				<div>
 					<div id="username_info"></div>
 					<div id="phone_info"></div>
-					<form>
+
+					<!-- 添加onlcick="return false" 可以防止表单自动提交 -->
+					<form onclick="return false">
 						<div class="input-prepend">
 							<input placeholder="你的昵称" type="text" class="restyle" id="username" />
 							<i class="icon-user"></i>
 						</div>
 						<div class="input-prepend">
-							<input placeholder="手机号" type="password"/>
+							<input placeholder="手机号" type="text" id="phone"/>
 							<i class="icon-mobile-phone"></i>
 						</div>
 						<div class="input-prepend">
-							<input placeholder="设置密码" type="password" class="style" />
+							<input placeholder="设置密码" type="password" class="style" id="passwd" />
 							<i class="icon-lock"></i>
 						</div>
 						
 						
 						
-						<button class="sign-up-button" type="submit">
+						<button id="sign-btn" class="sign-up-button" type="submit">
 							<span class="sign-in-loading" style="display: none;"></span>
 							注册
 						</button>

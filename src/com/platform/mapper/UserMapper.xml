@@ -1,82 +1,136 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="dao.UserMapper" >
-  <resultMap id="BaseResultMap" type="com.platform.entity.User" >
-    <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="username" property="username" jdbcType="VARCHAR" />
-    <result column="passwd" property="passwd" jdbcType="VARCHAR" />
-    <result column="createTime" property="createtime" jdbcType="TIMESTAMP" />
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.platform.dao.UserMapper">
+  <resultMap id="BaseResultMap" type="com.platform.entity.User">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="passwd" jdbcType="VARCHAR" property="passwd" />
+    <result column="createTime" jdbcType="TIMESTAMP" property="createtime" />
+    <result column="info" jdbcType="VARCHAR" property="info" />
   </resultMap>
-  <sql id="Base_Column_List" >
-    id, username, passwd, createTime
+  <sql id="Base_Column_List">
+    id, username, phone, passwd, createTime, info
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from user
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from user
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="entity.User" >
-    insert into user (id, username, passwd, 
-      createTime)
-    values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{passwd,jdbcType=VARCHAR}, 
-      #{createtime,jdbcType=TIMESTAMP})
+  <insert id="insert" parameterType="com.platform.entity.User">
+    insert into user (id, username, phone, 
+      passwd, createTime, info
+      )
+    values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
+      #{passwd,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, #{info,jdbcType=VARCHAR}
+      )
   </insert>
-  <insert id="insertSelective" parameterType="entity.User" >
+  <insert id="insertSelective" parameterType="com.platform.entity.User">
     insert into user
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
         id,
       </if>
-      <if test="username != null" >
+      <if test="username != null">
         username,
       </if>
-      <if test="passwd != null" >
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="passwd != null">
         passwd,
       </if>
-      <if test="createtime != null" >
+      <if test="createtime != null">
         createTime,
       </if>
+      <if test="info != null">
+        info,
+      </if>
     </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
         #{id,jdbcType=INTEGER},
       </if>
-      <if test="username != null" >
+      <if test="username != null">
         #{username,jdbcType=VARCHAR},
       </if>
-      <if test="passwd != null" >
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="passwd != null">
         #{passwd,jdbcType=VARCHAR},
       </if>
-      <if test="createtime != null" >
+      <if test="createtime != null">
         #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="info != null">
+        #{info,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="entity.User" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.platform.entity.User">
     update user
-    <set >
-      <if test="username != null" >
+    <set>
+      <if test="username != null">
         username = #{username,jdbcType=VARCHAR},
       </if>
-      <if test="passwd != null" >
+      <if test="phone != null">
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="passwd != null">
         passwd = #{passwd,jdbcType=VARCHAR},
       </if>
-      <if test="createtime != null" >
+      <if test="createtime != null">
         createTime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="info != null">
+        info = #{info,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="entity.User" >
+  <update id="updateByPrimaryKey" parameterType="com.platform.entity.User">
     update user
     set username = #{username,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
       passwd = #{passwd,jdbcType=VARCHAR},
-      createTime = #{createtime,jdbcType=TIMESTAMP}
+      createTime = #{createtime,jdbcType=TIMESTAMP},
+      info = #{info,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
+  </update>
+
+
+
+
+
+
+  <select id="searchUsernameDup" parameterType="java.lang.String" resultType="java.lang.Integer">
+    select count(*) from user
+    WHERE
+    username = #{username}
+  </select>
+
+  <select id="searchPhoneDup" parameterType="java.lang.String" resultType="java.lang.Integer">
+    select count(*) from user
+    WHERE
+    phone = #{phone}
+  </select>
+
+  <select id="login" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from user
+    where username = #{0} and passwd = #{1}
+  </select>
+
+  <update id="reset">
+    update user
+    set passwd = #{1}
+    where phone = #{0}
   </update>
 </mapper>

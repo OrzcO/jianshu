@@ -3,12 +3,51 @@
 	<head>
 		<meta charset="UTF-8">
 		<title></title>
-		
-		<link rel="stylesheet" href="css/bootstrap.min.css" />
-		<link rel="stylesheet" href="css/font-awesome.min.css" />
-		<link rel="stylesheet" href="css/platform.css" />
-		<script type="text/javascript" src="js/jquery.min.js" ></script>
-		<script type="text/javascript" src="js/bootstrap.min.js" ></script>
+
+		<link rel="stylesheet" href="../css/bootstrap.min.css" />
+		<link rel="stylesheet" href="../css/font-awesome.min.css" />
+		<link rel="stylesheet" href="../css/platform.css" />
+		<script type="text/javascript" src="../js/jquery.min.js" ></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js" ></script>
+
+		<script type="text/javascript">
+
+			$(function () {
+
+			    $("#reset-btn").click(function () {
+					var passwd = $("#passwd").val();
+					var re_passwd = $("#repeat-passwd").val();
+					var phone = $("#phone").val();
+
+					if (passwd != re_passwd) {
+					    alert("两次密码不一致");
+					} else {
+					    $.ajax({
+							url : "/user/reset.action",
+							data : {
+							    phone : phone,
+								passwd : passwd
+							},
+							type : "post",
+							dataType : "text",
+							success : function (data) {
+								if (data == 1) {
+								    alert("修改密码成功");
+								    window.location = "/html/login.html";
+								} else {
+								    alert("修改密码失败");
+								}
+                            },
+							error : function (data) {
+								alert("server erroe");
+                            }
+						});
+					}
+                });
+
+            });
+
+		</script>
 		
 		
 	</head>
@@ -27,9 +66,9 @@
 				</h4>
 				
 				<div>
-					<form>
+					<form onclick="return false">
 						<div class="input-prepend">
-							<input placeholder="手机号/邮箱" type="text" class="restyle" />
+							<input placeholder="手机号/邮箱" type="text" class="restyle" id="phone" />
 							<i class="icon-phone"></i>
 						</div>
 						
@@ -40,12 +79,12 @@
 						</div>
 						
 						<div class="input-prepend">
-							<input placeholder="请输入新密码" type="password"  />
+							<input placeholder="请输入新密码" type="password" id="passwd"  />
 							<i class="icon-unlock"></i>
 						</div>
 						
 						<div class="input-prepend">
-							<input placeholder="请再输入一遍新密码" type="password" class="style" />
+							<input placeholder="请再输入一遍新密码" type="password" class="style" id="repeat-passwd"/>
 							<i class="icon-unlock"></i>
 						</div>
 						
@@ -53,7 +92,7 @@
 						
 					
 						
-						<button class="sign-in-button" type="submit">
+						<button id="reset-btn" class="sign-in-button" type="submit">
 							<span class="sign-in-loading" style="display: none;"></span>
 							重置密码
 						</button>

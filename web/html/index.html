@@ -21,7 +21,27 @@
 	
 	<script type="text/javascript">
 
-//		alert("index page");
+
+
+		$(function () {
+
+			$.ajax({
+				url : "/user/getSession.action",
+				type : "get",
+				dataType : "json",
+				success : function (data) {
+				    if (data != null) {
+				        alert("id : " + data.id + " username : " + data.username + " info : " + data.info);
+					}
+                },
+                error : function (data) {
+					alert(data);
+					alert("get session failed");
+//					返回登录页面 / or ...改变一些 display 元素
+                }
+			});
+
+        });
 		
 	</script>
 	
@@ -41,15 +61,15 @@
 		<div class="navbar navbar-default navbar-fixed-top" role="navigation" style="background-color: #FFFFFF; font-size: 20px; ">
 			<div class="navbar-header" style="margin-left: 50px; width: 300px;" >
 				<!--version 1  ： 一个LOGO -->
-				<a href="index.html" class="navbar-brand" style="font-size: 25px; color: #ea6f5a; font-family:'微软雅黑' ;">文章创作交流网站</a>
+				<a href="/index.action" class="navbar-brand" style="font-size: 25px; color: #ea6f5a; font-family:'微软雅黑' ;">文章创作交流网站</a>
 			
 			</div>
 			
 			<ul class="nav navbar-nav">
 				<!--<li class="active"><a href="#">hah1</a></li>-->
-				<li><a href="index.html"><i class="icon-home"></i>首页</a></li>
-				<li class="logIn"><a href="user_main.html"><i class="icon-bell-alt"></i>消息</a></li>
-				<li class="logIn"><a href="followFan.html"><i class="icon-file"></i>关注</a></li>	
+				<li><a href="/index.aciton"><i class="icon-home"></i>首页</a></li>
+				<li class="logIn"><a href="/user_main.action"><i class="icon-bell-alt"></i>消息</a></li>
+				<li class="logIn"><a href="/followFan.action"><i class="icon-file"></i>关注</a></li>
 			</ul>
 			
 			
@@ -76,21 +96,21 @@
 			
 			
 			<ul class="nav navbar-nav navbar-right">	
-				<li class="logOut"><a class="log-in" href="login.html">登录</a></li>
+				<li class="logOut"><a class="log-in" href="/login.action">登录</a></li>
 				
-				<li class="logOut"><a class="btn sign-up" href="register.html" style="color:#ec6149 ;">注册</a></li>
+				<li class="logOut"><a class="btn sign-up" href="/register.action" style="color:#ec6149 ;">注册</a></li>
 	
 				<li class="dropdown logIn">
 					<a class="dropdown-toggle"  data-toggle="dropdown" style="padding: 5px 15px" >
-						<img src="img/profile.JPG" class="img-circle" width="40px" height="40px">
+						<img src="../img/profile.JPG" class="img-circle" width="40px" height="40px">
 						<span class="caret"></span>
 					</a>
 	
 					<ul class="dropdown-menu" style="position: absolute; left: 0px; top: 50px; font-size: 17px;">
-						<li style="padding: 5px 20px 5px 0px;"><a href="user_main.html"><i class="icon-user"></i>我的主页</a></li>
+						<li style="padding: 5px 20px 5px 0px;"><a href=""><i class="icon-user"></i>我的主页</a></li>
 						<li style="padding: 5px 20px 5px 0px;"><a href="user_main.html"><i class="icon-heart"></i>喜欢的文章</a></li>
 						<li style="padding: 5px 20px 5px 0px;"><a href="help.html"><i class="icon-wrench"></i>帮助与反馈</a></li>
-						<li style="padding: 5px 20px 5px 0px;"><a href="index.html"><i class="icon-signout"></i>退出</a></li>
+						<li style="padding: 5px 20px 5px 0px;"><a href="/user/logout.action"><i class="icon-signout"></i>退出</a></li>
 					</ul>
 					
 				</li>
