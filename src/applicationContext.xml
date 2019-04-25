@@ -17,36 +17,39 @@
     <aop:aspectj-autoproxy proxy-target-class="true" />
 
 
-    <!-- 数据源c3p0 -->
-    <!--<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">-->
-        <!--<property name="driverClass" value="com.mysql.jdbc.Driver" />-->
-        <!--&lt;!&ndash;<property name="jdbcUrl" value="jdbc:mysql://192.168.55.97:3306/jinshen?allowMultiQueries=true&amp;useUnicode=yes&amp;characterEncoding=utf-8" />&ndash;&gt;-->
-        <!--<property name="jdbcUrl" value="jdbc:mysql://127.0.0.1:3306/articlePlatform？useUnicode=yes&amp;characterEncoding=utf-8" />-->
-        <!--<property name="user" value="root" />-->
-        <!--<property name="password" value="523407249" />-->
-        <!--<property name="maxPoolSize" value="30" />-->
-        <!--<property name="minPoolSize" value="5" />-->
-        <!--<property name="initialPoolSize" value="2" />-->
-        <!--<property name="acquireIncrement" value="2" />-->
-    <!--</bean>-->
 
-    <!--&lt;!&ndash; sessionFactory 将spring和mybatis整合 &ndash;&gt;-->
-    <!--<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">-->
-        <!--<property name="dataSource" ref="dataSource" />-->
-        <!--<property name="configLocation" value="classpath:mybatis-config.xml" />-->
-        <!--<property name="mapperLocations" value="classpath:com/platform/mapper/*.xml" />    &lt;!&ndash; 加载mapper文件 &ndash;&gt;-->
-    <!--</bean>-->
 
-    <!--<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">-->
-        <!--<constructor-arg index="0">-->
-            <!--<ref bean="sqlSessionFactory"/>-->
-        <!--</constructor-arg>-->
-    <!--</bean>-->
-    <!--&lt;!&ndash; dao mapping接口扫描 &ndash;&gt;-->
-    <!--<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">-->
-        <!--<property name="basePackage" value=" com.jinshen.dao" />-->
-        <!--<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />-->
-    <!--</bean>-->
+
+     <!--数据源c3p0-->
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="driverClass" value="com.mysql.jdbc.Driver" />
+        <!--<property name="jdbcUrl" value="jdbc:mysql://192.168.55.97:3306/jinshen?allowMultiQueries=true&amp;useUnicode=yes&amp;characterEncoding=utf-8" />-->
+        <property name="jdbcUrl" value="jdbc:mysql://127.0.0.1:3306/articlePlatform?useUnicode=yes&amp;characterEncoding=utf-8" />
+        <property name="user" value="root" />
+        <property name="password" value="523407249" />
+        <property name="maxPoolSize" value="30" />
+        <property name="minPoolSize" value="5" />
+        <property name="initialPoolSize" value="2" />
+        <property name="acquireIncrement" value="2" />
+    </bean>
+
+    <!-- sessionFactory 将spring和mybatis整合 -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="configLocation" value="classpath:mybatis-config.xml" />
+        <property name="mapperLocations" value="classpath:com/platform/mapper/*.xml" />    <!-- 加载mapper文件 -->
+    </bean>
+
+    <bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg index="0">
+            <ref bean="sqlSessionFactory"/>
+        </constructor-arg>
+    </bean>
+    <!-- dao mapping接口扫描 -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value=" com.platform.dao" />
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+    </bean>
 
     <!--&lt;!&ndash; 事务 &ndash;&gt;-->
     <!--<bean id="txManager"-->

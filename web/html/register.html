@@ -3,12 +3,56 @@
 	<head>
 		<meta charset="UTF-8">
 		<title></title>
-		
-		<link rel="stylesheet" href="css/bootstrap.min.css" />
-		<link rel="stylesheet" href="css/font-awesome.min.css" />
-		<link rel="stylesheet" href="css/platform.css" />
-		<script type="text/javascript" src="js/jquery.min.js" ></script>
-		<script type="text/javascript" src="js/bootstrap.min.js" ></script>
+
+		<link rel="stylesheet" href="../css/bootstrap.min.css" />
+		<link rel="stylesheet" href="../css/font-awesome.min.css" />
+		<link rel="stylesheet" href="../css/platform.css" />
+		<script type="text/javascript" src="../js/jquery.min.js" ></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js" ></script>
+
+
+		<script type="text/javascript">
+			
+
+
+			
+			
+			
+			$(function () {
+
+
+			    // username判重操作
+				$("#username").on('change' , function () {
+					var text = $("#username").val().trim();
+					if (text != "") {
+					    $.ajax({
+							url : '/user/searchUsernameDup.action' ,
+							data :{
+							    username : text
+							},
+//                            headers:{
+//                                Accept:"text/html, application/xhtml+xml, */*"
+//                            },
+							dataType : "text" ,
+                            success : function (data) {
+							    alert(data);
+                                if(data == 1){
+                                    $('#username_info').html("username重复");
+//                                    $('#submit').attr({"disabled" : "disabled"});
+                                }else{
+                                    $('#username_info').html("username未重复，可用");
+//                                    $('#submit').removeAttr("disabled");
+                                }
+                            },
+                            error : function (error) {
+                                alert("no")
+                            }
+						});
+					}
+                });
+            });
+
+		</script>
 		
 	</head>
 	<body>
@@ -29,9 +73,11 @@
 				</h4>
 				
 				<div>
+					<div id="username_info"></div>
+					<div id="phone_info"></div>
 					<form>
 						<div class="input-prepend">
-							<input placeholder="你的昵称" type="text" class="restyle" />
+							<input placeholder="你的昵称" type="text" class="restyle" id="username" />
 							<i class="icon-user"></i>
 						</div>
 						<div class="input-prepend">
