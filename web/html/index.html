@@ -22,24 +22,61 @@
 	<script type="text/javascript">
 
 
+		var login = false;
+
+		function getSession() {
+
+            $.ajax({
+                url : "/user/getSession.action",
+                type : "get",
+                dataType : "json",
+                success : function (data) {
+                    if (data != null) {
+//                        alert("id : " + data.id + " username : " + data.username + " info : " + data.info);
+
+                        login = true;
+
+//				        隐藏nav的按钮
+                        $(".logIn").show();
+                        $(".logOut").hide();
+                    } else {
+
+                        login = false;
+
+                        $(".logIn").hide();
+                        $(".logOut").show();
+                    }
+                },
+                error : function (data) {
+
+
+                    login = false;
+
+                    $(".logIn").hide();
+                    $(".logOut").show();
+
+//                    alert(data);
+//                    alert("get session failed");
+//					返回登录页面 / or ...改变一些 display 元素
+                }
+            });
+        }
+
 
 		$(function () {
 
-			$.ajax({
-				url : "/user/getSession.action",
-				type : "get",
-				dataType : "json",
-				success : function (data) {
-				    if (data != null) {
-				        alert("id : " + data.id + " username : " + data.username + " info : " + data.info);
-					}
-                },
-                error : function (data) {
-					alert(data);
-					alert("get session failed");
-//					返回登录页面 / or ...改变一些 display 元素
-                }
-			});
+			getSession();
+
+
+			$("#logout-btn").click(function () {
+
+//			    强制刷新重新获取session数据，防止多个浏览器窗口一个退出，其他未退出的情况
+				getSession();
+
+				if (login == true) {
+				    window.location = "/user/logout.action";
+				}
+            });
 
         });
 		
@@ -102,7 +139,7 @@
 	
 				<li class="dropdown logIn">
 					<a class="dropdown-toggle"  data-toggle="dropdown" style="padding: 5px 15px" >
-						<img src="../img/profile.JPG" class="img-circle" width="40px" height="40px">
+						<img src="../img/profile.jpg" class="img-circle" width="40px" height="40px">
 						<span class="caret"></span>
 					</a>
 	
@@ -110,7 +147,7 @@
 						<li style="padding: 5px 20px 5px 0px;"><a href=""><i class="icon-user"></i>我的主页</a></li>
 						<li style="padding: 5px 20px 5px 0px;"><a href="user_main.html"><i class="icon-heart"></i>喜欢的文章</a></li>
 						<li style="padding: 5px 20px 5px 0px;"><a href="help.html"><i class="icon-wrench"></i>帮助与反馈</a></li>
-						<li style="padding: 5px 20px 5px 0px;"><a href="/user/logout.action"><i class="icon-signout"></i>退出</a></li>
+						<li style="padding: 5px 20px 5px 0px;"><a id="logout-btn" ><i class="icon-signout"></i>退出</a></li>
 					</ul>
 					
 				</li>

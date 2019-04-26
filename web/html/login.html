@@ -12,10 +12,36 @@
 
 		<script type="text/javascript">
 
+            function getSession() {
+
+                $.ajax({
+                    url : "/user/getSession.action",
+                    type : "get",
+
+//					强制等getSession之后再确定是否提交表单
+					async : "false",
+
+                    dataType : "json",
+                    success : function (data) {
+                        if (data != null) {
+                            window.location = "/html/index.html";
+                        }
+                    }
+
+                });
+            }
+
 			$(function () {
+
+			    getSession();
+
 
 //			    登录按钮
 				$("#sub-btn").click(function () {
+
+//				    如果已经session里有信息了，则不用登陆，直接跳转
+                    getSession();
+
 					var username = $("#username").val().trim();
 					var passwd = $("#passwd").val().trim();
 
