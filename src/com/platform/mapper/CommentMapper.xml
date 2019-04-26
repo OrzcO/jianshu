@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.platform.dao.CommentMapper" >
+  <resultMap id="BaseResultMap" type="com.platform.entity.Comment" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="aid" property="aid" jdbcType="INTEGER" />
+    <result column="comment_from" property="commentFrom" jdbcType="VARCHAR" />
+    <result column="comment_to" property="commentTo" jdbcType="VARCHAR" />
+    <result column="depth" property="depth" jdbcType="INTEGER" />
+    <result column="info" property="info" jdbcType="VARCHAR" />
+    <result column="time" property="time" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, aid, comment_from, comment_to, depth, info, time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from comment
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from comment
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.platform.entity.Comment" >
+    insert into comment (id, aid, comment_from, 
+      comment_to, depth, info, 
+      time)
+    values (#{id,jdbcType=INTEGER}, #{aid,jdbcType=INTEGER}, #{commentFrom,jdbcType=VARCHAR}, 
+      #{commentTo,jdbcType=VARCHAR}, #{depth,jdbcType=INTEGER}, #{info,jdbcType=VARCHAR}, 
+      #{time,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.platform.entity.Comment" >
+    insert into comment
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="aid != null" >
+        aid,
+      </if>
+      <if test="commentFrom != null" >
+        comment_from,
+      </if>
+      <if test="commentTo != null" >
+        comment_to,
+      </if>
+      <if test="depth != null" >
+        depth,
+      </if>
+      <if test="info != null" >
+        info,
+      </if>
+      <if test="time != null" >
+        time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="aid != null" >
+        #{aid,jdbcType=INTEGER},
+      </if>
+      <if test="commentFrom != null" >
+        #{commentFrom,jdbcType=VARCHAR},
+      </if>
+      <if test="commentTo != null" >
+        #{commentTo,jdbcType=VARCHAR},
+      </if>
+      <if test="depth != null" >
+        #{depth,jdbcType=INTEGER},
+      </if>
+      <if test="info != null" >
+        #{info,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null" >
+        #{time,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.platform.entity.Comment" >
+    update comment
+    <set >
+      <if test="aid != null" >
+        aid = #{aid,jdbcType=INTEGER},
+      </if>
+      <if test="commentFrom != null" >
+        comment_from = #{commentFrom,jdbcType=VARCHAR},
+      </if>
+      <if test="commentTo != null" >
+        comment_to = #{commentTo,jdbcType=VARCHAR},
+      </if>
+      <if test="depth != null" >
+        depth = #{depth,jdbcType=INTEGER},
+      </if>
+      <if test="info != null" >
+        info = #{info,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null" >
+        time = #{time,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.platform.entity.Comment" >
+    update comment
+    set aid = #{aid,jdbcType=INTEGER},
+      comment_from = #{commentFrom,jdbcType=VARCHAR},
+      comment_to = #{commentTo,jdbcType=VARCHAR},
+      depth = #{depth,jdbcType=INTEGER},
+      info = #{info,jdbcType=VARCHAR},
+      time = #{time,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
