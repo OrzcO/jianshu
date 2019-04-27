@@ -3,12 +3,123 @@
 	<head>
 		<meta charset="UTF-8">
 		<title></title>
-		
-		<link rel="stylesheet" href="css/bootstrap.min.css" />
-		<link rel="stylesheet" href="css/font-awesome.min.css" />
-		<link rel="stylesheet" href="css/platform.css" />
-		<script type="text/javascript" src="js/jquery.min.js" ></script>
-		<script type="text/javascript" src="js/bootstrap.min.js" ></script>
+
+		<link rel="stylesheet" href="../css/bootstrap.min.css" />
+		<link rel="stylesheet" href="../css/font-awesome.min.css" />
+		<link rel="stylesheet" href="../css/platform.css" />
+		<script type="text/javascript" src="../js/jquery.min.js" ></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js" ></script>
+
+
+		<script type="text/javascript">
+
+
+			<!--article information 初始化部分 -->
+			var aid = 1;
+
+
+			function comment(comment_from , comment_to , depth , info) {
+
+			    if (comment_to == "" ) {
+			        comment_to = null;
+				}
+
+				if (depth == 0) {
+			        $.ajax({
+						url : "/article/getMaxDepth.action",
+						type : "get",
+						data : {
+						    aid : aid
+						},
+						dataType : "text",
+						success : function (data) {
+							depth = data;
+                        }
+					});
+				}
+
+				alert("depth : " + depth);
+
+			    $.ajax({
+					url : "/article/comment.action",
+					data : {
+					    aid : aid,
+						comment_from : comment_from,
+						comment_to : comment_to,
+						depth : depth,
+						info : info
+					},
+					dataType : "text" ,
+					type : "post",
+					success : function () {
+						alert("评论成功");
+                    },
+					error : function () {
+						alert("评论失败");
+                    }
+				});
+
+            }
+
+			$(function () {
+
+
+			    $(".comment-huifu").click(function () {
+					if ($(this).parents(".comment").find(".sub-comment-list").length == 0) {
+					    alert("当前无sub-comment-list");
+                        alert("more-comment 点击后，form块应显示")
+					} else {
+                        alert("当前有sub-comment-list");
+                        alert("more-comment 点击后，form块应显示")
+					}
+                });
+
+
+                $(".comment-quxiao").click(function () {
+                    $list = $(this).parents(".sub-comment-list");
+                    if ($list.length == 1 ) {
+                        if ($list.find(".sub-comment").length > 0) {
+                            $(this).parents("form.new-comment").remove();
+						} else {
+                            $(this).parents(".sub-comment-list").remove();
+						}
+					}
+                });
+
+
+                $(".more-comment").click(function () {
+//                    alert($(this).siblings().find("form.new-comment").length);
+                    alert($(this).siblings("form.new-comment").length);
+//					if ($(this).siblings("form.new-comment").length == 0) {
+//					    alert("more-comment 点击后，form块应显示");
+//					}
+                });
+
+
+
+                $("#new-comment-area").click(function () {
+					$("#new-comment-btn").show();
+                });
+
+			    $("#new-comment-send").click(function () {
+
+//			        发送评论给action
+
+//					var info = $("")
+
+
+					$("#new-comment-btn").hide();
+
+//					refresh 评论区域
+                });
+
+			    $("#new-comment-cancel").click(function () {
+					$("#new-comment-btn").hide();
+                });
+
+            });
+
+		</script>
 	
 	</head>
 	<body>
@@ -56,7 +167,7 @@
 	
 				<li class="dropdown logIn">
 					<a class="dropdown-toggle"  data-toggle="dropdown" style="padding: 5px 15px" >
-						<img src="img/profile.JPG" class="img-circle" width="40px" height="40px">
+						<img src="../img/profile.jpg" class="img-circle" width="40px" height="40px">
 						<span class="caret"></span>
 					</a>
 	
@@ -106,7 +217,7 @@
 					<!--作者部分-->
 					<div class="author">
 						<a class="avatar">
-							<img src="img/author.jpg" />
+							<img src="../img/author.jpg" />
 						</a>
 						<div class="info">
 							<span>
@@ -129,7 +240,7 @@
 					<!--文章部分-->
 					<div class="show-content">
 						<div class="image-container">
-							<img src="img/photo1.jpg" />
+							<img src="../img/photo1.jpg" />
 						</div>
 						<blockquote>
 							<p>
@@ -149,13 +260,13 @@
 							</b>
 						</p>
 						<div class="image-container">
-							<img src="img/photo2.jpg" />
+							<img src="../img/photo2.jpg" />
 						</div>
 						<p>喜欢在高铁上听着喜欢的歌，看着窗外发呆，想到些什么就记下来。</p>
 						<p>我喜欢走累了，就坐在湖边，听着民谣，静看夕阳西下。</p>
 						<p>喜欢夜里独自在街头游荡，或者去逛夜市，记录下那些各自忙碌的身影。</p>
 						<div class="image-container">
-							<img src="img/photo3.jpg" />
+							<img src="../img/photo3.jpg" />
 						</div>
 						<p>也特别喜欢旅途中遇到的那些个萌娃，微笑打个招呼，逗逗乐。</p>
 						<p>为什么喜欢小孩子？</p>
@@ -165,10 +276,10 @@
 							</b>
 						</p>
 						<div class="image-container">
-							<img src="img/photo4.jpg" />
+							<img src="../img/photo4.jpg" />
 						</div>
 						<div class="image-container">
-							<img src="img/photo5.jpg" />
+							<img src="../img/photo5.jpg" />
 						</div>
 						
 						<p>
@@ -238,14 +349,14 @@
 					<!--自己写评论部分-->
 					<form class="new-comment">
 						<a class="avatar">
-							<img src="img/profile.jpg" />
+							<img src="../img/profile.jpg" />
 						</a>
-						<textarea placeholder="请写下你的评论"></textarea>
+						<textarea id="new-comment-area" placeholder="请写下你的评论"></textarea>
 						
-						<div class="write-function-block">
+						<div id="new-comment-btn" class="write-function-block">
 							<div class="hint">Enter 发表</div>
-							<a class="btn btn-send">发送</a>
-							<a class="cancel">取消</a>
+							<a id="new-comment-send" class="btn btn-send">发送</a>
+							<a id="new-comment-cancel" class="cancel">取消</a>
 						</div>
 					</form>
 					
@@ -266,7 +377,7 @@
 					<div class="comment">
 						<div class="author">
 							<a class="avatar">
-								<img src="img/comment1.jpg" />
+								<img src="../img/comment1.jpg" />
 							</a>
 							<div class="info">
 								<a href="#" class="name">喵媛</a>
@@ -283,7 +394,7 @@
 									<span>赞</span>
 								</a>
 								
-								<a>
+								<a class="comment-huifu">
 									<i class="icon-comment-alt"></i>
 									<span>回复</span>
 								</a>
@@ -295,7 +406,7 @@
 					<div class="comment">
 						<div class="author">
 							<a class="avatar">
-								<img src="img/comment1.jpg" />
+								<img src="../img/comment1.jpg" />
 							</a>
 							<div class="info">
 								<a href="#" class="name">喵媛</a>
@@ -312,7 +423,7 @@
 									<span>赞</span>
 								</a>
 								
-								<a>
+								<a class="comment-huifu">
 									<i class="icon-comment-alt"></i>
 									<span>回复</span>
 								</a>
@@ -327,7 +438,7 @@
 								<div class="write-function-block">
 									<div class="hint">Enter 发表</div>
 									<a class="btn btn-send">发送</a>
-									<a class="cancel">取消</a>
+									<a class="cancel comment-quxiao">取消</a>
 								</div>
 							</form>
 						</div>
@@ -338,7 +449,7 @@
 					<div class="comment">
 						<div class="author">
 							<a class="avatar">
-								<img src="img/comment2.jpg" />
+								<img src="../img/comment2.jpg" />
 							</a>
 							<div class="info">
 								<a href="#" class="name">名言诗句</a>
@@ -355,7 +466,7 @@
 									<span>赞</span>
 								</a>
 								
-								<a>
+								<a class="comment-huifu">
 									<i class="icon-comment-alt"></i>
 									<span>回复</span>
 								</a>
@@ -374,7 +485,7 @@
 								</p>
 								<div class="sub-tool-group">
 									<span>2019.04.16 12:17</span>
-									<a>
+									<a class="comment-huifu">
 										<i class="icon-comment-alt"></i>
 										<span>回复</span>
 									</a>
@@ -394,7 +505,7 @@
 								</p>
 								<div class="sub-tool-group">
 									<span>2019.04.16 15:59</span>
-									<a>
+									<a class="comment-huifu">
 										<i class="icon-comment-alt"></i>
 										<span>回复</span>
 									</a>
@@ -405,7 +516,7 @@
 							</div>
 							
 							<div class="more-comment">
-								<a href="#">
+								<a>
 									<i class="icon-pencil"></i>
 									<span>添加新评论</span>
 								</a>
@@ -418,7 +529,7 @@
 								<div class="write-function-block">
 									<div class="hint">Enter 发表</div>
 									<a class="btn btn-send">发送</a>
-									<a class="cancel">取消</a>
+									<a class="cancel comment-quxiao">取消</a>
 								</div>
 							</form>
 						</div>
