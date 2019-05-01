@@ -118,6 +118,11 @@ public class UserController {
         HttpSession session = httpServletRequest.getSession();
         User user = (User)session.getAttribute("user");
 
+//        解决session的500错误
+        if (user == null) {
+            return null;
+        }
+
         map.put("id" , String.valueOf(user.getId())) ;
         map.put("username" , user.getUsername());
         map.put("info" , user.getInfo());
@@ -134,6 +139,6 @@ public class UserController {
 
         session.invalidate();
 
-        return "index";
+        return "redirect:/index.action";
     }
 }

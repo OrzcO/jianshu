@@ -45,7 +45,12 @@ public class RedirectController {
         return "reset";
     }
 
-
+//    返回文章页面
+//    还要含有文章的id , href="article.action/aid=***" href中拼上aid
+    @RequestMapping("article.action")
+    public String article(){
+        return "article";
+    }
 
 
 }
