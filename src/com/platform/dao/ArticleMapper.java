@@ -18,7 +18,4 @@ public interface ArticleMapper {
     int updateByPrimaryKey(Article record);
 
 
-
-
-    int getMaxDepth(int aid);
 }

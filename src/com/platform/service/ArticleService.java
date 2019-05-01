@@ -3,6 +3,7 @@ package com.platform.service;
 
 import com.platform.dao.ArticleMapper;
 import com.platform.dao.CommentMapper;
+import com.platform.entity.Comment;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -19,9 +20,21 @@ public class ArticleService {
     CommentMapper commentMapper;
 
 
+//    articleMapper
+
+
+
+
+
+//    commentMapper
+
 
     public int getMaxDepth(int aid) {
-        return articleMapper.getMaxDepth(aid);
+        return commentMapper.getMaxDepth(aid);
+    }
+
+    public int insertSelective(Comment comment) {
+        return commentMapper.insertSelective(comment);
     }
 
 }

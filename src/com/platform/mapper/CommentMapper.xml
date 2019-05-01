@@ -114,4 +114,12 @@
       time = #{time,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+
+  <select id="getMaxDepth" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    select max(depth)
+    from comment
+    where aid = #{aid}
+  </select>
+
 </mapper>
