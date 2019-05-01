@@ -116,12 +116,40 @@
 			    getSession();
 
 			    $(".comment-huifu").click(function () {
-					if ($(this).parents(".comment").find(".sub-comment-list").length == 0) {
-					    alert("当前无sub-comment-list");
-                        alert("more-comment 点击后，form块应显示")
+			        $parent = $(this).parents(".comment");
+					if ($parent.find(".sub-comment-list").length == 0) {
+//					    无sub-comment-list时，应当加一个sub-comment-list，然后增加一个form即可
+						$last = $parent.find("div:last");
+					    $('<div class="sub-comment-list">' +
+                            '<form class="new-comment" style="margin-left: 0;">' +
+                            '<textarea placeholder="请写下你的评论"></textarea>' +
+                            '<div class="write-function-block">' +
+                            '<div class="hint">Enter 发表</div>' +
+                            '<a class="btn btn-send">发送</a>' +
+                            '<a class="cancel comment-quxiao">取消</a>' +
+                            '</div>' +
+                            '</form>' +
+                            '</div>').insertAfter($last);
 					} else {
-                        alert("当前有sub-comment-list");
-                        alert("more-comment 点击后，form块应显示")
+						if ($parent.find(".sub-comment-list .sub-comment").length == 0) {
+ //						    无sub-comment-list但无子评论时，直接隐藏sub-comment-list即可
+							$parent.find(".sub-comment-list").remove();
+						} else{
+//						    有sub-comment-list并且有sub-comment的子评论时，只隐藏/增加form即可
+							if ($parent.find(".new-comment").length == 0) {
+							    $last = $parent.find("div:last");
+							    $('<form class="new-comment" style="margin-left: 0;">' +
+                                    '<textarea placeholder="请写下你的评论"></textarea>' +
+                                    '<div class="write-function-block">' +
+                                    '<div class="hint">Enter 发表</div>' +
+                                    '<a class="btn btn-send">发送</a>' +
+                                    '<a class="cancel comment-quxiao">取消</a>' +
+                                    '</div>' +
+                                    '</form>').insertAfter($last);
+							} else {
+                                $parent.find(".new-comment").remove();
+							}
+						}
 					}
                 });
 
@@ -139,11 +167,19 @@
 
 
                 $(".more-comment").click(function () {
-//                    alert($(this).siblings().find("form.new-comment").length);
-                    alert($(this).siblings("form.new-comment").length);
-//					if ($(this).siblings("form.new-comment").length == 0) {
-//					    alert("more-comment 点击后，form块应显示");
-//					}
+//                    alert($(this).siblings("form.new-comment").length);
+					if ($(this).siblings("form.new-comment").length == 0) {
+                        $('<form class="new-comment" style="margin-left: 0;">' +
+                            '<textarea placeholder="请写下你的评论"></textarea>' +
+                            '<div class="write-function-block">' +
+                            '<div class="hint">Enter 发表</div>' +
+                            '<a class="btn btn-send">发送</a>' +
+                            '<a class="cancel comment-quxiao">取消</a>' +
+                            '</div>' +
+                            '</form>').insertAfter($(this));
+					} else {
+                        $(this).siblings("form.new-comment").remove();
+					}
                 });
 
 
@@ -573,7 +609,7 @@
 								</div>
 							</div>
 							
-							<div class="more-comment">
+							<div class="more-comment sub-comment">
 								<a>
 									<i class="icon-pencil"></i>
 									<span>添加新评论</span>

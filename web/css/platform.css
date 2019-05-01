@@ -1068,6 +1068,10 @@ footer .main .icp, footer .main .icp a , footer .main .icp p{
     border: none;
 }
 
+.note .post .comment-list .comment .sub-comment-list .more-comment{
+    border: none;
+}
+
 /*举报*/
 .note .post .comment-list .sub-comment-list .report {
     float: right;
