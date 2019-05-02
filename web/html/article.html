@@ -20,6 +20,9 @@
 
             var login = false;
 
+            var comment_depth = 0;
+            var comment_count = 0;
+
             function getSession() {
 
                 $.ajax({
@@ -56,6 +59,169 @@
                 });
             }
 
+            function getMaxDepth() {
+                $.ajax({
+                    url : "/article/getMaxDepth.action",
+                    type : "get",
+                    data : {
+                        aid : aid
+                    },
+                    async : false,
+                    dataType : "text",
+                    success : function (data) {
+                        comment_depth = parseInt(data);
+                    }
+                });
+            }
+
+            function getCommentCount() {
+                $.ajax({
+                    url : "/article/getCommentCount.action",
+                    type : "get",
+                    data : {
+                        aid : aid
+                    },
+                    dataType : "text",
+                    success : function (data) {
+                        comment_count = parseInt(data);
+                    }
+                });
+            }
+
+//            order : 0 默认按照时间降序排列
+            function search(offset , order) {
+                $.ajax({
+					url : "/article/search.action",
+					type:"post",
+					dataType:"json",
+					data:{
+					    aid : aid,
+						offset : offset,
+						order : order ,
+                        comment_depth : comment_depth
+					},
+					success : function (data) {
+
+
+
+//					    显示评论数据
+
+
+//						clear comment-list下的comment
+//						$("div.comment-list").find(".comment").remove();
+
+
+						var cur = -1;
+						for (var i in data) {
+						    if (data[i].depth == cur) {
+//						        add sub-comment
+								$last = $(".comment-list").find(".comment:last");
+								if ($last.find(".sub-comment-list").length == 0) {
+								    $last = $last.find(".comment-wrap");
+
+								    $('<div class="sub-comment-list">' +
+                                        '<div class="sub-comment">' +
+                                        '<p>' +
+                                        '<a href="#">' + data[i].commentFrom + ' </a> :' +
+                                        '<span>' +
+                                        '<a href="#">'+ data[i].commentTo +' </a>' +
+                                        data[i].info +
+                                        '</span>' +
+                                        '</p>' +
+                                        '<div class="sub-tool-group">' +
+                                        '<span>' + data[i].time + '</span>' +
+                                        '<a class="comment-huifu">' +
+                                        '<i class="icon-comment-alt"></i>' +
+                                        '<span>回复</span>' +
+                                        '</a>' +
+                                        '<a class="report">' +
+                                        '<span>举报</span>' +
+                                        '</a>' +
+                                        '</div>' +
+                                        '</div>' +
+                                        '</div>' +
+                                        '</div>').insertAfter($last);
+
+								    $last = $last.siblings(".sub-comment-list");
+								    if ($last.find(".more-comment").length == 0) {
+								        $last = $last.find(".sub-comment:last");
+								        $('<div class="more-comment sub-comment">' +
+                                            '<a>' +
+                                            '<i class="icon-pencil"></i>' +
+                                            '<span>添加新评论</span>' +
+                                            '</a>' +
+                                            '</div>').insertAfter($last);
+									}
+
+
+								} else {
+								    $last = $last.find(".sub-comment:last");
+
+								    $('<div class="sub-comment">' +
+                                        '<p>' +
+                                        '<a href="#">'+ data[i].commentFrom + ' </a> :' +
+                                        '<span>\n' +
+                                        '<a href="#">'+ data[i].commentTo + ' </a>' +
+                                        data[i].info +
+                                        '</span>' +
+                                        '</p>' +
+                                        '<div class="sub-tool-group">' +
+                                        '<span>' + data[i].time + '</span>' +
+                                        '<a class="comment-huifu">' +
+                                        '<i class="icon-comment-alt"></i>' +
+                                        '<span>回复</span>' +
+                                        '</a>' +
+                                        '<a class="report">' +
+                                        '<span>举报</span>' +
+                                        '</a>' +
+                                        '</div>' +
+                                        '</div>').insertBefore($last);
+								}
+
+							} else {
+						        cur = data[i].depth;
+
+						        $last = $("body");
+						        if ($(".comment-list").find(".comment").length == 0) {
+						            $last = $(".comment-list").find(".normal-comment-list");
+								} else {
+						            $last = $(".comment-list").find(".comment:last");
+								}
+                                $('<div class="comment">' +
+									'<div class="author">' +
+									'<a class="avatar">' +
+
+//										img src 还没写 不行就这时候发一个ajax，请求下载并获取图片的url
+									'<img src="../img/comment1.jpg" />' +
+
+									'</a>' +
+									'<div class="info">' +
+									'<a href="#" class="name">' + data[i].commentFrom  + ' </a>' +
+									'<div class="meta">' +
+									'<span>' + data[i].depth + '楼 · ' + data[i].time +'</span>' +
+									'</div>' +
+									'</div>' +
+									'</div>' +
+									'<div class="comment-wrap">' +
+									'<p>'+ data[i].info +'</p>' +
+									'<div class="tool-group">' +
+									'<a>' +
+									'<i class="icon-thumbs-up"></i>' +
+									'<span>赞</span>' +
+									'</a>' +
+									'<a class="comment-huifu">' +
+									'<i class="icon-comment-alt"></i>' +
+									'<span>回复</span>' +
+									'</a>' +
+									'</div>' +
+									'</div>' +
+									'</div>').insertAfter($last);
+							}
+						}
+
+                    }
+				});
+            }
 
 			function comment(comment_from , comment_to , depth , info) {
 
@@ -111,11 +277,36 @@
 
             }
 
+
+//           每次回复/喜欢等按钮点击后 会进行一次是否登录的判断
+			function judgeLogin() {
+				if (login == false) {
+				    window.location = "/html/login.html?aid="+aid;
+				}
+            }
+
+            function showComment() {
+                getMaxDepth();
+
+                getCommentCount();
+//                分页
+
+                $(".top-title span").html(comment_depth + "条评论");
+
+//                每页10条评论
+				search(0 , 0);
+//				显示评论数据
+
+            }
+
+
 			$(function () {
 
 			    getSession();
 
-			    $(".comment-huifu").click(function () {
+			    showComment();
+
+			    $(document).on("click" , ".comment-huifu" ,function () {
 			        $parent = $(this).parents(".comment");
 					if ($parent.find(".sub-comment-list").length == 0) {
 //					    无sub-comment-list时，应当加一个sub-comment-list，然后增加一个form即可
@@ -154,7 +345,7 @@
                 });
 
 
-                $(".comment-quxiao").click(function () {
+                $(document).on("click", ".comment-quxiao", function () {
                     $list = $(this).parents(".sub-comment-list");
                     if ($list.length == 1 ) {
                         if ($list.find(".sub-comment").length > 0) {
@@ -166,7 +357,7 @@
                 });
 
 
-                $(".more-comment").click(function () {
+                $(document).on("click"  , ".more-comment",function () {
 //                    alert($(this).siblings("form.new-comment").length);
 					if ($(this).siblings("form.new-comment").length == 0) {
                         $('<form class="new-comment" style="margin-left: 0;">' +
@@ -183,12 +374,11 @@
                 });
 
 
-
-                $("#new-comment-area").click(function () {
+                $("#new-comment-area").click( function () {
 					$("#new-comment-btn").show();
                 });
 
-			    $("#new-comment-send").click(function () {
+			    $("#new-comment-send").click( function () {
 
 //			        发送评论给action
 
@@ -226,7 +416,7 @@
 
 		<ul class="nav navbar-nav">
 			<!--<li class="active"><a href="#">hah1</a></li>-->
-			<li><a href="/index.aciton"><i class="icon-home"></i>首页</a></li>
+			<li><a href="/index.action"><i class="icon-home"></i>首页</a></li>
 			<li class="logIn"><a href="/user_main.action"><i class="icon-bell-alt"></i>消息</a></li>
 			<li class="logIn"><a href="/followFan.action"><i class="icon-file"></i>关注</a></li>
 		</ul>

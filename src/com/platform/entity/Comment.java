@@ -1,5 +1,7 @@
 package com.platform.entity;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 
 public class Comment {
@@ -15,6 +17,7 @@ public class Comment {
 
     private String info;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private Date time;
 
     public Integer getId() {

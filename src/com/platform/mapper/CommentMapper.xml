@@ -122,4 +122,38 @@
     where aid = #{aid}
   </select>
 
+
+  <select id="getCommentCount" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    select count(1)
+    from comment
+    where aid = #{aid}
+  </select>
+
+
+  <select id="search" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from comment
+    where aid = #{0}
+    <choose>
+      <when test="param3 == 0">
+        and #{1} >= depth and depth >= #{1}-3
+      </when>
+      <otherwise>
+        and #{1}+3 >= depth and depth >= #{1}
+      </otherwise>
+    </choose>
+    <choose>
+      <when test="param3 == 1">
+        order by depth , time asc
+      </when>
+      <otherwise>
+        order by depth desc , time asc
+      </otherwise>
+    </choose>
+
+  </select>
+
+
+
 </mapper>

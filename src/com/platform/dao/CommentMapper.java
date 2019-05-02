@@ -2,6 +2,8 @@ package com.platform.dao;
 
 import com.platform.entity.Comment;
 
+import java.util.List;
+
 public interface CommentMapper {
     int deleteByPrimaryKey(Integer id);
 
@@ -20,4 +22,8 @@ public interface CommentMapper {
 
 
     int getMaxDepth(int aid);
+
+    int getCommentCount(int aid);
+
+    List<Comment> search(int aid , int offet , int order);
 }

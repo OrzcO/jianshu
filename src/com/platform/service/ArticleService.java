@@ -7,6 +7,7 @@ import com.platform.entity.Comment;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @Service(value = "articleService")
 public class ArticleService {
@@ -35,6 +36,15 @@ public class ArticleService {
 
     public int insertSelective(Comment comment) {
         return commentMapper.insertSelective(comment);
+    }
+
+
+    public int getCommentCount(int aid) {
+        return commentMapper.getCommentCount(aid);
+    }
+
+    public List<Comment> search(int aid , int offset , int order) {
+        return commentMapper.search(aid , offset , order);
     }
 
 }
