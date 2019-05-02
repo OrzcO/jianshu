@@ -130,7 +130,8 @@
                                         '</p>' +
                                         '<div class="sub-tool-group">' +
                                         '<span>' + data[i].time + '</span>' +
-                                        '<a class="comment-huifu">' +
+                                        '<a class="comment-huifu" data-from="' + data[i].commentFrom + '' +
+										'" data-id="' + data[i].id + '">' +
                                         '<i class="icon-comment-alt"></i>' +
                                         '<span>回复</span>' +
                                         '</a>' +
@@ -167,7 +168,8 @@
                                         '</p>' +
                                         '<div class="sub-tool-group">' +
                                         '<span>' + data[i].time + '</span>' +
-                                        '<a class="comment-huifu">' +
+                                        '<a class="comment-huifu" data-from="' + data[i].commentFrom + '' +
+										'" data-id="' + data[i].id + '">' +
                                         '<i class="icon-comment-alt"></i>' +
                                         '<span>回复</span>' +
                                         '</a>' +
@@ -209,15 +211,25 @@
 									'<i class="icon-thumbs-up"></i>' +
 									'<span>赞</span>' +
 									'</a>' +
-									'<a class="comment-huifu">' +
+									'<a class="comment-huifu" data-from="' + data[i].commentFrom + '' +
+									'" data-id="' + data[i].id + '">' +
 									'<i class="icon-comment-alt"></i>' +
 									'<span>回复</span>' +
 									'</a>' +
 									'</div>' +
 									'</div>' +
 									'</div>').insertAfter($last);
+
+//						        增加data-depth属性
+								$(".comment-list .comment:last").data("depth" , data[i].depth);
 							}
 						}
+
+
+//						测试一下data-depth对不对
+//						$(".comment").each(function () {
+//							console.log($(this).data("depth"));
+//                        });
 
                     }
 				});
@@ -337,8 +349,46 @@
                                     '<a class="cancel comment-quxiao">取消</a>' +
                                     '</div>' +
                                     '</form>').insertAfter($last);
+
+//							    规定 ： @*** 在层主的那个回复点了之后没有@***，其他的点了之后都会有@comment_from的显示
+//								思路 : 如果他有一个父类是sub-comment的话，回复会显示@***
+
+//								在textarea里显示@****
+								if ($(this).parents(".sub-comment").length > 0) {
+//								    如果他没有一个sub-comment的父类，即他是这一层的那个回复
+                                    $(this).parents(".comment").find("form.new-comment textarea").val("@"+$(this).data("from")+" ");
+                                    $(this).parents(".comment").find("form.new-comment textarea").data("id" , $(this).data("id"));
+								}
+
 							} else {
-                                $parent.find(".new-comment").remove();
+
+							    if ($(this).parents(".sub-comment").length == 0) {
+//							        这一层的那个回复
+									if ($(this).parents(".comment").find("form.new-comment textarea").val() == "") {
+//									    textarea 为空
+                                        $parent.find(".new-comment").remove();
+									} else {
+                                        $parent.find(".new-comment textarea").val("");
+                                        $parent.find(".new-comment textarea").data("id" , $(this).data("id"));
+									}
+								} else if ($(this).parents(".comment").find("form.new-comment textarea").data("id") == $(this).data("id")) {
+//									如果连续点击相同的回复，那么这个回复new-comment将remove掉
+//									做法：给这个textarea加一个data("id")，存放上次点击的回复的所在评论的id，通过是否相同进行判重
+							        $parent.find(".new-comment").remove();
+                                } else {
+                                    $parent.find(".new-comment textarea").data("id" , $(this).data("id"));
+                                    $parent.find(".new-comment textarea").val("@" + $(this).data("from") + " ");
+                                }
+
+
+
+//							    if ($(this).parents(".comment").find("form.new-comment textarea").val() == "@"+$(this).data("from")+" ") {
+//                                    $parent.find(".new-comment").remove();
+//								} else {
+//                                    $parent.find(".new-comment textarea").val("@" + $(this).data("from") + " ");
+//								}
+
+
 							}
 						}
 					}
@@ -369,7 +419,14 @@
                             '</div>' +
                             '</form>').insertAfter($(this));
 					} else {
-                        $(this).siblings("form.new-comment").remove();
+					    if ($(this).siblings("form.new-comment").find("textarea").val() == "") {
+                            $(this).siblings("form.new-comment").remove();
+						} else {
+//					        防止点击某个子回复的回复，点击添加新评论，再点击那个回复后消失的情况
+                            $(this).siblings("form.new-comment").find("textarea").data("id",-1);
+                            $(this).siblings("form.new-comment").find("textarea").val("");
+						}
+
 					}
                 });
 
