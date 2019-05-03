@@ -1,6 +1,7 @@
 package com.platform.action;
 
 
+import com.platform.entity.Article_likes;
 import com.platform.entity.Comment;
 import com.platform.service.ArticleService;
 import org.springframework.stereotype.Controller;
@@ -97,4 +98,66 @@ public class ArticleController {
 
         return list;
     }
+
+
+    @RequestMapping("like.action")
+    @ResponseBody
+    public int like(HttpServletRequest httpServletRequest){
+        int aid = Integer.parseInt(httpServletRequest.getParameter("aid"));
+        int uid = Integer.parseInt(httpServletRequest.getParameter("uid"));
+
+        Article_likes article_likes = new Article_likes();
+        article_likes.setAid(aid);
+        article_likes.setUid(uid);
+        article_likes.setTime(new Date());
+
+        int ans = articleService.insertSelective(article_likes);
+
+        System.out.println("like.action " + aid + " " + uid + " : " + ans );
+
+        return ans;
+    }
+
+
+    @RequestMapping("unlike.action")
+    @ResponseBody
+    public int unlike(HttpServletRequest httpServletRequest){
+        int aid = Integer.parseInt(httpServletRequest.getParameter("aid"));
+        int uid = Integer.parseInt(httpServletRequest.getParameter("uid"));
+
+        int ans = articleService.deleteLike(aid , uid);
+
+        System.out.println("unlike.action " + aid + " " + uid + " : " + ans );
+
+        return ans;
+    }
+
+
+
+    @RequestMapping("getLike.action")
+    @ResponseBody
+    public int getLike(HttpServletRequest httpServletRequest){
+        int aid = Integer.parseInt(httpServletRequest.getParameter("aid"));
+        int uid = Integer.parseInt(httpServletRequest.getParameter("uid"));
+
+        int ans = articleService.getLike(aid , uid);
+
+        System.out.println("getLike.action " + aid + " " + uid + " : " + ans );
+
+        return ans;
+    }
+
+    @RequestMapping("getLikeCount.action")
+    @ResponseBody
+    public int getLikeCount(HttpServletRequest httpServletRequest){
+        int aid = Integer.parseInt(httpServletRequest.getParameter("aid"));
+
+        int ans = articleService.getLikeCount(aid);
+
+        System.out.println("getLikeCount.action " + aid +  " : " + ans );
+
+        return ans;
+    }
+
+
 }

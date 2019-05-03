@@ -16,6 +16,8 @@
 
 			<!--article information 初始化部分 -->
 			var aid = 1;
+
+			var uid ;
 			var comment_from;
 
             var login = false;
@@ -29,19 +31,24 @@
 //            为了防止局部变量和全局变量的冲突，把offset -> page_offset
             var page_offset = 0;
 
+//            登录用户是否喜欢了这篇文章
+            var like = 0;
+
             function getSession() {
 
                 $.ajax({
                     url : "/user/getSession.action",
                     type : "get",
                     dataType : "json",
-//					async : false,
+					async : false,
                     success : function (data) {
                         if (data != null ) {
-//                        alert("id : " + data.id + " username : " + data.username + " info : " + data.info);
 
                             login = true;
                             comment_from = data.username;
+                            uid = data.id;
+
+//                        alert("uid : " + uid + " username : " + comment_from + " info : " + data.info);
 
 //				        隐藏nav的按钮
                             $(".logIn").show();
@@ -392,12 +399,166 @@
 
             }
 
+//            获取文章的喜欢数
+            function getLikeCount() {
+                $.ajax({
+                    url : "/article/getLikeCount.action",
+                    type :"get",
+                    dataType : "text",
+                    data : {
+                        aid : aid
+                    },
+                    success : function (data) {
+                        $(".like-wrap a").text(data);
+                    }
+                });
+            }
+
+            function like_toggle () {
+
+                if (uid == undefined || comment_from == undefined) {
+                    alert("请先登录再进行操作");
+                    return ;
+                }
+
+                if (like == 0) {
+
+                    $.ajax({
+                        url : "/article/like.action",
+                        type : "post",
+                        dataType:"text",
+
+//                        很重要 like 和 unlike 都要设置成同步的，不然获取LikeCount的值是错误的
+                        async : false,
+
+                        data : {
+                            uid : uid,
+                            aid : aid
+                        },
+                        success : function (data) {
+                            if (data == 1) {
+                                $(".btn.like-group").addClass("active");
+                                $(".btn.like-group").find(".like i").removeClass("icon-heart-empty");
+                                $(".btn.like-group").find(".like i").addClass("icon-heart");
+
+
+                                $(".side-tool li:eq(2) a").addClass("active");
+                                $(".side-tool li:eq(2) a i").removeClass("icon-heart-empty");
+                                $(".side-tool li:eq(2) a i").addClass("icon-heart");
+
+
+                                like = 1;
+                            } else {
+                                alert("喜欢失败");
+                            }
+
+                        }
+                    });
+
+
+                } else {
+
+                    $.ajax({
+                        url : "/article/unlike.action",
+                        type : "post",
+                        dataType:"text",
+
+//                        很重要 like 和 unlike 都要设置成同步的，不然获取LikeCount的值是错误的
+                        async : false,
+
+                        data : {
+                            uid : uid,
+                            aid : aid
+                        },
+                        success : function (data) {
+                            if (data == 1) {
+                                $(".btn.like-group").removeClass("active");
+                                $(".btn.like-group").find(".like i").removeClass("icon-heart");
+                                $(".btn.like-group").find(".like i").addClass("icon-heart-empty");
+
+                                $(".side-tool li:eq(2) a").removeClass("active");
+                                $(".side-tool li:eq(2) a i").removeClass("icon-heart");
+                                $(".side-tool li:eq(2) a i").addClass("icon-heart-empty");
+
+                                like = 0;
+                            } else {
+                                alert("取消喜欢失败");
+                            }
+
+                        }
+                    });
+
+                }
+                getLikeCount();
+            }
+
+
+
+            function LikeInfo() {
+
+
+//                获取like_cnt喜欢数
+                getLikeCount();
+
+
+                if (uid == undefined || comment_from == undefined) {
+//                    alert("请先登录再进行操作");
+                    return ;
+                }
+
+//                获取当前文章是否被喜欢了
+                $.ajax({
+                    url : "/article/getLike.action",
+                    type : "get",
+                    dataType : "text",
+                    data:{
+                        aid : aid,
+                        uid : uid
+                    },
+                    success : function (data) {
+                        if (data == 1) {
+
+//                            当前用户已经喜欢了这篇文章
+                            $(".btn.like-group").addClass("active");
+                            $(".btn.like-group").find(".like i").removeClass("icon-heart-empty");
+                            $(".btn.like-group").find(".like i").addClass("icon-heart");
+
+
+                            $(".side-tool li:eq(2) a").addClass("active");
+                            $(".side-tool li:eq(2) a i").removeClass("icon-heart-empty");
+                            $(".side-tool li:eq(2) a i").addClass("icon-heart");
+
+                            like = 1;
+                        } else if (data == 0) {
+
+//                            当前用户没有喜欢这篇文章
+                            $(".btn.like-group").removeClass("active");
+                            $(".btn.like-group").find(".like i").removeClass("icon-heart");
+                            $(".btn.like-group").find(".like i").addClass("icon-heart-empty");
+
+                            $(".side-tool li:eq(2) a").removeClass("active");
+                            $(".side-tool li:eq(2) a i").removeClass("icon-heart");
+                            $(".side-tool li:eq(2) a i").addClass("icon-heart-empty");
+                            like = 0;
+                        }
+                    },
+                    error : function () {
+                        alert("获取是否喜欢文章信息失败");
+                    }
+                });
+
+
+
+
+            }
 
 			$(function () {
 
 			    getSession();
 
 			    showComment();
+
+			    LikeInfo();
 
 			    $(document).on("click" , ".comment-huifu" ,function () {
 			        $parent = $(this).parents(".comment");
@@ -608,6 +769,15 @@
                     page_offset = 0;
 
                     showComment();
+                });
+
+
+                $(".btn.like-group").click(function () {
+                    like_toggle();
+                });
+
+                $(".side-tool li:eq(2)").click(function () {
+                    like_toggle();
                 });
 
             });

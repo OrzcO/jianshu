@@ -14,4 +14,14 @@ public interface Article_likesMapper {
     int updateByPrimaryKeySelective(Article_likes record);
 
     int updateByPrimaryKey(Article_likes record);
+
+
+
+    int deleteLike(int aid , int uid);
+
+    int getLike(int aid , int uid);
+
+    int getLikeCount(int aid );
+
+
 }

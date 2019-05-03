@@ -79,4 +79,25 @@
       time = #{time,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+
+
+
+  <delete id="deleteLike">
+    delete from article_likes
+    where aid = #{0}
+    and uid = #{1}
+  </delete>
+
+  <select id="getLike" resultType="java.lang.Integer">
+    select count(*) from article_likes
+    where aid = #{0} and uid = #{1}
+  </select>
+
+
+  <select id="getLikeCount" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+    select count(*) from article_likes
+    where aid = #{0}
+  </select>
+
 </mapper>

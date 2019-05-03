@@ -2,7 +2,9 @@ package com.platform.service;
 
 
 import com.platform.dao.ArticleMapper;
+import com.platform.dao.Article_likesMapper;
 import com.platform.dao.CommentMapper;
+import com.platform.entity.Article_likes;
 import com.platform.entity.Comment;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,9 @@ public class ArticleService {
 
     @Resource(name = "commentMapper")
     CommentMapper commentMapper;
+
+    @Resource(name = "article_likesMapper")
+    Article_likesMapper article_likesMapper;
 
 
 //    articleMapper
@@ -47,4 +52,23 @@ public class ArticleService {
         return commentMapper.search(aid , offset , order);
     }
 
+
+//    article_likes Mapper
+    public int insertSelective(Article_likes article_likes) {
+        return article_likesMapper.insertSelective(article_likes);
+    }
+
+    public int deleteLike(int aid , int uid) {
+        return article_likesMapper.deleteLike(aid , uid);
+    }
+
+
+    public int getLike(int aid , int uid) {
+        return article_likesMapper.getLike(aid , uid);
+    }
+
+
+    public int getLikeCount(int aid) {
+        return article_likesMapper.getLikeCount(aid );
+    }
 }
