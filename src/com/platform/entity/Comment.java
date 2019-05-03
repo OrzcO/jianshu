@@ -1,5 +1,6 @@
 package com.platform.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
@@ -17,7 +18,7 @@ public class Comment {
 
     private String info;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm" , timezone = "GMT+8")
     private Date time;
 
     public Integer getId() {

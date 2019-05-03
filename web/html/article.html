@@ -23,12 +23,19 @@
             var comment_depth = 0;
             var comment_count = 0;
 
+//            默认按照时间逆序排列，
+            var order = 0;
+
+//            为了防止局部变量和全局变量的冲突，把offset -> page_offset
+            var page_offset = 0;
+
             function getSession() {
 
                 $.ajax({
                     url : "/user/getSession.action",
                     type : "get",
                     dataType : "json",
+//					async : false,
                     success : function (data) {
                         if (data != null ) {
 //                        alert("id : " + data.id + " username : " + data.username + " info : " + data.info);
@@ -81,6 +88,7 @@
                     data : {
                         aid : aid
                     },
+					async : false,
                     dataType : "text",
                     success : function (data) {
                         comment_count = parseInt(data);
@@ -89,7 +97,7 @@
             }
 
 //            order : 0 默认按照时间降序排列
-            function search(offset , order) {
+            function search(offset) {
                 $.ajax({
 					url : "/article/search.action",
 					type:"post",
@@ -108,7 +116,7 @@
 
 
 //						clear comment-list下的comment
-//						$("div.comment-list").find(".comment").remove();
+						$("div.comment-list").find(".comment").remove();
 
 
 						var cur = -1;
@@ -233,8 +241,68 @@
 
                     }
 				});
+
+                pagination(offset +1);
+
+                page_offset = offset;
             }
 
+            function pagination(offset) {
+
+//                根据comment_depth和每页的数量决定分页的个数，以及上一页和下一页
+//                把所有的li初始化没有active的样式
+//                默认把第offset个li里的a设为active
+
+				var cnt = Math.ceil(comment_depth / 3);
+
+				$(".comment-list ul.pagination").find("li").remove();
+
+
+//				从offset 向左右两边各加3个页码
+				var from = offset > 3 ? offset-3 : 1;
+				var to = (cnt - offset + 1 ) > 3 ? offset+3 : cnt;
+
+				console.log("from :" + from);
+				console.log("to :" + to);
+
+//				from<= ~ <offset
+				for (;from<offset;from++) {
+                    $("ul.pagination").append($('<li>' +
+                        '<a href="javascript:search(' + parseInt(from-1) + ')">' + from + '</a>' +
+                        '</li>'));
+				}
+
+//				offset
+                $("ul.pagination").append($('<li>' +
+                    '<a class="active">' + offset + '</a>' +
+                    '</li>'));
+
+				from = offset+1;
+
+//				offset< ~ <=to
+                for (;from<=to;from++) {
+                    $("ul.pagination").append($('<li>' +
+                        '<a href="javascript:search(' + parseInt(from-1) + ')">' + from + '</a>' +
+                        '</li>'));
+                }
+
+
+//				最后加上一页和下一页比较方便 。 而不是通过以上一页下一页为基准，在其后/前append元素
+				if (offset != 1) {
+//				    加上一页
+					$("ul.pagination").prepend($('<li>' +
+						'<a href="javascript:search(' + parseInt(offset-2) + ')">上一页</a>' +
+						'</li>'));
+				}
+
+                if (offset != cnt) {
+//				    加下一页
+                    $("ul.pagination").append($('<li>' +
+                        '<a href="javascript:search(' + parseInt(offset) + ')">下一页</a>' +
+                        '</li>'));
+                }
+            }
+            
 			function comment(comment_from , comment_to , depth , info) {
 
                 var cur_depth = 0;
@@ -254,14 +322,14 @@
 						dataType : "text",
 						success : function (data) {
                             cur_depth = parseInt(data) +1 ;
-                            alert(cur_depth);
+//                            alert(cur_depth);
                         }
 					});
 				} else {
                     cur_depth = depth;
 				}
 
-				alert("cur_depth : " + cur_depth);
+//				alert("cur_depth : " + cur_depth);
 
 			    $.ajax({
 					url : "/article/comment.action",
@@ -272,6 +340,8 @@
 						depth : cur_depth,
 						info : info
 					},
+//					强制等评论完之后再刷新
+					async : false ,
 					dataType : "text" ,
 					type : "post",
 					success : function (data) {
@@ -291,23 +361,34 @@
 
 
 //           每次回复/喜欢等按钮点击后 会进行一次是否登录的判断
+
+//			之后用作 如果未登录 就跳转到对应页面 进行跳转操作，登陆后 直接回来
 			function judgeLogin() {
+
 				if (login == false) {
-				    window.location = "/html/login.html?aid="+aid;
+				    getSession();
+				    if (login == false) {
+                        window.location = "/html/login.html?action=article.action&aid="+aid;
+					}
+
 				}
             }
 
+//            每次发布新的评论，改变排序方式时以及页面初始化时会强制调用这个函数
             function showComment() {
+
                 getMaxDepth();
 
                 getCommentCount();
 //                分页
 
-                $(".top-title span").html(comment_depth + "条评论");
+                $(".top-title span").html(comment_count + "条评论");
 
 //                每页10条评论
-				search(0 , 0);
-//				显示评论数据
+
+//				按照时间逆序排列 ： order = 0
+
+				search(page_offset);
 
             }
 
@@ -431,6 +512,56 @@
                 });
 
 
+                $(document).on("click" , ".btn-send:not(#new-comment-send)" , function () {
+
+                    var info = $(this).parents("form.new-comment").find("textarea").val();
+                    var copy_info = info;
+//                    alert(info + " - "+ comment_from);
+
+
+//					初始化发评论 comment-to 和 depth 都置为 "" 和 0 ， 后续可以采用别的的方式直接获取
+					var cur_depth = $(this).parents(".comment").data("depth");
+
+					var comment_to = "";
+					if (info.indexOf("@") != -1 && info.indexOf(" ") != -1) {
+					    comment_to = info.substr( 1 , info.indexOf(" ")-info.indexOf("@")-1);
+					    info = info.substr(info.indexOf(" "));
+					}
+					alert(comment_from + " - " + comment_to + " - " + info + " - " + cur_depth);
+
+					if (comment_to != "") {
+					    $.ajax({
+							url : "/user/searchUsernameDup.action",
+							type:"post",
+							dataType:"text",
+
+//							必须强制那个async，不然这个ajax等于无效
+							async : false,
+
+							data:{
+							    username : comment_to
+							},
+							success : function (data) {
+								if (data == 0) {
+//								    如果那个名字不存在的话，则不按照回复@**的格式处理
+								    comment_to = "";
+                                    info = copy_info;
+								}
+                            },
+							error : function (data) {
+								alert("分名字时出现错误");
+                                comment_to = "";
+                                info = copy_info;
+                            }
+						});
+					}
+                    comment(comment_from , comment_to , cur_depth , info);
+
+					showComment();
+
+
+                });
+
                 $("#new-comment-area").click( function () {
 					$("#new-comment-btn").show();
                 });
@@ -449,11 +580,34 @@
 
 					$("#new-comment-btn").hide();
 
+					showComment();
+
 //					refresh 评论区域
                 });
 
 			    $("#new-comment-cancel").click(function () {
 					$("#new-comment-btn").hide();
+                });
+
+
+			    $("#inverse-order-btn").click(function () {
+					$(this).addClass("active");
+					$("#sequence-order-btn").removeClass("active");
+
+					order = 0;
+                    page_offset = 0;
+
+					showComment();
+                });
+
+                $("#sequence-order-btn").click(function () {
+                    $(this).addClass("active");
+                    $("#inverse-order-btn").removeClass("active");
+
+                    order = 1;
+                    page_offset = 0;
+
+                    showComment();
                 });
 
             });
@@ -706,8 +860,8 @@
 						<div class="top-title">
 							<span>79条评论</span>
 							<div class="pull-right">
-								<a class="active">按时间倒序</a>
-								<a>按时间正序</a>
+								<a id="inverse-order-btn" class="active">按时间倒序</a>
+								<a id="sequence-order-btn">按时间正序</a>
 							</div>
 						</div>
 					</div>
@@ -878,21 +1032,21 @@
 					
 				
 					<ul class="pagination">
-						<li>
-							<a class="active" href="#">1</a>
-						</li>
-						<li>
-							<a href="#">2</a>
-						</li>
-						<li>
-							<a href="#">3</a>
-						</li>
-						<li>
-							<a href="#">4</a>
-						</li>
-						<li>
-							<a href="#">下一页</a>
-						</li>
+						<!--<li>-->
+							<!--<a class="active" href="#">1</a>-->
+						<!--</li>-->
+						<!--<li>-->
+							<!--<a href="#">2</a>-->
+						<!--</li>-->
+						<!--<li>-->
+							<!--<a href="#">3</a>-->
+						<!--</li>-->
+						<!--<li>-->
+							<!--<a href="#">4</a>-->
+						<!--</li>-->
+						<!--<li>-->
+							<!--<a href="#">下一页</a>-->
+						<!--</li>-->
 					</ul>
 					
 				</div>

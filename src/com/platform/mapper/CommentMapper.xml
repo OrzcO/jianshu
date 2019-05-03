@@ -135,12 +135,14 @@
     <include refid="Base_Column_List" />
     from comment
     where aid = #{0}
+
+    <!--      这里不能全是 小于等于 或者 大于等于 否则会出现重复显示的问题 -->
     <choose>
       <when test="param3 == 0">
-        and #{1} >= depth and depth >= #{1}-3
+        and #{1} >= depth and depth > #{1}-3
       </when>
       <otherwise>
-        and #{1}+3 >= depth and depth >= #{1}
+        and #{1}+3 > depth and depth >= #{1}
       </otherwise>
     </choose>
     <choose>
@@ -151,6 +153,11 @@
         order by depth desc , time asc
       </otherwise>
     </choose>
+
+      <!--
+      不能用limit的写法，因为要用depth取层数，用limit的话子评论也会占用一定的评论数量
+      limit #{1} , 3
+     -->
 
   </select>
 
