@@ -133,4 +133,10 @@
     set passwd = #{1}
     where phone = #{0}
   </update>
+
+
+  <update id="setInfo">
+    update user set info = #{1}
+    where id = #{0}
+  </update>
 </mapper>

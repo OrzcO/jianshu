@@ -33,4 +33,13 @@ public class UserService {
     public int reset(String phone , String passwd) {
         return userMapper.reset(phone , passwd);
     }
+
+    public int setInfo(int id , String info) {
+        return userMapper.setInfo(id , info);
+    }
+
+    public User selectByPrimaryKey(int id) {
+        return userMapper.selectByPrimaryKey(id);
+    }
+
 }

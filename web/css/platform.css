@@ -452,6 +452,22 @@ footer .main .icp, footer .main .icp a , footer .main .icp p{
 	resize:none;
 	outline:none;
 }
+
+.btn-hollow {
+    border: 1px solid rgba(59,194,29,.7);
+    color: #42c02e!important;
+    font-weight: 400;
+    line-height: normal;
+    border-radius: 40px;
+    background: none;
+}
+
+.btn-hollow:focus, .btn-hollow:hover {
+    border: 1px solid #42c02e;
+    color: #42c02e!important;
+    background-color: rgba(59,194,29,.05);
+}
+
 .aside .profile-edit .btn-hollow{
 	padding:5px 20px;
 	font-size:14px

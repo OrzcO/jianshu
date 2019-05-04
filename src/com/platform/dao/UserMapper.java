@@ -26,4 +26,6 @@ public interface UserMapper {
     User login(String username , String passwd);
 
     int reset(String phone , String passwd);
+
+    int setInfo(int id , String info);
 }

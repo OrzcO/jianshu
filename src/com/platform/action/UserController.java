@@ -141,4 +141,24 @@ public class UserController {
 
         return "redirect:/index.action";
     }
+
+    @ResponseBody
+    @RequestMapping("setInfo.action")
+    public int setInfo(HttpServletRequest httpServletRequest) {
+        int id = Integer.parseInt(httpServletRequest.getParameter("id"));
+        String info = httpServletRequest.getParameter("info");
+
+        int ans = userService.setInfo(id , info);
+
+        System.out.println("setInfo.action " + id + " - " + info + " : " + ans);
+
+
+//        更新session !!!
+        User user = userService.selectByPrimaryKey(id);
+
+        HttpSession session = httpServletRequest.getSession();
+        session.setAttribute("user" , user);
+
+        return ans;
+    }
 }
