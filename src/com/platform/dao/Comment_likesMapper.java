@@ -14,4 +14,13 @@ public interface Comment_likesMapper {
     int updateByPrimaryKeySelective(Comment_likes record);
 
     int updateByPrimaryKey(Comment_likes record);
+
+
+
+    int zanInfo(int id);
+
+    int getZan(int uid , int cid);
+
+    int unlike_comment(int uid , int cid);
+
 }

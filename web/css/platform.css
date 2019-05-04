@@ -752,6 +752,19 @@ footer .main .icp, footer .main .icp a , footer .main .icp p{
     background-color: rgba(236, 97, 73, 0.05);
 }
 
+.meta-bottom .like-group.active{
+    background-color: #EA6F5A;
+}
+
+.meta-bottom .like-group.active  a {
+    color: white;
+}
+
+.meta-bottom .like-group.active .like span{
+    padding-right: 10px;
+    border-right: 1.5px solid white;
+}
+
 .meta-bottom .share-group{
 	/*margin-bottom: 50px;*/
 	margin-top: 6px;
@@ -819,6 +832,10 @@ footer .main .icp, footer .main .icp a , footer .main .icp p{
 .side-tool ul li:hover{
     background-color: hsla(0,0%,71%,.1);
     transition: .1s ease-in;
+}
+
+.side-tool a.active{
+    color: #ea6f5a;
 }
 
 
@@ -1025,6 +1042,11 @@ footer .main .icp, footer .main .icp a , footer .main .icp p{
 
 .note .post .comment-list .tool-group a:hover {
 	color: #333333;
+}
+
+/*赞的红色*/
+.note .post .comment-list .tool-group i.active {
+    color: #ea6f5a;
 }
 
 .note .post .comment-list .sub-comment-list {

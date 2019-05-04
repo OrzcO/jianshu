@@ -79,4 +79,23 @@
       time = #{time,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+
+
+
+  <select id="zanInfo" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    select count(1) from comment_likes
+    where cid = #{0}
+  </select>
+
+  <select id="getZan" resultType="java.lang.Integer">
+    select count(1) from comment_likes
+    where uid = #{0} and cid = #{1}
+  </select>
+
+  <delete id="unlike_comment">
+    delete from comment_likes
+    where uid = #{0} and cid = #{1}
+  </delete>
+
 </mapper>

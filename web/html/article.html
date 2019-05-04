@@ -109,6 +109,7 @@
 					url : "/article/search.action",
 					type:"post",
 					dataType:"json",
+					async : false,
 					data:{
 					    aid : aid,
 						offset : offset,
@@ -222,14 +223,15 @@
 									'<div class="comment-wrap">' +
 									'<p>'+ data[i].info +'</p>' +
 									'<div class="tool-group">' +
-									'<a>' +
+//										在赞的a标签里增加data-id，来方便对评论赞
+									'<a class="comment-zan" data-id="' + data[i].id + '">' +
 									'<i class="icon-thumbs-up"></i>' +
-									'<span>赞</span>' +
+									'<span> 赞</span>' +
 									'</a>' +
 									'<a class="comment-huifu" data-from="' + data[i].commentFrom + '' +
 									'" data-id="' + data[i].id + '">' +
 									'<i class="icon-comment-alt"></i>' +
-									'<span>回复</span>' +
+									'<span> 回复</span>' +
 									'</a>' +
 									'</div>' +
 									'</div>' +
@@ -311,6 +313,11 @@
             }
             
 			function comment(comment_from , comment_to , depth , info) {
+
+                if (uid == undefined || comment_from == undefined) {
+                    return ;
+				}
+
 
                 var cur_depth = 0;
 
@@ -492,8 +499,6 @@
                 getLikeCount();
             }
 
-
-
             function LikeInfo() {
 
 
@@ -552,6 +557,76 @@
 
             }
 
+            function singleZanInfo(id , dom) {
+
+                var $p = $(dom);
+
+//					    获取多少人赞
+                $.ajax({
+                    url : "/article/zanInfo.action",
+                    type: "get",
+                    data : {
+                        id : id
+                    },
+                    dataType : "text",
+                    async : false ,
+                    success : function (data) {
+                        if (data >= 1) {
+                            $p.find("span").text(" " + data + "人赞");
+                        } else {
+                            $p.find("span").text(" 赞");
+                        }
+                    }
+                });
+
+//					    获取这条评论是否被comment_from / uid 赞
+                if (uid == undefined || comment_from == undefined) {
+                    return ;
+                }
+
+                $.ajax({
+                    url : "/article/getZan.action",
+                    type : "get",
+                    data : {
+                        uid : uid,
+                        cid : id
+                    },
+                    async : false ,
+                    dataType : "text",
+                    success : function (data) {
+                        if (data == 1) {
+                            $p.find("i").addClass("active");
+                            $p.data("like","1");
+                        } else {
+                            $p.find("i").removeClass("active");
+                            $p.data("like" , "0");
+                        }
+                    }
+                });
+            }
+
+            function zanInfo(dom) {
+
+                $p = null;
+                if (dom == undefined || dom == null) {
+                    $p = $(".comment-zan");
+                    console.log("zanInfo : null/undefined" + $p.length);
+				} else {
+                    $p = $(dom);
+                    console.log("zanInfo : " + $p.length);
+				}
+
+				$p.each(function () {
+					var id = $(this).data("id");
+//					alert(id);
+					if (id != "" && id != undefined) {
+
+					    singleZanInfo(id , $(this).get(0));
+
+					}
+                });
+            }
+
 			$(function () {
 
 			    getSession();
@@ -559,6 +634,8 @@
 			    showComment();
 
 			    LikeInfo();
+
+                zanInfo(null);
 
 			    $(document).on("click" , ".comment-huifu" ,function () {
 			        $parent = $(this).parents(".comment");
@@ -636,6 +713,60 @@
 					}
                 });
 
+			    $(document).on("click" , ".comment-zan" , function () {
+			        var $p = $(this);
+			        var id = $(this).data("id");
+			        var ok = $(this).data("like");
+
+			        if (uid == undefined || comment_from == undefined) {
+			            return ;
+					}
+
+			        if (ok == undefined || ok == "0") {
+                        $.ajax({
+                            url : "/article/like_comment.action",
+                            type : "post",
+                            dataType : "text",
+                            async : false ,
+                            data :{
+                                uid : uid,
+                                cid : id
+                            },
+                            success : function (data) {
+                                if (data == 1) {
+                                    $p.data("like" , "1");
+                                    $p.find("i").addClass("active");
+                                }
+                            },
+							error : function (data) {
+								alert("喜欢评论失败");
+                            }
+                        });
+					} else {
+                        $.ajax({
+                            url : "/article/unlike_comment.action",
+                            type : "post",
+                            dataType : "text",
+                            async : false ,
+                            data :{
+                                uid : uid,
+                                cid : id
+                            },
+                            success : function (data) {
+                                if (data == 1) {
+                                    $p.data("like" , "0");
+                                    $p.find("i").removeClass("active");
+                                }
+                            },
+                            error : function (data) {
+                                alert("不喜欢喜欢评论失败");
+                            }
+                        });
+					}
+
+                    singleZanInfo(id , $(this).get(0));
+
+                });
 
                 $(document).on("click", ".comment-quxiao", function () {
                     $list = $(this).parents(".sub-comment-list");
@@ -778,6 +909,16 @@
 
                 $(".side-tool li:eq(2)").click(function () {
                     like_toggle();
+                });
+
+                $("#logout-btn").click(function () {
+
+//			    强制刷新重新获取session数据，防止多个浏览器窗口一个退出，其他未退出的情况
+                    getSession();
+
+                    if (login == true) {
+                        window.location = "/user/logout.action";
+                    }
                 });
 
             });

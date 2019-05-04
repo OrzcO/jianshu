@@ -3,6 +3,7 @@ package com.platform.action;
 
 import com.platform.entity.Article_likes;
 import com.platform.entity.Comment;
+import com.platform.entity.Comment_likes;
 import com.platform.service.ArticleService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -155,6 +156,65 @@ public class ArticleController {
         int ans = articleService.getLikeCount(aid);
 
         System.out.println("getLikeCount.action " + aid +  " : " + ans );
+
+        return ans;
+    }
+
+    @RequestMapping("zanInfo.action")
+    @ResponseBody
+    public int zanInfo(HttpServletRequest httpServletRequest){
+        int id = Integer.parseInt(httpServletRequest.getParameter("id"));
+
+        int ans = articleService.zanInfo(id);
+
+        System.out.println("zanInfo.action " + id +  " : " + ans );
+
+        return ans;
+    }
+
+    @RequestMapping("getZan.action")
+    @ResponseBody
+    public int getZan(HttpServletRequest httpServletRequest){
+        int uid = Integer.parseInt(httpServletRequest.getParameter("uid"));
+        int cid = Integer.parseInt(httpServletRequest.getParameter("cid"));
+
+        int ans = articleService.getZan(uid , cid);
+
+        System.out.println("getZan.action " + uid + " - " + cid  +  " : " + ans );
+
+        return ans;
+    }
+
+
+    @RequestMapping("like_comment.action")
+    @ResponseBody
+    public int like_comment(HttpServletRequest httpServletRequest){
+        int uid = Integer.parseInt(httpServletRequest.getParameter("uid"));
+        int cid = Integer.parseInt(httpServletRequest.getParameter("cid"));
+
+        Comment_likes comment_likes = new Comment_likes();
+        comment_likes.setUid(uid);
+        comment_likes.setCid(cid);
+        comment_likes.setTime(new Date());
+
+        int ans = articleService.insertSelective(comment_likes);
+
+        System.out.println("like_comment.action " + uid + " - " + cid  +  " : " + ans );
+
+        return ans;
+    }
+
+
+    @RequestMapping("unlike_comment.action")
+    @ResponseBody
+    public int unlike_comment(HttpServletRequest httpServletRequest){
+
+        int uid = Integer.parseInt(httpServletRequest.getParameter("uid"));
+        int cid = Integer.parseInt(httpServletRequest.getParameter("cid"));
+
+        int ans = articleService.unlike_comment(uid , cid);
+
+        System.out.println("unlike_comment.action " + uid + " - " + cid  +  " : " + ans );
 
         return ans;
     }
