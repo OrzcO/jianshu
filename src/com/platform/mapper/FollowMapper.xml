@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.platform.dao.FollowMapper" >
+  <resultMap id="BaseResultMap" type="com.platform.entity.Follow" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="follow_from" property="followFrom" jdbcType="INTEGER" />
+    <result column="follow_to" property="followTo" jdbcType="INTEGER" />
+    <result column="time" property="time" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, follow_from, follow_to, time
+  </sql>
+
+
+
+  <resultMap id="UserMap" type="com.platform.entity.User">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="passwd" jdbcType="VARCHAR" property="passwd" />
+    <result column="fan_count" jdbcType="INTEGER" property="fanCount" />
+    <result column="follow_count" jdbcType="INTEGER" property="followCount" />
+    <result column="write_count" jdbcType="INTEGER" property="writeCount" />
+    <result column="like_count" jdbcType="INTEGER" property="likeCount" />
+    <result column="article_count" jdbcType="INTEGER" property="articleCount" />
+    <result column="createTime" jdbcType="TIMESTAMP" property="createtime" />
+    <result column="info" jdbcType="VARCHAR" property="info" />
+  </resultMap>
+  <sql id="User_List">
+    id, username, phone, passwd, fan_count, follow_count, write_count, like_count, article_count,
+    createTime, info
+  </sql>
+
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from follow
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from follow
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.platform.entity.Follow" >
+    insert into follow (id, follow_from, follow_to, 
+      time)
+    values (#{id,jdbcType=INTEGER}, #{followFrom,jdbcType=INTEGER}, #{followTo,jdbcType=INTEGER}, 
+      #{time,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.platform.entity.Follow" >
+    insert into follow
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="followFrom != null" >
+        follow_from,
+      </if>
+      <if test="followTo != null" >
+        follow_to,
+      </if>
+      <if test="time != null" >
+        time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="followFrom != null" >
+        #{followFrom,jdbcType=INTEGER},
+      </if>
+      <if test="followTo != null" >
+        #{followTo,jdbcType=INTEGER},
+      </if>
+      <if test="time != null" >
+        #{time,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.platform.entity.Follow" >
+    update follow
+    <set >
+      <if test="followFrom != null" >
+        follow_from = #{followFrom,jdbcType=INTEGER},
+      </if>
+      <if test="followTo != null" >
+        follow_to = #{followTo,jdbcType=INTEGER},
+      </if>
+      <if test="time != null" >
+        time = #{time,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.platform.entity.Follow" >
+    update follow
+    set follow_from = #{followFrom,jdbcType=INTEGER},
+      follow_to = #{followTo,jdbcType=INTEGER},
+      time = #{time,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+
+
+
+
+  <select id="getFollowCount" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    select count(1)
+    from follow
+    where follow_from = #{0}
+  </select>
+
+  <select id="getFanCount" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    select count(1)
+    from follow
+    where follow_to = #{0}
+  </select>
+
+  <select id="getFollowed" resultType="java.lang.Integer">
+    select count(1)
+    from follow
+    where follow_from = #{0}
+    and follow_to = #{1}
+  </select>
+
+  <delete id="unlike">
+    delete from follow
+    where
+    follow_from = #{0}
+    and
+    follow_to = #{1}
+  </delete>
+
+
+
+
+  <!--关注列表-->
+  <select id="getFollowList" parameterType="java.lang.Integer" resultMap="UserMap">
+    select
+    user.id as id, username ,fan_count, follow_count, write_count, like_count, article_count
+    from user , follow
+    WHERE
+    user.id = follow_to and follow_from = #{0}
+    order by follow.time desc
+  </select>
+
+
+  <!--粉丝列表-->
+  <select id="getFanList" parameterType="java.lang.Integer" resultMap="UserMap">
+    select
+    user.id as id, username ,fan_count, follow_count, write_count, like_count, article_count
+    from user , follow
+    WHERE
+    user.id = follow_from and follow_to = #{0}
+    order by follow.time desc
+  </select>
+
+
+
+  <!--更新关注/粉丝 写文章的数量 文章的喜欢数量 写字数量 数量 -->
+  <update id="updateFan" parameterType="java.lang.Integer">
+    update user set fan_count =
+    (select count(*) from follow where  follow_to = user.id)
+    where user.id = #{0}
+  </update>
+
+  <update id="updateFollow" parameterType="java.lang.Integer">
+    update user set follow_count =
+    (select count(*) from follow where follow_from = user.id)
+    where user.id = #{0}
+  </update>
+
+  <update id="updateArticleLike" parameterType="java.lang.Integer">
+    update user set like_count =
+    (select count(*) from article a , article_likes al where
+    a.uid = user.id and a.id = al.aid )
+    where  user.id = #{0}
+  </update>
+</mapper>

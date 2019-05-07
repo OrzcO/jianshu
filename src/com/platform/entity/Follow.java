@@ -4,12 +4,12 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.util.Date;
 
-public class Article_likes {
+public class Follow {
     private Integer id;
 
-    private Integer uid;
+    private Integer followFrom;
 
-    private Integer aid;
+    private Integer followTo;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm" , timezone = "GMT+8")
     private Date time;
@@ -22,20 +22,20 @@ public class Article_likes {
         this.id = id;
     }
 
-    public Integer getUid() {
-        return uid;
+    public Integer getFollowFrom() {
+        return followFrom;
     }
 
-    public void setUid(Integer uid) {
-        this.uid = uid;
+    public void setFollowFrom(Integer followFrom) {
+        this.followFrom = followFrom;
     }
 
-    public Integer getAid() {
-        return aid;
+    public Integer getFollowTo() {
+        return followTo;
     }
 
-    public void setAid(Integer aid) {
-        this.aid = aid;
+    public void setFollowTo(Integer followTo) {
+        this.followTo = followTo;
     }
 
     public Date getTime() {

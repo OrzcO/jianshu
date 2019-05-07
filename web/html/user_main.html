@@ -21,6 +21,54 @@
         var username;
         var info;
 
+        var like = 0;
+        var user_id;
+
+//        用于喜欢评论、文章时 数据库中没有对应的username字段，方便一点
+        var user_name;
+
+        function updateFollow() {
+            if (uid == undefined || uid == 0 ) {
+                return ;
+            }
+
+            $.ajax({
+                url : "/follow/updateFollow.action",
+                type :"post",
+                dataType : "text",
+                data : {
+                    id : uid
+                },
+                success : function (data) {
+                    if (data == 1) {
+//					    update 第i个的user 的数据 or ....
+//                        alert("update " + id + " Follow info ok");
+                    }
+                }
+            });
+        }
+
+        function updateFan(id) {
+            if (id == undefined || id == 0 ) {
+                return ;
+            }
+
+            $.ajax({
+                url : "/follow/updateFan.action",
+                type :"post",
+                dataType : "text",
+                data : {
+                    id : id
+                },
+                success : function (data) {
+                    if (data == 1) {
+//					    update 第i个的user 的数据 or ....
+//                        alert("update " + id + " Fan info ok");
+                    }
+                }
+            });
+        }
+
         function getSession() {
 
             $.ajax({
@@ -60,16 +108,426 @@
         }
 
         function loadPage() {
-			$("a.name").text(username);
             $(".profile-edit textarea").val(info);
             $(".description div").text(info);
         }
 
+        
+
+//        初始化 user_id 用户的关注/粉丝/文章 以及是否关注
+        function init() {
+
+            if (user_id == uid) {
+                $(".user-follow-button").hide();
+			} else {
+                $(".function-btn").hide();
+			}
+
+            if (user_id == undefined || user_id == 0) {
+                alert("没有user_id");
+                return ;
+			}
+
+
+
+            $.ajax({
+                url : "/user/getUsernameById.action",
+                type : "get",
+                data : {
+                    id : user_id
+                },
+                dataType : "text",
+                success : function (data) {
+                    if (data != null || data != undefined) {
+                        user_name = data;
+                        $(".title a.name").text(data);
+                        $(".title a.name").attr("href" , "/html/user_main.html?id=" + user_id);
+                    }
+                }
+            });
+
+			$.ajax({
+				url : "/follow/getFollowCount.action",
+				type : "get",
+				data : {
+				    id : user_id
+				},
+				dataType : "text",
+				success : function (data) {
+					$(".meta-block:eq(0) p").text(data);
+                }
+			});
+
+			$.ajax({
+                url : "/follow/getFanCount.action",
+                type : "get",
+                data : {
+                    id : user_id
+                },
+                dataType : "text",
+                success : function (data) {
+                    $(".meta-block:eq(1) p").text(data);
+                }
+            });
+
+			$.ajax({
+                url : "/article/getArticleCount.action",
+                type : "get",
+                data : {
+                    id : user_id
+                },
+                dataType : "text",
+                success : function (data) {
+                    $(".meta-block:eq(2) p").text(data);
+                }
+            });
+
+            $.ajax({
+                url : "/article/getArticleLikeCount.action",
+                type : "get",
+                data : {
+                    id : user_id
+                },
+                dataType : "text",
+                success : function (data) {
+                    $(".meta-block:eq(4) p").text(data);
+                }
+            });
+
+            $.ajax({
+                url : "/user/getUserInfoById.action",
+                type: "get",
+                dataType : "text",
+                data : {
+                    id : user_id
+                },
+                success : function (data) {
+                    if (data != undefined ) {
+                        $(".description div").text(data);
+                        $(".profile-edit textarea").val(data);
+                    }
+                }
+            });
+
+            if (uid == undefined || uid == 0 || user_id == uid) {
+                return ;
+            }
+
+
+            $.ajax({
+                url : "/follow/getFollowed.action",
+                type : "get",
+                data : {
+                    from : uid ,
+                    to : user_id
+                },
+                async : false,
+                dataType : "text",
+                success: function (data) {
+                    if (data == 1) {
+                        $(".user-follow-button").removeClass("off");
+                        $(".user-follow-button").addClass("on");
+                        $(".user-follow-button i").removeClass("icon-plus");
+                        $(".user-follow-button i").addClass("icon-ok");
+                        $(".user-follow-button span").text("已关注");
+
+                        like = 1;
+                    } else {
+                        $(".user-follow-button").addClass("off");
+                        $(".user-follow-button").removeClass("on");
+                        $(".user-follow-button i").addClass("icon-plus");
+                        $(".user-follow-button i").removeClass("icon-ok");
+                        $(".user-follow-button span").text("关注");
+
+                        like = 0;
+                    }
+                }
+            });
+        }
+
+        
+        function getAllInfo() {
+			if (user_id == undefined) {
+			    return ;
+			}
+
+			$.ajax({
+				url : "/user/getAllInfo.action",
+				type : "get",
+				data : {
+				    id : user_id
+				},
+				dataType : "json",
+				success : function (data) {
+				    alert("data.length : " + data.length);
+
+				    if (data == undefined || data.length == 0) {
+				        return ;
+					}
+
+					$("ul.note-list li").remove();
+
+//					按照时间逆序排序
+					data.sort(function (a , b) {
+					    return Date.parse(b.time) - Date.parse(a.time);
+                    });
+
+				    console.log(data);
+
+				    var $cur = $("ul.note-list");
+					for (var i in data) {
+				        if (data[i].hasOwnProperty("createtime")) {
+                            ($("ul.note-list")).append($('<li>\n' +
+                                '\t\t\t\t\t\t\t\t\t\t<div class="content">\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t<div class="author">\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t<a class="avatar" href="#">\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t\t<img src="../img/profile.jpg" />\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t</a>\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t<div class="info">\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t\t<a href="#">' + data[i].username + '</a>\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t\t<em>·</em>\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t\t<span>加入了文章创作平台 · ' + data[i].createtime + '</span>\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t</div>\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t</div>\n' +
+                                '\t\t\t\t\t\t\t\t\t\t</div>\n' +
+                                '\t\t\t\t\t\t\t\t\t</li>'));
+
+				            $cur = $("ul.note-list li:last");
+
+						} else if (data[i].hasOwnProperty("author")) {
+
+				            $('<li class="have-img">\n' +
+                                '\t\t\t\t\t\t\t\t\t\t<a href="#" class="wrap-img">\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t<img src="../img/index0.jpg" />\n' +
+                                '\t\t\t\t\t\t\t\t\t\t</a>\n' +
+                                '\t\t\t\t\t\t\t\t\t\t<div class="content">\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t<div class="author">\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t<a class="avatar" href="#">\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t\t<img src="../img/profile.jpg" />\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t</a>\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t<div class="info">\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t\t<a href="#">' + data[i].author + '</a>\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t\t<span>发表了文章 · ' + data[i].time + '</span>\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t</div>\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t</div>\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t<a class="title" href="#">\n' + data[i].title +
+                                '\t\t\t\t\t\t\t\t\t\t\t</a>\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t<p class="abstract">\n' + data[i].introduction +
+                                '\t\t\t\t\t\t\t\t\t\t\t</p>\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t<div class="meta">\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t<span><i class="icon-eye-open"></i> ' + data[i].readCount + '</span>\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t<a><i class="icon-comment"></i> ' + data[i].commentCount + '</a>\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t<span><i class="icon-heart"></i> ' + data[i].likeCount + '</span>\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t</div>\n' +
+                                '\t\t\t\t\t\t\t\t\t\t</div>\n' +
+                                '\t\t\t\t\t\t\t\t\t</li>').insertBefore($cur);
+
+						} else if (data[i].hasOwnProperty("depth")) {
+
+				            var aid = data[i].aid;
+				            var toInfo = "";
+
+				            if (data[i].commentTo != "" && data[i].commentTo != null && data[i].commentTo != undefined) {
+
+				                toInfo = "<a>@" + data[i].commentTo + "</a> ";
+
+							}
+
+							if (data[i].info == null) {
+				                data[i].info = "";
+							}
+
+
+//							以及一个ajax获取文章的内容
+							$('<li>\n' +
+                                '\t\t\t\t\t\t\t\t\t\t<div class="content">\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t<div class="author">\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t<a class="avatar" href="#">\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t\t<img src="../img/profile.jpg" />\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t</a>\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t<div class="info">\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t\t<a href="#">' + data[i].commentFrom + '</a>\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t\t<em>·</em>\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t\t<span>发表了评论 ·' + data[i].time + ' </span>\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t</div>\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t</div>\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t<p class="comment">\n' + toInfo + data[i].info +
+                                '\t\t\t\t\t\t\t\t\t\t\t</p>\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t<blockquote>\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t<a class="title" href="#">\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t\t一个土家族80后的家庭简史（1985年——2018年）\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t</a>\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t<p class="abstract">\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t\t【 文：李砍柴】 引子 今年四月的时候，母亲给我打电话说，她不在镇上我姐家里住，\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t\t她回家了。 其实姐姐也是心疼母亲，\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t\t才接她去镇上，名义上是照看外孙女，其实并没有太多的事。在家里...\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t</p>\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t<div class="meta">\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t\t<a href="#"></a>\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t\t<span></span>\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t\t<a></a>\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t\t<span></span>\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t</div>\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t</blockquote>\n' +
+                                '\t\t\t\t\t\t\t\t\t\t</div>\n' +
+                                '\t\t\t\t\t\t\t\t\t</li>').insertBefore($cur);
+
+                            //						获取文章信息的ajax
+                            $.ajax({
+                                url :"/article/getArticleById.action",
+                                type:"get",
+                                async:false,
+                                data : {
+                                    id : aid
+                                },
+                                dataType : "json",
+                                success : function (data) {
+//							    console.log(data);
+//							    alert(data.title + " - " + data.introduction);
+
+                                    $p = $("ul.note-list li:eq(-2)").find("blockquote");
+                                    $p.find("a.title").text(data.title);
+                                    $p.find("p.abstract").text(data.introduction);
+                                    $p.find(".meta a:eq(0)").text(data.author);
+                                    $p.find(".meta span:eq(0)").html('<i class="icon-eye-open"></i> ' + data.readCount);
+                                    $p.find(".meta a:eq(1)").html('<i class="icon-comment"></i> ' + data.commentCount);
+                                    $p.find(".meta span:eq(1)").html('<i class="icon-heart"></i> ' + data.likeCount);
+                                }
+                            });
+						} else if (data[i].hasOwnProperty("uid") && data[i].hasOwnProperty("aid")) {
+
+				            var aid = data[i].aid;
+
+//				            console.log(data[i]);
+
+//				            alert("aid : " + aid);
+
+				            $('<li class="have-img">\n' +
+                                '\t\t\t\t\t\t\t\t\t\t<a href="#" class="wrap-img">\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t<img src="../img/index3.jpg" />\n' +
+                                '\t\t\t\t\t\t\t\t\t\t</a>\n' +
+                                '\t\t\t\t\t\t\t\t\t\t<div class="content">\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t<div class="author">\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t<a class="avatar" href="#">\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t\t<img src="../img/profile.jpg" />\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t</a>\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t<div class="info">\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t\t<a href="#">' + user_name + '</a>\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t\t<span>喜欢了文章 · ' + data[i].time +'</span>\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t</div>\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t</div>\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t<a class="title" href="#">\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t</a>\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t<p class="abstract">\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t</p>\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t<div class="meta">\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t<a></a>\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t<span></span>\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t<a></a>\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t<span></span>\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t</div>\n' +
+                                '\t\t\t\t\t\t\t\t\t\t</div>\n' +
+                                '\t\t\t\t\t\t\t\t\t</li>').insertBefore($cur);
+
+
+                            $.ajax({
+                                url :"/article/getArticleById.action",
+                                type:"get",
+                                async:false,
+                                data : {
+                                    id : aid
+                                },
+                                dataType : "json",
+                                success : function (data) {
+
+                                    $p = $("ul.note-list li:eq(-2)");
+
+                                    if (data.url == null || data.url == "") {
+                                        $p.find("a.wrap-img").hide();
+                                        $p.find("div:eq(0)").removeClass("content");
+									}
+
+                                    $p.find("a.title").text(data.title);
+                                    $p.find("p.abstract").text(data.introduction);
+                                    $p.find(".meta a:eq(0)").text(data.author);
+                                    $p.find(".meta span:eq(0)").html('<i class="icon-eye-open"></i> ' + data.readCount);
+                                    $p.find(".meta a:eq(1)").html('<i class="icon-comment"></i> ' + data.commentCount);
+                                    $p.find(".meta span:eq(1)").html('<i class="icon-heart"></i> ' + data.likeCount);
+                                }
+                            });
+						} else if (data[i].hasOwnProperty("followFrom")) {
+
+				            var id = data[i].followTo;
+
+				            $('<li>\n' +
+                                '\t\t\t\t\t\t\t\t\t\t<div class="content">\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t<div class="author">\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t<a class="avatar" href="#">\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t\t<img src="../img/profile.jpg" />\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t</a>\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t<div class="info">\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t\t<a href="#">'+ user_name + '</a>\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t\t<em>·</em>\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t\t<span>关注了作者 · '  + data[i].time + '</span>\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t</div>\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t</div>\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t<div class="follow-detail">\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t<div class="info">\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t\t<a class="avatar">\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t\t\t<img src="../img/recommed-author1.jpg" />\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t\t</a>\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t\t<a class="title"></a>\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t\t<p>写了 282558 字，被 67166 人关注，获得了 24128 个喜欢</p>\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t\t<div class="signature">\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t\t</div>\n' +
+                                '\t\t\t\t\t\t\t\t\t\t\t</div>\n' +
+                                '\t\t\t\t\t\t\t\t\t\t</div>\n' +
+                                '\t\t\t\t\t\t\t\t\t</li>').insertBefore($cur);
+
+
+				            $.ajax({
+								url : "/user/getUserById.action",
+								type:"get",
+								data : {
+								    id : id
+								},
+								async : false,
+								dataType: "json",
+								success : function (data) {
+
+								    $p = $("ul.note-list li:eq(-2)").find("div.info");
+								    $p.find("a.title").text(data.username);
+								    $p.find("p").text("写了 " + data.writeCount + "字，被 " + data.fanCount + " 人关注，获得了 " + data.likeCount + " 个喜欢")
+									$p.find(".signature").text(data.info);
+
+                                }
+							});
+						}
+
+
+
+					}
+                }
+			});
+        }
+        
+        
+        
 		$(function () {
+
+
 
             getSession();
 
+            if (window.location.search.indexOf("user_id") != -1) {
+                user_id = location.search.substring(location.search.indexOf("=")+1);
+                alert("user_id " + user_id);
+            }
 
+            init();
+
+            getAllInfo();
 
             $("#logout-btn").click(function () {
 
@@ -118,6 +576,97 @@
             $("#cancel-btn").click(function () {
                 $("form.profile-edit").hide();
                 $(".description").show();
+            });
+
+            $(".user-follow-button").click(function () {
+
+                if (uid == undefined) {
+                    alert("请登录啊！！！");
+                    return ;
+				}
+
+				if (user_id == undefined) {
+                    alert("没有user_id ！！！");
+                    return ;
+				}
+
+				if (like == 0) {
+
+				    $.ajax({
+						url : "/follow/like.action",
+						type : "post",
+                        async : false,
+						dataType : "text",
+						data : {
+						    from : uid,
+							to : user_id
+						},
+						success : function (data) {
+							if (data == 1) {
+                                $(".user-follow-button").removeClass("off");
+                                $(".user-follow-button").addClass("on");
+                                $(".user-follow-button i").removeClass("icon-plus");
+                                $(".user-follow-button i").addClass("icon-ok");
+                                $(".user-follow-button span").text("已关注");
+
+                                like = 1;
+							} else {
+							    alert("喜欢" + user_id + " 失败");
+							}
+                        }
+					});
+
+				} else {
+                    $.ajax({
+                        url : "/follow/unlike.action",
+                        type : "post",
+                        async : false,
+                        dataType : "text",
+                        data : {
+                            from : uid,
+                            to : user_id
+                        },
+                        success : function (data) {
+                            if (data == 1) {
+                                $(".user-follow-button").addClass("off");
+                                $(".user-follow-button").removeClass("on");
+                                $(".user-follow-button i").addClass("icon-plus");
+                                $(".user-follow-button i").removeClass("icon-ok");
+                                $(".user-follow-button span").text("关注");
+
+                                like = 0;
+                            } else {
+                                alert("不喜欢" + user_id + " 失败");
+                            }
+                        }
+                    });
+				}
+
+                updateFan(user_id);
+				updateFollow();
+            });
+
+            $(".trigger-menu li").click(function () {
+                var type = $(this).data("type");
+
+                if (user_id == undefined) {
+                    return ;
+                }
+
+
+                alert(type);
+                if (type == "article") {
+
+                } else if (type == "all") {
+
+                } else if (type == "comment") {
+
+                } else if (type == "hot") {
+
+                }
+
+                $(this).addClass("active");
+                $(this).siblings("li").removeClass("active");
             });
         });
 
@@ -212,6 +761,20 @@
 							<a class="avatar" href="#">
 								<img src="../img/profile.jpg" />
 							</a>
+
+							<button id="user-follow-btn" class="off user-follow-button">
+								<i class="icon-plus"></i>
+								<span>关注</span>
+							</button>
+
+							<!--<button class="on user-follow-button">-->
+							<!--<i class="icon-ok"></i>-->
+							<!--<span>已关注</span>-->
+
+							<!--&lt;!&ndash;<i class="icon-remove"></i>-->
+							<!--<span>取消关注</span>&ndash;&gt;-->
+							<!--</button>-->
+
 							<div class="title">
 								<a class="name" href="#">OrzcO</a>
 							</div>
@@ -265,7 +828,7 @@
 						
 						<div class="outer-container">
 							<ul class="trigger-menu">
-								<li>
+								<li data-type="article">
 									<a>
 										<i class="icon-file"></i>
 										文章
@@ -273,21 +836,21 @@
 								</li>
 								
 								
-								<li class="active">
+								<li data-type="all" class="active">
 									<a>
 										<i class="icon-bell-alt"></i>
 										动态
 									</a>
 								</li>
 								
-								<li>
+								<li data-type="comment">
 									<a>
 										<i class="icon-comments"></i>
 										最新评论
 									</a>
 								</li>
 								
-								<li>
+								<li data-type="hot">
 									<a>
 										<i class="icon-star"></i>
 										热门
@@ -366,7 +929,7 @@
 											</blockquote>
 										</div>
 									</li>
-									
+
 									
 									<li>
 										<div class="content">
@@ -405,7 +968,38 @@
 											</div>
 										</div>
 									</li>
-									
+
+
+									<!--喜欢文章 无图版-->
+									<li class="have-img">
+										<a href="#" class="wrap-img">
+											<img src="../img/调档函.jpg" />
+										</a>
+										<div class="content">
+											<div class="author">
+												<a class="avatar" href="#">
+													<img src="../img/调档函.jpg" />
+												</a>
+												<div class="info">
+													<a href="#">OrzcO</a>
+													<span>喜欢了文章 · 2019.04.09 21:46</span>
+												</div>
+											</div>
+											<a class="title" href="#">
+												纳兰词：一往而情深，醉里何知岁月年华？
+											</a>
+											<p class="abstract">
+												1. 人生若只如初见，何事秋风悲画扇？等闲变却故人心，却道故人心易变。——《木兰花·拟古决绝词柬友》
+												2. 我是人间惆怅客，知君何事泪纵横。断肠声里忆平生。——《浣溪沙》 3...
+											</p>
+											<div class="meta">
+												<a>nickname</a>
+												<span><i class="icon-eye-open"></i>191</span>
+												<a><i class="icon-comment"></i>121</a>
+												<span><i class="icon-heart"></i>101</span>
+											</div>
+										</div>
+									</li>
 									
 									<li class="have-img">
 										<a href="#" class="wrap-img">
@@ -494,6 +1088,21 @@
 												<span><i class="icon-eye-open"></i>191</span>
 												<a><i class="icon-comment"></i>121</a>
 												<span><i class="icon-heart"></i>101</span>
+											</div>
+										</div>
+									</li>
+
+									<li>
+										<div class="content">
+											<div class="author">
+												<a class="avatar" href="#">
+													<img src="../img/profile.jpg.jpg" />
+												</a>
+												<div class="info">
+													<a href="#">OrzcO</a>
+													<em>·</em>
+													<span>加入了简书 · 2019.04.15</span>
+												</div>
 											</div>
 										</div>
 									</li>

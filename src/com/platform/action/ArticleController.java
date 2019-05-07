@@ -1,6 +1,7 @@
 package com.platform.action;
 
 
+import com.platform.entity.Article;
 import com.platform.entity.Article_likes;
 import com.platform.entity.Comment;
 import com.platform.entity.Comment_likes;
@@ -219,5 +220,49 @@ public class ArticleController {
         return ans;
     }
 
+
+
+
+    @RequestMapping("getArticleCount.action")
+    @ResponseBody
+    public int getArticleCount(HttpServletRequest httpServletRequest){
+
+        int id = Integer.parseInt(httpServletRequest.getParameter("id"));
+
+        int ans = articleService.getArticleCount(id);
+
+        System.out.println("getArticleCount.action " + id +  " : " + ans );
+
+        return ans;
+    }
+
+
+    @RequestMapping("getArticleLikeCount.action")
+    @ResponseBody
+    public int getArticleLikeCount(HttpServletRequest httpServletRequest){
+
+        int id = Integer.parseInt(httpServletRequest.getParameter("id"));
+
+        int ans = articleService.getArticleLikeCount(id);
+
+        System.out.println("getArticleLikeCount.action " + id +  " : " + ans );
+
+        return ans;
+    }
+
+
+
+    @RequestMapping("getArticleById.action")
+    @ResponseBody
+    public Article getArticleById(HttpServletRequest httpServletRequest){
+
+        int id = Integer.parseInt(httpServletRequest.getParameter("id"));
+
+        Article article = articleService.getArticleById(id);
+
+        System.out.println("getArticleById.action " + id );
+
+        return article;
+    }
 
 }

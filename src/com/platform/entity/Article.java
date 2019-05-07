@@ -1,5 +1,7 @@
 package com.platform.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class Article {
@@ -19,6 +21,7 @@ public class Article {
 
     private Integer readCount;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm" , timezone = "GMT+8")
     private Date time;
 
     private String url;

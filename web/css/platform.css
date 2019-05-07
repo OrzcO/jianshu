@@ -236,6 +236,60 @@ footer .main .icp, footer .main .icp a , footer .main .icp p{
     border-radius: 50%;
 }
 
+
+.user-follow-button {
+    text-align: center;
+    border-radius: 40px;
+    font-weight: 400;
+    border: 1px solid transparent;
+    line-height: normal;
+}
+
+.main-top .user-follow-button {
+    padding: 8px 0;
+    width: 100px;
+    float: right;
+    margin: 23px 0 23px 16px;
+    font-size: 15px;
+}
+
+.user-follow-button.off:hover {
+    border-color: #3db922;
+    background-color: #3db922;
+}
+
+.user-follow-button.off {
+    color: #fff;
+    background-color: #42c02e;
+}
+
+.user-follow-button.on {
+    color: #8c8c8c;
+    background-color: transparent;
+    border-color: hsla(0,0%,59%,.6);
+}
+
+.user-follow-button.on:hover {
+    border-color: #969696;
+    background-color: rgba(99,99,99,.05);
+}
+
+
+.user-list .follow{
+    float: right;
+    margin-top: 8px;
+    padding: 8px 0;
+    width: 100px;
+    font-size: 15px;
+}
+
+.btn-success {
+    border-radius: 40px;
+    color: #fff;
+    background-color: #42c02e;
+    border-color: #42c02e;
+}
+
 .main-top .title {
     padding: 5px 0 0 100px;
 }

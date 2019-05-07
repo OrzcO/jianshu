@@ -1,5 +1,7 @@
 package com.platform.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class User {
@@ -11,6 +13,17 @@ public class User {
 
     private String passwd;
 
+    private Integer fanCount;
+
+    private Integer followCount;
+
+    private Integer writeCount;
+
+    private Integer likeCount;
+
+    private Integer articleCount;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm" , timezone = "GMT+8")
     private Date createtime;
 
     private String info;
@@ -45,6 +58,46 @@ public class User {
 
     public void setPasswd(String passwd) {
         this.passwd = passwd == null ? null : passwd.trim();
+    }
+
+    public Integer getFanCount() {
+        return fanCount;
+    }
+
+    public void setFanCount(Integer fanCount) {
+        this.fanCount = fanCount;
+    }
+
+    public Integer getFollowCount() {
+        return followCount;
+    }
+
+    public void setFollowCount(Integer followCount) {
+        this.followCount = followCount;
+    }
+
+    public Integer getWriteCount() {
+        return writeCount;
+    }
+
+    public void setWriteCount(Integer writeCount) {
+        this.writeCount = writeCount;
+    }
+
+    public Integer getLikeCount() {
+        return likeCount;
+    }
+
+    public void setLikeCount(Integer likeCount) {
+        this.likeCount = likeCount;
+    }
+
+    public Integer getArticleCount() {
+        return articleCount;
+    }
+
+    public void setArticleCount(Integer articleCount) {
+        this.articleCount = articleCount;
     }
 
     public Date getCreatetime() {

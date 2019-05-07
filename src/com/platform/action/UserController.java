@@ -3,7 +3,6 @@ package com.platform.action;
 import com.platform.entity.User;
 import com.platform.service.UserService;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -12,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -161,4 +161,59 @@ public class UserController {
 
         return ans;
     }
+
+
+    @ResponseBody
+    @RequestMapping("getUsernameById.action")
+    public String getUsernameById(HttpServletRequest httpServletRequest) {
+        int id = Integer.parseInt(httpServletRequest.getParameter("id"));
+
+        String ans = userService.getUsernameById(id);
+
+        System.out.println("getUsernameById.action " + id +  " : " + ans);
+
+        return ans;
+    }
+
+    @ResponseBody
+    @RequestMapping("getUserInfoById.action")
+    public String getUserInfoById(HttpServletRequest httpServletRequest) {
+        int id = Integer.parseInt(httpServletRequest.getParameter("id"));
+
+        String ans = userService.getUserInfoById(id);
+
+        System.out.println("getUserInfoById.action " + id +  " : " + ans);
+
+        return ans;
+    }
+
+
+
+//    user_main页面
+    @ResponseBody
+    @RequestMapping("getAllInfo.action")
+    public List<Object> getAllInfo(HttpServletRequest httpServletRequest) {
+        int id = Integer.parseInt(httpServletRequest.getParameter("id"));
+
+        List<Object> list = userService.getAllInfo(id);
+
+        System.out.println("getAllInfo.action " + id +  " : " + list.size());
+
+        return list;
+    }
+
+
+
+    @ResponseBody
+    @RequestMapping("getUserById.action")
+    public User getUserById(HttpServletRequest httpServletRequest) {
+        int id = Integer.parseInt(httpServletRequest.getParameter("id"));
+
+        User user = userService.getUserById(id);
+
+        System.out.println("getUserById.action " + id  );
+
+        return user;
+    }
+
 }

@@ -1,6 +1,8 @@
 package com.platform.dao;
 
-import com.platform.entity.User;
+import com.platform.entity.*;
+
+import java.util.List;
 
 public interface UserMapper {
     int deleteByPrimaryKey(Integer id);
@@ -16,7 +18,9 @@ public interface UserMapper {
     int updateByPrimaryKey(User record);
 
 
-//
+
+
+
 
 
     int searchUsernameDup(String username);
@@ -28,4 +32,16 @@ public interface UserMapper {
     int reset(String phone , String passwd);
 
     int setInfo(int id , String info);
+
+    String getUsernameById(int id);
+
+    String getUserInfoById(int id);
+
+
+    List<User> getUserInfo(int id);
+    List<Article> getArticleInfo(int id);
+    List<Article_likes> getArticleLikesInfo(int id);
+    List<Comment> getCommentInfo(int id);
+    List<Comment_likes> getCommentLikesInfo(int id);
+    List<Follow> getFollowInfo(int id);
 }

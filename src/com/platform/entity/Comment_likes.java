@@ -1,5 +1,7 @@
 package com.platform.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class Comment_likes {
@@ -9,6 +11,7 @@ public class Comment_likes {
 
     private Integer cid;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm" , timezone = "GMT+8")
     private Date time;
 
     public Integer getId() {

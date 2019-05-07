@@ -6,14 +6,86 @@
     <result column="username" jdbcType="VARCHAR" property="username" />
     <result column="phone" jdbcType="VARCHAR" property="phone" />
     <result column="passwd" jdbcType="VARCHAR" property="passwd" />
+    <result column="fan_count" jdbcType="INTEGER" property="fanCount" />
+    <result column="follow_count" jdbcType="INTEGER" property="followCount" />
+    <result column="write_count" jdbcType="INTEGER" property="writeCount" />
+    <result column="like_count" jdbcType="INTEGER" property="likeCount" />
+    <result column="article_count" jdbcType="INTEGER" property="articleCount" />
     <result column="createTime" jdbcType="TIMESTAMP" property="createtime" />
     <result column="info" jdbcType="VARCHAR" property="info" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, username, phone, passwd, createTime, info
+    id, username, phone, passwd, fan_count, follow_count, write_count, like_count, article_count,
+    createTime, info
   </sql>
+
+
+  <resultMap id="ArticleMap" type="com.platform.entity.Article" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="uid" property="uid" jdbcType="INTEGER" />
+    <result column="author" property="author" jdbcType="VARCHAR" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="introduction" property="introduction" jdbcType="VARCHAR" />
+    <result column="comment_count" property="commentCount" jdbcType="INTEGER" />
+    <result column="like_count" property="likeCount" jdbcType="INTEGER" />
+    <result column="read_count" property="readCount" jdbcType="INTEGER" />
+    <result column="time" property="time" jdbcType="TIMESTAMP" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Article_List" >
+    id, uid, author, title, introduction, comment_count, like_count, read_count, time,
+    url
+  </sql>
+
+
+  <resultMap id="ArticleLikesMap" type="com.platform.entity.Article_likes" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="uid" property="uid" jdbcType="INTEGER" />
+    <result column="aid" property="aid" jdbcType="INTEGER" />
+    <result column="time" property="time" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Article_Likes_List" >
+    id, uid, aid, time
+  </sql>
+
+
+  <resultMap id="CommentMap" type="com.platform.entity.Comment" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="aid" property="aid" jdbcType="INTEGER" />
+    <result column="comment_from" property="commentFrom" jdbcType="VARCHAR" />
+    <result column="comment_to" property="commentTo" jdbcType="VARCHAR" />
+    <result column="depth" property="depth" jdbcType="INTEGER" />
+    <result column="info" property="info" jdbcType="VARCHAR" />
+    <result column="time" property="time" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Comment_List" >
+    id, aid, comment_from, comment_to, depth, info, time
+  </sql>
+
+
+  <resultMap id="CommentLikesMap" type="com.platform.entity.Comment_likes" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="uid" property="uid" jdbcType="INTEGER" />
+    <result column="cid" property="cid" jdbcType="INTEGER" />
+    <result column="time" property="time" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Comment_likes_List" >
+    id, uid, cid, time
+  </sql>
+
+
+  <resultMap id="FollowMap" type="com.platform.entity.Follow" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="follow_from" property="followFrom" jdbcType="INTEGER" />
+    <result column="follow_to" property="followTo" jdbcType="INTEGER" />
+    <result column="time" property="time" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Follow_List" >
+    id, follow_from, follow_to, time
+  </sql>
+
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
+    select
     <include refid="Base_Column_List" />
     from user
     where id = #{id,jdbcType=INTEGER}
@@ -23,12 +95,14 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.platform.entity.User">
-    insert into user (id, username, phone, 
-      passwd, createTime, info
-      )
-    values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
-      #{passwd,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, #{info,jdbcType=VARCHAR}
-      )
+    insert into user (id, username, phone,
+    passwd, fan_count, follow_count,
+    write_count, like_count, article_count,
+    createTime, info)
+    values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR},
+    #{passwd,jdbcType=VARCHAR}, #{fanCount,jdbcType=INTEGER}, #{followCount,jdbcType=INTEGER},
+    #{writeCount,jdbcType=INTEGER}, #{likeCount,jdbcType=INTEGER}, #{articleCount,jdbcType=INTEGER},
+    #{createtime,jdbcType=TIMESTAMP}, #{info,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.platform.entity.User">
     insert into user
@@ -44,6 +118,21 @@
       </if>
       <if test="passwd != null">
         passwd,
+      </if>
+      <if test="fanCount != null">
+        fan_count,
+      </if>
+      <if test="followCount != null">
+        follow_count,
+      </if>
+      <if test="writeCount != null">
+        write_count,
+      </if>
+      <if test="likeCount != null">
+        like_count,
+      </if>
+      <if test="articleCount != null">
+        article_count,
       </if>
       <if test="createtime != null">
         createTime,
@@ -65,6 +154,21 @@
       <if test="passwd != null">
         #{passwd,jdbcType=VARCHAR},
       </if>
+      <if test="fanCount != null">
+        #{fanCount,jdbcType=INTEGER},
+      </if>
+      <if test="followCount != null">
+        #{followCount,jdbcType=INTEGER},
+      </if>
+      <if test="writeCount != null">
+        #{writeCount,jdbcType=INTEGER},
+      </if>
+      <if test="likeCount != null">
+        #{likeCount,jdbcType=INTEGER},
+      </if>
+      <if test="articleCount != null">
+        #{articleCount,jdbcType=INTEGER},
+      </if>
       <if test="createtime != null">
         #{createtime,jdbcType=TIMESTAMP},
       </if>
@@ -85,6 +189,21 @@
       <if test="passwd != null">
         passwd = #{passwd,jdbcType=VARCHAR},
       </if>
+      <if test="fanCount != null">
+        fan_count = #{fanCount,jdbcType=INTEGER},
+      </if>
+      <if test="followCount != null">
+        follow_count = #{followCount,jdbcType=INTEGER},
+      </if>
+      <if test="writeCount != null">
+        write_count = #{writeCount,jdbcType=INTEGER},
+      </if>
+      <if test="likeCount != null">
+        like_count = #{likeCount,jdbcType=INTEGER},
+      </if>
+      <if test="articleCount != null">
+        article_count = #{articleCount,jdbcType=INTEGER},
+      </if>
       <if test="createtime != null">
         createTime = #{createtime,jdbcType=TIMESTAMP},
       </if>
@@ -97,15 +216,17 @@
   <update id="updateByPrimaryKey" parameterType="com.platform.entity.User">
     update user
     set username = #{username,jdbcType=VARCHAR},
-      phone = #{phone,jdbcType=VARCHAR},
-      passwd = #{passwd,jdbcType=VARCHAR},
-      createTime = #{createtime,jdbcType=TIMESTAMP},
-      info = #{info,jdbcType=VARCHAR}
+    phone = #{phone,jdbcType=VARCHAR},
+    passwd = #{passwd,jdbcType=VARCHAR},
+    fan_count = #{fanCount,jdbcType=INTEGER},
+    follow_count = #{followCount,jdbcType=INTEGER},
+    write_count = #{writeCount,jdbcType=INTEGER},
+    like_count = #{likeCount,jdbcType=INTEGER},
+    article_count = #{articleCount,jdbcType=INTEGER},
+    createTime = #{createtime,jdbcType=TIMESTAMP},
+    info = #{info,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
-
-
-
 
 
 
@@ -139,4 +260,66 @@
     update user set info = #{1}
     where id = #{0}
   </update>
+
+
+  <select id="getUsernameById" parameterType="java.lang.Integer" resultType="java.lang.String">
+    select username from USER
+    where id = #{0}
+  </select>
+
+
+  <select id="getUserInfoById" parameterType="java.lang.Integer" resultType="java.lang.String">
+    select info from USER
+    where id = #{0}
+  </select>
+
+
+  <!--user_main部分获取动态-->
+  <select id="getUserInfo" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from USER 
+    where id = #{0}
+  </select>
+  
+  <select id="getArticleInfo" parameterType="java.lang.Integer" resultMap="ArticleMap">
+    select
+    <include refid="Article_List" />
+    from article
+    where uid = #{0}
+  </select>
+  
+  <select id="getArticleLikesInfo" parameterType="java.lang.Integer" resultMap="ArticleLikesMap">
+    select
+    <include refid="Article_Likes_List" />
+    from article_likes
+    where uid = #{0}
+  </select>
+
+  <select id="getCommentInfo" parameterType="java.lang.Integer" resultMap="CommentMap">
+    SELECT
+    <include refid="Comment_List" />
+    from comment
+    where comment_from in
+    (
+    select username from user
+    where username = comment_from and user.id = #{0}
+    )
+  </select>
+  
+  
+  <select id="getCommentLikesInfo" parameterType="java.lang.Integer" resultMap="CommentLikesMap">
+    select
+    <include refid="Comment_likes_List" />
+    from comment_likes
+    where uid = #{0}
+  </select>
+
+  <select id="getFollowInfo" parameterType="java.lang.Integer" resultMap="FollowMap">
+    select
+    <include refid="Follow_List" />
+    from follow
+    where follow_from = #{0}
+  </select>
+  
 </mapper>

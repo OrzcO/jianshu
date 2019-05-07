@@ -5,6 +5,7 @@ import com.platform.dao.ArticleMapper;
 import com.platform.dao.Article_likesMapper;
 import com.platform.dao.CommentMapper;
 import com.platform.dao.Comment_likesMapper;
+import com.platform.entity.Article;
 import com.platform.entity.Article_likes;
 import com.platform.entity.Comment;
 import com.platform.entity.Comment_likes;
@@ -32,6 +33,13 @@ public class ArticleService {
 
 //    articleMapper
 
+    public int getArticleCount(int id) {
+        return articleMapper.getArticleCount(id);
+    }
+
+    public int getArticleLikeCount(int id) {
+        return articleMapper.getArticleLikeCount(id);
+    }
 
 
 
@@ -98,5 +106,7 @@ public class ArticleService {
         return comment_likesMapper.unlike_comment(uid , cid);
     }
 
-
+    public Article getArticleById (int id){
+        return articleMapper.selectByPrimaryKey(id);
+    }
 }

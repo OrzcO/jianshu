@@ -184,10 +184,19 @@
 
 
 
+  <select id="getArticleCount" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    select count(1)
+    from article
+    where uid = #{0}
+  </select>
 
 
 
-
+  <select id="getArticleLikeCount" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    select count(1)
+    from article_likes
+    where uid = #{0}
+  </select>
 
 
 </mapper>

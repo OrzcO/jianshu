@@ -6,6 +6,9 @@ import com.platform.entity.User;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 @Service(value = "userService")
 public class UserService {
@@ -39,6 +42,48 @@ public class UserService {
     }
 
     public User selectByPrimaryKey(int id) {
+        return userMapper.selectByPrimaryKey(id);
+    }
+
+    public String getUsernameById(int id) {
+        return userMapper.getUsernameById(id);
+    }
+    public String getUserInfoById(int id) {
+        return userMapper.getUserInfoById(id);
+    }
+
+
+    public List<Object> getAllInfo(int id) {
+        List<Object> objects = new ArrayList();
+        for (Object o : userMapper.getUserInfo(id)) {
+            objects.add(o);
+        }
+
+        for (Object o : userMapper.getArticleInfo(id)) {
+            objects.add(o);
+        }
+
+        for (Object o : userMapper.getArticleLikesInfo(id)) {
+            objects.add(o);
+        }
+
+        for (Object o : userMapper.getCommentInfo(id)) {
+            objects.add(o);
+        }
+
+        for (Object o : userMapper.getCommentLikesInfo(id)) {
+            objects.add(o);
+        }
+
+        for (Object o : userMapper.getFollowInfo(id)) {
+            objects.add(o);
+        }
+
+        return objects;
+    }
+
+
+    public User getUserById(int id) {
         return userMapper.selectByPrimaryKey(id);
     }
 

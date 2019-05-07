@@ -18,4 +18,8 @@ public interface ArticleMapper {
     int updateByPrimaryKey(Article record);
 
 
+
+    int getArticleCount(int id);
+
+    int getArticleLikeCount(int id);
 }
