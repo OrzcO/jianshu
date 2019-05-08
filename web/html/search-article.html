@@ -3,94 +3,160 @@
 	<head>
 		<meta charset="UTF-8">
 		<title></title>
-		
-		<link rel="stylesheet" href="css/bootstrap.min.css" />
-		<link rel="stylesheet" href="css/font-awesome.min.css" />
-		<link rel="stylesheet" href="css/platform.css" />
-		<script type="text/javascript" src="js/jquery.min.js" ></script>
-		<script type="text/javascript" src="js/bootstrap.min.js" ></script>
-	
+
+		<link rel="stylesheet" href="../css/bootstrap.min.css" />
+		<link rel="stylesheet" href="../css/font-awesome.min.css" />
+		<link rel="stylesheet" href="../css/platform.css" />
+		<script type="text/javascript" src="../js/jquery.min.js" ></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js" ></script>
+
+		<script type="text/javascript">
+
+
+            var login = false;
+
+            function getSession() {
+
+                $.ajax({
+                    url : "/user/getSession.action",
+                    type : "get",
+                    dataType : "json",
+                    success : function (data) {
+                        if (data != null) {
+//                        alert("id : " + data.id + " username : " + data.username + " info : " + data.info);
+
+                            login = true;
+
+//				        隐藏nav的按钮
+                            $(".logIn").show();
+                            $(".logOut").hide();
+                        } else {
+
+                            login = false;
+
+                            $(".logIn").hide();
+                            $(".logOut").show();
+                        }
+                    },
+                    error : function (data) {
+
+
+                        login = false;
+
+                        $(".logIn").hide();
+                        $(".logOut").show();
+
+//                    alert(data);
+//                    alert("get session failed");
+//					返回登录页面 / or ...改变一些 display 元素
+                    }
+                });
+            }
+
+
+            $(function () {
+
+                getSession();
+
+
+                $("#logout-btn").click(function () {
+
+//			    强制刷新重新获取session数据，防止多个浏览器窗口一个退出，其他未退出的情况
+                    getSession();
+
+                    if (login == true) {
+                        window.location = "/user/logout.action";
+                    }
+                });
+
+            });
+
+		</script>
 	
 	</head>
 	<body>
-		
-		<!--导航栏部分-->
-		<div class="navbar navbar-default navbar-fixed-top" role="navigation" style="background-color: #FFFFFF; font-size: 20px; ">
-			<div class="navbar-header" style="margin-left: 50px; width: 300px;" >
-				<!--version 1  ： 一个LOGO -->
-				<a href="index.html" class="navbar-brand" style="font-size: 25px; color: #ea6f5a; font-family:'微软雅黑' ;">文章创作交流网站</a>
-			
-			</div>
-			
-			<ul class="nav navbar-nav">
-				<!--<li class="active"><a href="#">hah1</a></li>-->
-				<li><a href="index.html"><i class="icon-home"></i>首页</a></li>
-				<li class="logIn"><a href="user_main.html"><i class="icon-bell-alt"></i>消息</a></li>
-				<li class="logIn"><a href="followFan.html"><i class="icon-file"></i>关注</a></li>	
-			</ul>
-			
-			
-			<form action="#" class="navbar-form navbar-left">
-				
-				<!--version 1-->
-				<!--<div class="form-group">
-					<input type="text" class="form-control" placeholder="搜索" />
-					<button type="submit" class="btn btn-default">搜索</button>
-				</div>-->
-				
-				<!--version 2 搜索框 + icon-->
-				<!--<div class="form-group">
-					<input type="text" class="form-control" placeholder="搜索" />
-					<a href="#"><i class="icon-search"></i></a>
-				</div>-->
-				
-				<!--version 3 搜索框里 包含icon -->
-				<div class="input-group">
-					<input type="text" class="form-control" placeholder="搜索" style="font-size:13px ;background-color: #EEEEEE; border: 0px; border-bottom-left-radius :40px ; border-top-left-radius: 40px;" />
-					<a href="#" class="input-group-addon" style="text-decoration: none; border: 0px; border-bottom-right-radius: 40px; border-top-right-radius: 40px; box-shadow: none;"><i class="icon-search"></i></a>
-				</div>
-			</form>
-			
-			
-			<ul class="nav navbar-nav navbar-right">	
-				<li class="logOut"><a href="register.html">登录</a></li>
-	
-				<li class="dropdown logIn">
-					<a class="dropdown-toggle"  data-toggle="dropdown" style="padding: 5px 15px" >
-						<img src="img/profile.JPG" class="img-circle" width="40px" height="40px">
-						<span class="caret"></span>
-					</a>
-	
-					<ul class="dropdown-menu" style="position: absolute; left: 0px; top: 50px; font-size: 17px;">
-						<li style="padding: 5px 20px 5px 0px;"><a href="user_main.html"><i class="icon-user"></i>我的主页</a></li>
-						<li style="padding: 5px 20px 5px 0px;"><a href="user_main.html"><i class="icon-heart"></i>喜欢的文章</a></li>
-						<li style="padding: 5px 20px 5px 0px;"><a href="help.html"><i class="icon-wrench"></i>帮助与反馈</a></li>
-						<li style="padding: 5px 20px 5px 0px;"><a href="index.html"><i class="icon-signout"></i>退出</a></li>
-					</ul>
-					
-				</li>
-				<!--<li><img src="img/调档函.JPG" class="img-circle" width="40px" height="40px" style="margin-top: 5px;"></li>-->
-				<!--<li><a href="#">123</a></li>-->
-				
-				
-				<!--版本一 ： 直接一个写文章的li-->
-				<!--<li style="margin-right: 80px;"><a href="#"><i class="icon-pencil"></i>写文章</a></li>-->
-				
-				<!--版本二： 拿button封装起来的写文章，且自带红色背景-->
-				<li style="margin-right: 80px;">
-					<a href="#" class="write-block" style="padding-top: 5px; padding-bottom: 5px;">
-						<button class="btn write-btn">
-							<i class="icon-pencil"></i>写文章
-						</button>
-					</a>
-				</li>
-			</ul>
 
-		</div> 
-		
-		
-		
-		<div class="container search"  style="margin-top: 70px;">
+	<!--导航栏部分-->
+	<div class="navbar navbar-default navbar-fixed-top" role="navigation" style="background-color: #FFFFFF; font-size: 20px; ">
+		<div class="navbar-header" style="margin-left: 50px; width: 300px;" >
+			<!--version 1  ： 一个LOGO -->
+			<a href="/index.action" class="navbar-brand" style="font-size: 25px; color: #ea6f5a; font-family:'微软雅黑' ;">文章创作交流网站</a>
+
+		</div>
+
+		<ul class="nav navbar-nav">
+			<!--<li class="active"><a href="#">hah1</a></li>-->
+			<li><a href="/index.action"><i class="icon-home"></i>首页</a></li>
+			<li class="logIn"><a href="/user_main.action"><i class="icon-bell-alt"></i>消息</a></li>
+			<li class="logIn"><a href="/followFan.action"><i class="icon-file"></i>关注</a></li>
+		</ul>
+
+
+		<form action="#" class="navbar-form navbar-left">
+
+			<!--version 1-->
+			<!--<div class="form-group">
+                <input type="text" class="form-control" placeholder="搜索" />
+                <button type="submit" class="btn btn-default">搜索</button>
+            </div>-->
+
+			<!--version 2 搜索框 + icon-->
+			<!--<div class="form-group">
+                <input type="text" class="form-control" placeholder="搜索" />
+                <a href="#"><i class="icon-search"></i></a>
+            </div>-->
+
+			<!--version 3 搜索框里 包含icon -->
+			<div class="input-group">
+				<input type="text" class="search-input" placeholder="搜索"  />
+				<a class="search-btn" >
+					<i class="icon-search"></i>
+				</a>
+			</div>
+		</form>
+
+
+		<ul class="nav navbar-nav navbar-right">
+			<li class="logOut"><a class="log-in" href="/login.action">登录</a></li>
+
+			<li class="logOut"><a class="btn sign-up" href="/register.action" style="color:#ec6149 ;">注册</a></li>
+
+			<li class="dropdown logIn">
+				<a class="dropdown-toggle"  data-toggle="dropdown" style="padding: 5px 15px" >
+					<img src="../img/profile.jpg" class="img-circle" width="40px" height="40px">
+					<span class="caret"></span>
+				</a>
+
+				<ul class="dropdown-menu" style="position: absolute; left: 0px; top: 50px; font-size: 17px;">
+					<li style="padding: 5px 20px 5px 0px;"><a href="/user_main.action"><i class="icon-user"></i>我的主页</a></li>
+					<li style="padding: 5px 20px 5px 0px;"><a href="user_main.html"><i class="icon-heart"></i>喜欢的文章</a></li>
+					<li style="padding: 5px 20px 5px 0px;"><a href="help.html"><i class="icon-wrench"></i>帮助与反馈</a></li>
+					<li style="padding: 5px 20px 5px 0px;"><a id="logout-btn" ><i class="icon-signout"></i>退出</a></li>
+				</ul>
+
+			</li>
+			<!--<li><img src="img/调档函.JPG" class="img-circle" width="40px" height="40px" style="margin-top: 5px;"></li>-->
+			<!--<li><a href="#">123</a></li>-->
+
+
+			<!--版本一 ： 直接一个写文章的li-->
+			<!--<li style="margin-right: 80px;"><a href="#"><i class="icon-pencil"></i>写文章</a></li>-->
+
+			<!--版本二： 拿button封装起来的写文章，且自带红色背景-->
+			<li style="margin-right: 80px;">
+				<a href="#" class="write-block" style="padding-top: 5px; padding-bottom: 5px;">
+					<button class="btn write-btn">
+						<i class="icon-pencil"></i>写文章
+					</button>
+				</a>
+			</li>
+		</ul>
+
+	</div>
+
+
+
+	<div class="container search"  style="margin-top: 70px;">
 			<div class="row">
 			
 				<div class="aside">

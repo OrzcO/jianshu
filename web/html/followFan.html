@@ -712,8 +712,10 @@
 
 			<!--version 3 搜索框里 包含icon -->
 			<div class="input-group">
-				<input type="text" class="form-control" placeholder="搜索" style="font-size:13px ;background-color: #EEEEEE; border: 0px; border-bottom-left-radius :40px ; border-top-left-radius: 40px;" />
-				<a href="#" class="input-group-addon" style="text-decoration: none; border: 0px; border-bottom-right-radius: 40px; border-top-right-radius: 40px; box-shadow: none;"><i class="icon-search"></i></a>
+				<input type="text" class="search-input" placeholder="搜索"  />
+				<a class="search-btn" >
+					<i class="icon-search"></i>
+				</a>
 			</div>
 		</form>
 
@@ -730,7 +732,7 @@
 				</a>
 
 				<ul class="dropdown-menu" style="position: absolute; left: 0px; top: 50px; font-size: 17px;">
-					<li style="padding: 5px 20px 5px 0px;"><a href=""><i class="icon-user"></i>我的主页</a></li>
+					<li style="padding: 5px 20px 5px 0px;"><a href="/user_main.action"><i class="icon-user"></i>我的主页</a></li>
 					<li style="padding: 5px 20px 5px 0px;"><a href="user_main.html"><i class="icon-heart"></i>喜欢的文章</a></li>
 					<li style="padding: 5px 20px 5px 0px;"><a href="help.html"><i class="icon-wrench"></i>帮助与反馈</a></li>
 					<li style="padding: 5px 20px 5px 0px;"><a id="logout-btn" ><i class="icon-signout"></i>退出</a></li>
@@ -756,8 +758,8 @@
 
 	</div>
 
-		
-		<div style="margin-top: 70px;">
+
+	<div style="margin-top: 70px;">
 		
 			<div class="container" style="padding-left: 200px; padding-right: 130px;">
 				
