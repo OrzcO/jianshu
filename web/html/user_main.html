@@ -24,6 +24,8 @@
         var like = 0;
         var user_id;
 
+        var cur_type = "all";
+
 //        用于喜欢评论、文章时 数据库中没有对应的username字段，方便一点
         var user_name;
 
@@ -272,6 +274,7 @@
 					    return Date.parse(b.time) - Date.parse(a.time);
                     });
 
+                    console.log("all : ");
 				    console.log(data);
 
 				    var $cur = $("ul.note-list");
@@ -511,8 +514,246 @@
                 }
 			});
         }
-        
-        
+
+
+        function getArticleInfo() {
+            if (user_id == undefined) {
+                return;
+            }
+
+            $.ajax({
+				url: "/user/getArticleInfo.action",
+				type:"get",
+				data : {
+				    id : user_id
+				},
+				dataType : "json",
+				success : function (data) {
+					if (data == null || data.length == 0) {
+					    return ;
+					}
+
+//					依然按照文章时间逆序排序
+                    data.sort(function (a , b) {
+                        return Date.parse(b.time) - Date.parse(a.time);
+                    });
+
+                    $("ul.note-list li").remove();
+
+                    console.log("article : ");
+                    console.log(data);
+
+                    var $cur = $("ul.note-list");
+                    for (var i in data) {
+                        $cur.append($('<li class="have-img">\n' +
+                            '\t\t\t\t\t\t\t\t\t\t<a href="#" class="wrap-img">\n' +
+                            '\t\t\t\t\t\t\t\t\t\t\t<img src="../img/index0.jpg" />\n' +
+                            '\t\t\t\t\t\t\t\t\t\t</a>\n' +
+                            '\t\t\t\t\t\t\t\t\t\t<div class="content">\n' +
+                            '\t\t\t\t\t\t\t\t\t\t\t<div class="author">\n' +
+                            '\t\t\t\t\t\t\t\t\t\t\t\t<a class="avatar" href="#">\n' +
+                            '\t\t\t\t\t\t\t\t\t\t\t\t\t<img src="../img/profile.jpg" />\n' +
+                            '\t\t\t\t\t\t\t\t\t\t\t\t</a>\n' +
+                            '\t\t\t\t\t\t\t\t\t\t\t\t<div class="info">\n' +
+                            '\t\t\t\t\t\t\t\t\t\t\t\t\t<a href="#">' + data[i].author + '</a>\n' +
+                            '\t\t\t\t\t\t\t\t\t\t\t\t\t<span>发表了文章 · ' + data[i].time + '</span>\n' +
+                            '\t\t\t\t\t\t\t\t\t\t\t\t</div>\n' +
+                            '\t\t\t\t\t\t\t\t\t\t\t</div>\n' +
+                            '\t\t\t\t\t\t\t\t\t\t\t<a class="title" href="#">\n' + data[i].title +
+                            '\t\t\t\t\t\t\t\t\t\t\t</a>\n' +
+                            '\t\t\t\t\t\t\t\t\t\t\t<p class="abstract">\n' + data[i].introduction +
+                            '\t\t\t\t\t\t\t\t\t\t\t</p>\n' +
+                            '\t\t\t\t\t\t\t\t\t\t\t<div class="meta">\n' +
+                            '\t\t\t\t\t\t\t\t\t\t\t\t<span><i class="icon-eye-open"></i> ' + data[i].readCount + '</span>\n' +
+                            '\t\t\t\t\t\t\t\t\t\t\t\t<a><i class="icon-comment"></i> ' + data[i].commentCount + '</a>\n' +
+                            '\t\t\t\t\t\t\t\t\t\t\t\t<span><i class="icon-heart"></i> ' + data[i].likeCount + '</span>\n' +
+                            '\t\t\t\t\t\t\t\t\t\t\t</div>\n' +
+                            '\t\t\t\t\t\t\t\t\t\t</div>\n' +
+                            '\t\t\t\t\t\t\t\t\t</li>'));
+
+                        $p = $("ul.note-list li:last");
+
+                        if (data[i].url == null || data[i].url == "" || data[i].url == undefined) {
+                            $p.find("a.wrap-img").hide();
+                            $p.find("div:eq(0)").removeClass("content");
+                        }
+					}
+                }
+			});
+		}
+
+        function getCommentInfo() {
+            if (user_id == undefined) {
+                return;
+            }
+
+            $.ajax({
+                url: "/user/getCommentInfo.action",
+                type:"get",
+                data : {
+                    id : user_id
+                },
+                dataType : "json",
+                success : function (data) {
+                    if (data == null || data.length == 0) {
+                        return ;
+                    }
+
+//					依然按照评论时间逆序排序
+                    data.sort(function (a , b) {
+                        return Date.parse(b.time) - Date.parse(a.time);
+                    });
+
+                    $("ul.note-list li").remove();
+
+                    console.log("comment : ");
+                    console.log(data);
+
+                    var $cur = $("ul.note-list");
+
+                    for (var i in data) {
+
+                        var aid = data[i].aid;
+                        var toInfo = "";
+
+                        if (data[i].commentTo != "" && data[i].commentTo != null && data[i].commentTo != undefined) {
+
+                            toInfo = "<a>@" + data[i].commentTo + "</a> ";
+
+                        }
+
+                        if (data[i].info == null) {
+                            data[i].info = "";
+                        }
+
+
+//							以及一个ajax获取文章的内容
+                        $cur.append($('<li>\n' +
+                            '\t\t\t\t\t\t\t\t\t\t<div class="content">\n' +
+                            '\t\t\t\t\t\t\t\t\t\t\t<div class="author">\n' +
+                            '\t\t\t\t\t\t\t\t\t\t\t\t<a class="avatar" href="#">\n' +
+                            '\t\t\t\t\t\t\t\t\t\t\t\t\t<img src="../img/profile.jpg" />\n' +
+                            '\t\t\t\t\t\t\t\t\t\t\t\t</a>\n' +
+                            '\t\t\t\t\t\t\t\t\t\t\t\t<div class="info">\n' +
+                            '\t\t\t\t\t\t\t\t\t\t\t\t\t<a href="#">' + data[i].commentFrom + '</a>\n' +
+                            '\t\t\t\t\t\t\t\t\t\t\t\t\t<em>·</em>\n' +
+                            '\t\t\t\t\t\t\t\t\t\t\t\t\t<span>发表了评论 ·' + data[i].time + ' </span>\n' +
+                            '\t\t\t\t\t\t\t\t\t\t\t\t</div>\n' +
+                            '\t\t\t\t\t\t\t\t\t\t\t</div>\n' +
+                            '\t\t\t\t\t\t\t\t\t\t\t<p class="comment">\n' + toInfo + data[i].info +
+                            '\t\t\t\t\t\t\t\t\t\t\t</p>\n' +
+                            '\t\t\t\t\t\t\t\t\t\t\t<blockquote>\n' +
+                            '\t\t\t\t\t\t\t\t\t\t\t\t<a class="title" href="#">\n' +
+                            '\t\t\t\t\t\t\t\t\t\t\t\t</a>\n' +
+                            '\t\t\t\t\t\t\t\t\t\t\t\t<p class="abstract">\n' +
+                            '\t\t\t\t\t\t\t\t\t\t\t\t</p>\n' +
+                            '\t\t\t\t\t\t\t\t\t\t\t\t<div class="meta">\n' +
+                            '\t\t\t\t\t\t\t\t\t\t\t\t\t<a href="#"></a>\n' +
+                            '\t\t\t\t\t\t\t\t\t\t\t\t\t<span></span>\n' +
+                            '\t\t\t\t\t\t\t\t\t\t\t\t\t<a></a>\n' +
+                            '\t\t\t\t\t\t\t\t\t\t\t\t\t<span></span>\n' +
+                            '\t\t\t\t\t\t\t\t\t\t\t\t</div>\n' +
+                            '\t\t\t\t\t\t\t\t\t\t\t</blockquote>\n' +
+                            '\t\t\t\t\t\t\t\t\t\t</div>\n' +
+                            '\t\t\t\t\t\t\t\t\t</li>'));
+
+//						获取文章信息的ajax
+                        $.ajax({
+                            url :"/article/getArticleById.action",
+                            type:"get",
+                            async:false,
+                            data : {
+                                id : aid
+                            },
+                            dataType : "json",
+                            success : function (data) {
+//							    console.log(data);
+//							    alert(data.title + " - " + data.introduction);
+
+                                $p = $("ul.note-list li:last").find("blockquote");
+                                $p.find("a.title").text(data.title);
+                                $p.find("p.abstract").text(data.introduction);
+                                $p.find(".meta a:eq(0)").text(data.author);
+                                $p.find(".meta span:eq(0)").html('<i class="icon-eye-open"></i> ' + data.readCount);
+                                $p.find(".meta a:eq(1)").html('<i class="icon-comment"></i> ' + data.commentCount);
+                                $p.find(".meta span:eq(1)").html('<i class="icon-heart"></i> ' + data.likeCount);
+                            }
+                        });
+                    }
+                }
+            });
+        }
+
+
+        function getHotInfo() {
+            if (user_id == undefined) {
+                return;
+            }
+
+            $.ajax({
+                url: "/user/getArticleInfo.action",
+                type:"get",
+                data : {
+                    id : user_id
+                },
+                dataType : "json",
+                success : function (data) {
+                    if (data == null || data.length == 0) {
+                        return ;
+                    }
+
+//					依然按照文章热度（暂定： 10* 喜欢数 + 5 * 评论数 + 阅读数）逆序排序
+                    data.sort(function (a , b) {
+                        var x = parseInt(a.likeCount) * 10 + parseInt(a.commentCount) *5 +  parseInt(a.readCount);
+                        var y = parseInt(b.likeCount) * 10 + parseInt(b.commentCount) *5 +  parseInt(b.readCount);
+
+                        return y - x;
+                    });
+
+                    $("ul.note-list li").remove();
+
+                    console.log("hot : ");
+                    console.log(data);
+
+                    var $cur = $("ul.note-list");
+                    for (var i in data) {
+                        $cur.append($('<li class="have-img">\n' +
+                            '\t\t\t\t\t\t\t\t\t\t<a href="#" class="wrap-img">\n' +
+                            '\t\t\t\t\t\t\t\t\t\t\t<img src="../img/index0.jpg" />\n' +
+                            '\t\t\t\t\t\t\t\t\t\t</a>\n' +
+                            '\t\t\t\t\t\t\t\t\t\t<div class="content">\n' +
+                            '\t\t\t\t\t\t\t\t\t\t\t<div class="author">\n' +
+                            '\t\t\t\t\t\t\t\t\t\t\t\t<a class="avatar" href="#">\n' +
+                            '\t\t\t\t\t\t\t\t\t\t\t\t\t<img src="../img/profile.jpg" />\n' +
+                            '\t\t\t\t\t\t\t\t\t\t\t\t</a>\n' +
+                            '\t\t\t\t\t\t\t\t\t\t\t\t<div class="info">\n' +
+                            '\t\t\t\t\t\t\t\t\t\t\t\t\t<a href="#">' + data[i].author + '</a>\n' +
+                            '\t\t\t\t\t\t\t\t\t\t\t\t\t<span>发表了文章 · ' + data[i].time + '</span>\n' +
+                            '\t\t\t\t\t\t\t\t\t\t\t\t</div>\n' +
+                            '\t\t\t\t\t\t\t\t\t\t\t</div>\n' +
+                            '\t\t\t\t\t\t\t\t\t\t\t<a class="title" href="#">\n' + data[i].title +
+                            '\t\t\t\t\t\t\t\t\t\t\t</a>\n' +
+                            '\t\t\t\t\t\t\t\t\t\t\t<p class="abstract">\n' + data[i].introduction +
+                            '\t\t\t\t\t\t\t\t\t\t\t</p>\n' +
+                            '\t\t\t\t\t\t\t\t\t\t\t<div class="meta">\n' +
+                            '\t\t\t\t\t\t\t\t\t\t\t\t<span><i class="icon-eye-open"></i> ' + data[i].readCount + '</span>\n' +
+                            '\t\t\t\t\t\t\t\t\t\t\t\t<a><i class="icon-comment"></i> ' + data[i].commentCount + '</a>\n' +
+                            '\t\t\t\t\t\t\t\t\t\t\t\t<span><i class="icon-heart"></i> ' + data[i].likeCount + '</span>\n' +
+                            '\t\t\t\t\t\t\t\t\t\t\t</div>\n' +
+                            '\t\t\t\t\t\t\t\t\t\t</div>\n' +
+                            '\t\t\t\t\t\t\t\t\t</li>'));
+
+                        $p = $("ul.note-list li:last");
+
+                        if (data[i].url == null || data[i].url == "" || data[i].url == undefined) {
+                            $p.find("a.wrap-img").hide();
+                            $p.find("div:eq(0)").removeClass("content");
+                        }
+                    }
+                }
+            });
+        }
+
         
 		$(function () {
 
@@ -655,15 +896,23 @@
 
 
                 alert(type);
-                if (type == "article") {
 
-                } else if (type == "all") {
-
-                } else if (type == "comment") {
-
-                } else if (type == "hot") {
-
+                if (type == cur_type){
+                	return false;
                 }
+
+
+                if (type == "article") {
+                    getArticleInfo();
+                } else if (type == "all") {
+                    getAllInfo();
+                } else if (type == "comment") {
+                    getCommentInfo();
+                } else if (type == "hot") {
+                    getHotInfo();
+                }
+
+            	cur_type = type;
 
                 $(this).addClass("active");
                 $(this).siblings("li").removeClass("active");
@@ -865,7 +1114,7 @@
 										<div class="content">
 											<div class="author">
 												<a class="avatar" href="#">
-													<img src="../img/调档函.jpg" />
+													<img src="../img/profile.jpg" />
 												</a>
 												<div class="info">
 													<a href="#">OrzcO</a>
@@ -900,7 +1149,7 @@
 										<div class="content">
 											<div class="author">
 												<a class="avatar" href="#">
-													<img src="../img/调档函.jpg" />
+													<img src="../img/profile.jpg" />
 												</a>
 												<div class="info">
 													<a href="#">OrzcO</a>
@@ -935,7 +1184,7 @@
 										<div class="content">
 											<div class="author">
 												<a class="avatar" href="#">
-													<img src="../img/调档函.jpg" />
+													<img src="../img/profile.jpg" />
 												</a>
 												<div class="info">
 													<a href="#">OrzcO</a>
@@ -946,7 +1195,7 @@
 											<div class="follow-detail">
 												<div class="info">
 													<a class="avatar">
-														<img src="../img/调档函.jpg" />
+														<img src="../img/profile.jpg" />
 													</a>
 													<a class="btn btn-default following">
 														<i class="icon-ok"></i>
@@ -973,12 +1222,12 @@
 									<!--喜欢文章 无图版-->
 									<li class="have-img">
 										<a href="#" class="wrap-img">
-											<img src="../img/调档函.jpg" />
+											<img src="../img/profile.jpg" />
 										</a>
 										<div class="content">
 											<div class="author">
 												<a class="avatar" href="#">
-													<img src="../img/调档函.jpg" />
+													<img src="../img/profile.jpg" />
 												</a>
 												<div class="info">
 													<a href="#">OrzcO</a>
@@ -1003,12 +1252,12 @@
 									
 									<li class="have-img">
 										<a href="#" class="wrap-img">
-											<img src="../img/调档函.jpg" />
+											<img src="../img/profile.jpg" />
 										</a>
 										<div class="content">
 											<div class="author">
 												<a class="avatar" href="#">
-													<img src="../img/调档函.jpg" />
+													<img src="../img/profile.jpg" />
 												</a>
 												<div class="info">
 													<a href="#">OrzcO</a>
@@ -1033,12 +1282,12 @@
 									
 									<li class="have-img">
 										<a href="#" class="wrap-img">
-											<img src="../img/调档函.JPG" />
+											<img src="../img/profile.JPG" />
 										</a>
 										<div class="content">
 											<div class="author">
 												<a class="avatar" href="#">
-													<img src="../img/调档函.jpg" />
+													<img src="../img/profile.jpg" />
 												</a>
 												<div class="info">
 													<a href="#">OrzcO</a>
@@ -1064,12 +1313,12 @@
 									
 									<li class="have-img">
 										<a href="#" class="wrap-img">
-											<img src="../img/调档函.jpg" />
+											<img src="../img/profile.jpg" />
 										</a>
 										<div class="content">
 											<div class="author">
 												<a class="avatar" href="#">
-													<img src="../img/调档函.jpg" />
+													<img src="../img/profile.jpg" />
 												</a>
 												<div class="info">
 													<a href="#">OrzcO</a>
@@ -1096,7 +1345,7 @@
 										<div class="content">
 											<div class="author">
 												<a class="avatar" href="#">
-													<img src="../img/profile.jpg.jpg" />
+													<img src="../img/profile.jpg" />
 												</a>
 												<div class="info">
 													<a href="#">OrzcO</a>

@@ -2,6 +2,8 @@ package com.platform.service;
 
 
 import com.platform.dao.UserMapper;
+import com.platform.entity.Article;
+import com.platform.entity.Comment;
 import com.platform.entity.User;
 import org.springframework.stereotype.Service;
 
@@ -85,6 +87,25 @@ public class UserService {
 
     public User getUserById(int id) {
         return userMapper.selectByPrimaryKey(id);
+    }
+
+
+    public List<Article> getArticleInfo(int id){
+        List<Article> list = new ArrayList();
+        for (Article article : userMapper.getArticleInfo(id)) {
+            list.add(article);
+        }
+
+        return list;
+    }
+
+    public List<Comment> getCommentInfo(int id){
+        List<Comment> list = new ArrayList();
+        for (Comment comment : userMapper.getCommentInfo(id)) {
+            list.add(comment);
+        }
+
+        return list;
     }
 
 }

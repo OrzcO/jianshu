@@ -1,5 +1,7 @@
 package com.platform.action;
 
+import com.platform.entity.Article;
+import com.platform.entity.Comment;
 import com.platform.entity.User;
 import com.platform.service.UserService;
 import org.springframework.stereotype.Controller;
@@ -215,5 +217,30 @@ public class UserController {
 
         return user;
     }
+
+    @ResponseBody
+    @RequestMapping("getArticleInfo.action")
+    public List<Article> getArticleInfo(HttpServletRequest httpServletRequest) {
+        int id = Integer.parseInt(httpServletRequest.getParameter("id"));
+
+        List<Article> list = userService.getArticleInfo(id);
+
+        System.out.println("getArticleInfo.action " + id +  " : " + list.size());
+
+        return list;
+    }
+
+    @ResponseBody
+    @RequestMapping("getCommentInfo.action")
+    public List<Comment> getCommentInfo(HttpServletRequest httpServletRequest) {
+        int id = Integer.parseInt(httpServletRequest.getParameter("id"));
+
+        List<Comment> list = userService.getCommentInfo(id);
+
+        System.out.println("getCommentInfo.action " + id +  " : " + list.size());
+
+        return list;
+    }
+
 
 }
