@@ -80,7 +80,15 @@
 
 
 			$(".search-btn").click(function () {
-				alert($(".search-input").val());
+				var text = $(".search-input").val();
+
+				alert(text);
+
+				var href = "/search_user.action?text=" + text;
+				alert(href);
+				if (text != undefined && text != "") {
+				    location.href = "/html/search-article.html?text=" + text;
+				}
             });
 
         });

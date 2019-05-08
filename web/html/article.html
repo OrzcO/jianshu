@@ -921,6 +921,17 @@
                     }
                 });
 
+                $(".search-btn").click(function () {
+                    var text = $(".search-input").val();
+
+                    alert(text);
+
+                    var href = "/search_user.action?text=" + text;
+                    alert(href);
+                    if (text != undefined && text != "") {
+                        location.href = "/html/search-article.html?text=" + text;
+                    }
+                });
             });
 
 		</script>
@@ -963,8 +974,7 @@
 				<input type="text" class="search-input" placeholder="搜索"  />
 				<a class="search-btn" >
 					<i class="icon-search"></i>
-				</a>
-			</div>
+				</a></div>
 		</form>
 
 
@@ -980,7 +990,7 @@
 				</a>
 
 				<ul class="dropdown-menu" style="position: absolute; left: 0px; top: 50px; font-size: 17px;">
-					<li style="padding: 5px 20px 5px 0px;"><a href="/user_main.action"><i class="icon-user"></i>我的主页</a></li>
+					<li style="padding: 5px 20px 5px 0px;"><a href=""><i class="icon-user"></i>我的主页</a></li>
 					<li style="padding: 5px 20px 5px 0px;"><a href="user_main.html"><i class="icon-heart"></i>喜欢的文章</a></li>
 					<li style="padding: 5px 20px 5px 0px;"><a href="help.html"><i class="icon-wrench"></i>帮助与反馈</a></li>
 					<li style="padding: 5px 20px 5px 0px;"><a id="logout-btn" ><i class="icon-signout"></i>退出</a></li>

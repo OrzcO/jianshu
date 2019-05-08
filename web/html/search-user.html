@@ -14,6 +14,8 @@
 
             var login = false;
 
+            var text ;
+
             function getSession() {
 
                 $.ajax({
@@ -53,10 +55,73 @@
             }
 
 
+            function searchUser() {
+                if (text == undefined) {
+                    return ;
+                }
+
+                $.ajax({
+                    url : "/user/searchUser.action",
+                    type : "get",
+                    data : {
+                        text : text
+                    },
+                    dataType : "json",
+                    success : function (data) {
+                        if (data == null || data.length == 0) {
+                            alert("在页面哪里显示数据为空 or ...");
+                        } else {
+
+
+                            $("ul.user-list li").remove();
+
+                            $cur = $("ul.user-list");
+                            for (var i in data) {
+
+                                $cur.append($('<li>\n' +
+                                    '\t\t\t\t\t\t\t\t<a class="avatar">\n' +
+                                    '\t\t\t\t\t\t\t\t\t<img src="../img/author.jpg" />\n' +
+                                    '\t\t\t\t\t\t\t\t</a>\n' +
+                                    '\t\t\t\t\t\t\t\t\n' +
+                                    '\t\t\t\t\t\t\t\t<div class="info">\n' +
+                                    '\t\t\t\t\t\t\t\t\t<a class="name">' + data[i].username + '</a>\n' +
+                                    '\t\t\t\t\t\t\t\t\t<div class="meta">\n' +
+                                    '\t\t\t\t\t\t\t\t\t\t<span>关注 ' + data[i].followCount + '</span>\n' +
+                                    '\t\t\t\t\t\t\t\t\t\t<span>粉丝 ' + data[i].fanCount + '</span>\n' +
+                                    '\t\t\t\t\t\t\t\t\t\t<span>文章 ' + data[i].articleCount + '</span>\n' +
+                                    '\t\t\t\t\t\t\t\t\t</div>\n' +
+                                    '\t\t\t\t\t\t\t\t\t<div class="meta">\n' +
+                                    '\t\t\t\t\t\t\t\t\t\t<span>写了  ' + data[i].writeCount + '字，获得了 '+ data[i].likeCount +' 个喜欢</span>\n' +
+                                    '\t\t\t\t\t\t\t\t\t</div>\n' +
+                                    '\t\t\t\t\t\t\t\t</div>\n' +
+                                    '\t\t\t\t\t\t\t\t\n' +
+                                    '\t\t\t\t\t\t\t\t<a class="btn btn-default following">\n' +
+                                    '\t\t\t\t\t\t\t\t\t<i class="icon-ok"></i>\n' +
+                                    '\t\t\t\t\t\t\t\t\t<span>已关注</span>\n' +
+                                    '\t\t\t\t\t\t\t\t</a>\n' +
+                                    '\t\t\t\t\t\t\t</li>'));
+
+                            }
+
+                        }
+                    }
+                });
+            }
+
             $(function () {
 
                 getSession();
 
+                if (location.search.indexOf("text") != -1) {
+
+//                    decodeURI()来解决中文乱码问题
+                    text = decodeURI(location.search.substring(location.search.indexOf("=")+1));
+                    alert(text);
+				} else {
+                    alert("text 为空");
+				}
+
+                searchUser();
 
                 $("#logout-btn").click(function () {
 
@@ -65,6 +130,18 @@
 
                     if (login == true) {
                         window.location = "/user/logout.action";
+                    }
+                });
+
+                $(".search-btn").click(function () {
+                    var text = $(".search-input").val();
+
+                    alert(text);
+
+                    var href = "/search_user.action?text=" + text;
+                    alert(href);
+                    if (text != undefined && text != "") {
+                        location.href = "/html/search-article.html?text=" + text;
                     }
                 });
 
@@ -395,26 +472,25 @@
 							</li>
 							
 							<li>
-								<a href="#" class="avatar">
-									<img src="img/author.jpg" />
+								<a class="avatar">
+									<img src="../img/author.jpg" />
 								</a>
 								
 								<div class="info">
-									<a href="#" class="name">区块链</a>
+									<a class="name">区块链</a>
 									<div class="meta">
-										<span>关注 0</span>
-										<span>粉丝 1411</span>
-										<span>文章 1</span>
+										<span>关注 </span>
+										<span>粉丝 </span>
+										<span>文章 </span>
 									</div>
 									<div class="meta">
-										<span>写了 1139 字，获得了 48 个喜欢</span>
+										<span>写了  字，获得了  个喜欢</span>
 									</div>
 								</div>
 								
 								<a class="btn btn-default following">
 									<i class="icon-ok"></i>
 									<span>已关注</span>
-									<!--<span>X取消关注</span>-->
 								</a>
 							</li>
 							

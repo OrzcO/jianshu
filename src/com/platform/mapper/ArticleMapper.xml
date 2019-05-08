@@ -199,4 +199,18 @@
   </select>
 
 
+  <select id="searchArticle" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from article
+    where 1 = 0
+    <if test="_parameter != null">
+      <foreach item="item" index="index" collection="_parameter.split(' ')">
+        OR LOCATE(#{item} , title)
+        OR LOCATE(#{item} , introduction)
+        OR LOCATE(#{item} , content)
+      </foreach>
+    </if>
+  </select>
+
 </mapper>

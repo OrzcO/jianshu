@@ -12,8 +12,9 @@
 
 		<script type="text/javascript">
 
-
             var login = false;
+
+            var text ;
 
             function getSession() {
 
@@ -53,10 +54,146 @@
                 });
             }
 
+            function searchUser() {
+				if (text == undefined) {
+				    return ;
+				}
+
+				$.ajax({
+					url : "/user/searchUserLimit.action",
+					type : "get",
+					data : {
+					    text : text
+ 					},
+					dataType : "json",
+					success : function (data) {
+						if (data == null || data.length == 0) {
+						    alert("在页面哪里显示数据为空 or ...");
+						} else {
+
+
+						    $(".container-fluid div").remove();
+
+						    $cur = $(".container-fluid");
+						    for (var i in data) {
+
+						        $cur.append($('<div class="col-xs-8">\n' +
+                                    '\t\t\t\t\t\t\t\t\t<a class="avatar">\n' +
+                                    '\t\t\t\t\t\t\t\t\t\t<img src="../img/author.jpg" />\n' +
+                                    '\t\t\t\t\t\t\t\t\t</a>\n' +
+                                    '\t\t\t\t\t\t\t\t\t<div class="info">\n' +
+                                    '\t\t\t\t\t\t\t\t\t\t<a class="name">' + data[i].username +'</a>\n' +
+                                    '\t\t\t\t\t\t\t\t\t\t<div class="meta">\n' +
+                                    '\t\t\t\t\t\t\t\t\t\t\t写了 ' + data[i].writeCount +' 字・' + data[i].likeCount +' 喜欢\n' +
+                                    '\t\t\t\t\t\t\t\t\t\t</div>\n' +
+                                    '\t\t\t\t\t\t\t\t\t</div>\n' +
+                                    '\t\t\t\t\t\t\t\t</div>'));
+
+							}
+
+						}
+                    }
+				});
+            }
+
+            function searchArticle() {
+				if (text == undefined) {
+				    return ;
+				}
+
+				$.ajax({
+					url : "/article/searchArticle.action",
+					type : "get",
+					data : {
+					    text : text
+ 					},
+					dataType : "json",
+					success : function (data) {
+
+
+                        $("ul.note-list li").remove();
+
+
+						if (data == null || data.length == 0) {
+//						    alert("在页面哪里显示数据为空 or ...");
+						} else {
+
+
+						    $cur = $("ul.note-list");
+						    for (var i in data) {
+
+						        $cur.append($('<li>\n' +
+                                    '\t\t\t\t\t\t\t\t<div class="content">\n' +
+                                    '\t\t\t\t\t\t\t\t\t<div class="author">\n' +
+                                    '\t\t\t\t\t\t\t\t\t\t<a class="avatar">\n' +
+                                    '\t\t\t\t\t\t\t\t\t\t\t<img src="../img/author.jpg" />\n' +
+                                    '\t\t\t\t\t\t\t\t\t\t</a>\n' +
+                                    '\t\t\t\t\t\t\t\t\t\t<div class="info">\n' +
+                                    '\t\t\t\t\t\t\t\t\t\t\t<a class="nickname">' + data[i].author + '</a>\n' +
+                                    '\t\t\t\t\t\t\t\t\t\t\t<span class="time">' + data[i].time +'</span>\n' +
+                                    '\t\t\t\t\t\t\t\t\t\t</div>\n' +
+                                    '\t\t\t\t\t\t\t\t\t</div>\n' +
+                                    '\t\t\t\t\t\t\t\t\t<a class="title">\n' + data[i].title +
+                                    '\t\t\t\t\t\t\t\t\t</a>\n' +
+                                    '\t\t\t\t\t\t\t\t\t<p class="abstract">\n' + data[i].introduction +
+                                    '\t\t\t\t\t\t\t\t\t</p>\n' +
+                                    '\t\t\t\t\t\t\t\t\t<div class="meta">\n' +
+                                    '\t\t\t\t\t\t\t\t\t\t<span><i class="icon-eye-open"></i> ' +data[i].readCount +'</span>\n' +
+                                    '\t\t\t\t\t\t\t\t\t\t<a href="article.html"><i class="icon-comment"></i> ' +data[i].commentCount +'</a>\n' +
+                                    '\t\t\t\t\t\t\t\t\t\t<span><i class="icon-heart"></i> ' +data[i].likeCount +'</span>\n' +
+                                    '\t\t\t\t\t\t\t\t\t</div>\n' +
+                                    '\t\t\t\t\t\t\t\t</div>\n' +
+                                    '\t\t\t\t\t\t\t</li>'));
+							}
+
+						}
+                    }
+				});
+            }
 
             $(function () {
 
                 getSession();
+
+                if (location.search.indexOf("text") != -1) {
+
+//                    decodeURI()来解决中文乱码问题
+                    text = decodeURI(location.search.substring(location.search.indexOf("=")+1));
+                    alert(text);
+                } else {
+                    alert("text 为空");
+                }
+
+
+                searchUser();
+
+                searchArticle();
+
+
+
+
+
+                $(".search-btn").click(function () {
+                    var text = $(".search-input").val();
+
+                    alert(text);
+
+                    var href = "/search_user.action?text=" + text;
+//                    alert(href);
+                    if (text != undefined && text != "") {
+                        location.href = "/html/search-article.html?text=" + text;
+                    }
+                });
+
+
+//                查看全部按钮
+                $("a.function-btn").click(function () {
+					if (text == undefined) {
+					    return ;
+					}
+
+					location.href = "/html/search-user.html?text=" + text;
+                });
 
 
                 $("#logout-btn").click(function () {
@@ -70,7 +207,6 @@
                 });
 
             });
-
 		</script>
 	
 	</head>
@@ -255,35 +391,35 @@
 							</a>
 							<div class="container-fluid list">
 								<div class="col-xs-8">
-									<a class="avatar" href="#">
-										<img src="img/author.jpg" />
+									<a class="avatar">
+										<img src="../img/author.jpg" />
 									</a>
 									<div class="info">
-										<a href="#" class="name">区块链</a>
+										<a class="name"></a>
 										<div class="meta">
-											写了 1139 字・48 喜欢
+											写了  字・ 喜欢
 										</div>
 									</div>
 								</div>
 								<div class="col-xs-8">
-									<a class="avatar" href="#">
-										<img src="img/author.jpg" />
+									<a class="avatar">
+										<img src="../img/author.jpg" />
 									</a>
 									<div class="info">
-										<a href="#" class="name">区块链</a>
+										<a class="name"></a>
 										<div class="meta">
-											写了 1139 字・48 喜欢
+											写了  字・ 喜欢
 										</div>
 									</div>
 								</div>
 								<div class="col-xs-8">
-									<a class="avatar" href="#">
-										<img src="img/author.jpg" />
+									<a class="avatar">
+										<img src="../img/author.jpg" />
 									</a>
 									<div class="info">
-										<a href="#" class="name">区块链</a>
+										<a class="name"></a>
 										<div class="meta">
-											写了 1139 字・48 喜欢
+											写了  字・ 喜欢
 										</div>
 									</div>
 								</div>

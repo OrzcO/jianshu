@@ -265,4 +265,16 @@ public class ArticleController {
         return article;
     }
 
+    @ResponseBody
+    @RequestMapping("searchArticle.action")
+    public List<Article> searchUserLimit(HttpServletRequest httpServletRequest) {
+        String text = httpServletRequest.getParameter("text");
+
+        List<Article> list = articleService.searchArticle(text);
+
+        System.out.println("searchArticle.action " + text +  " : " + list.size());
+
+        return list;
+    }
+
 }

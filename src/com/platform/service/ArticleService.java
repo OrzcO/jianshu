@@ -109,4 +109,9 @@ public class ArticleService {
     public Article getArticleById (int id){
         return articleMapper.selectByPrimaryKey(id);
     }
+
+
+    public List<Article> searchArticle(String text) {
+        return articleMapper.searchArticle(text);
+    }
 }

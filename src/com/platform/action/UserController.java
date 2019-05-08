@@ -243,4 +243,30 @@ public class UserController {
     }
 
 
+    @ResponseBody
+    @RequestMapping("searchUser.action")
+    public List<User> searchUser(HttpServletRequest httpServletRequest) {
+        String text = httpServletRequest.getParameter("text");
+
+        List<User> list = userService.searchUser(text);
+
+        System.out.println("searchUser.action " + text +  " : " + list.size());
+
+        return list;
+    }
+
+    @ResponseBody
+    @RequestMapping("searchUserLimit.action")
+    public List<User> searchUserLimit(HttpServletRequest httpServletRequest) {
+        String text = httpServletRequest.getParameter("text");
+
+        List<User> list = userService.searchUserLimit(text);
+
+        System.out.println("searchUserLimit.action " + text +  " : " + list.size());
+
+        return list;
+    }
+
+
+
 }

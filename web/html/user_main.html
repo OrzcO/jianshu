@@ -917,6 +917,19 @@
                 $(this).addClass("active");
                 $(this).siblings("li").removeClass("active");
             });
+
+
+            $(".search-btn").click(function () {
+                var text = $(".search-input").val();
+
+                alert(text);
+
+                var href = "/search_user.action?text=" + text;
+                alert(href);
+                if (text != undefined && text != "") {
+                    location.href = "/html/search-article.html?text=" + text;
+                }
+            });
         });
 
 	</script>

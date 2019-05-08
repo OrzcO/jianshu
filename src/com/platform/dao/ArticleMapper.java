@@ -2,6 +2,8 @@ package com.platform.dao;
 
 import com.platform.entity.Article;
 
+import java.util.List;
+
 public interface ArticleMapper {
     int deleteByPrimaryKey(Integer id);
 
@@ -22,4 +24,7 @@ public interface ArticleMapper {
     int getArticleCount(int id);
 
     int getArticleLikeCount(int id);
+
+
+    List<Article> searchArticle(String text);
 }

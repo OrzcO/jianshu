@@ -108,4 +108,13 @@ public class UserService {
         return list;
     }
 
+
+    public List<User> searchUser(String text) {
+        return userMapper.searchUser(text);
+    }
+
+    public List<User> searchUserLimit(String text) {
+        return userMapper.searchUserLimit(text);
+    }
+
 }

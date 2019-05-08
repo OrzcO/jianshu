@@ -44,4 +44,10 @@ public interface UserMapper {
     List<Comment> getCommentInfo(int id);
     List<Comment_likes> getCommentLikesInfo(int id);
     List<Follow> getFollowInfo(int id);
+
+
+//    搜索部分
+    List<User> searchUser(String text);
+    List<User> searchUserLimit(String text);
+
 }
