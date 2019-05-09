@@ -754,7 +754,27 @@
             });
         }
 
-        
+        function enterPress() {
+            if (event.keyCode == 13 ) {
+                var text = $(".search-input").val();
+
+                $.ajax({
+                    url : "/search/searchInsert.action",
+                    type : "post",
+                    async : false,
+                    data :{
+                        info : text ,
+                        id : uid
+                    }
+                });
+
+                if (text != undefined && text != "") {
+                    location.href = "/html/search-article.html?text=" + text;
+                }
+            }
+        }
+
+
 		$(function () {
 
 
@@ -922,10 +942,16 @@
             $(".search-btn").click(function () {
                 var text = $(".search-input").val();
 
-                alert(text);
+                $.ajax({
+                    url : "/search/searchInsert.action",
+                    type : "post",
+                    async : false,
+                    data :{
+                        info : text ,
+                        id : uid
+                    }
+                });
 
-                var href = "/search_user.action?text=" + text;
-                alert(href);
                 if (text != undefined && text != "") {
                     location.href = "/html/search-article.html?text=" + text;
                 }
@@ -952,7 +978,7 @@
 		</ul>
 
 
-		<form action="#" class="navbar-form navbar-left">
+		<form onkeydown="enterPress()" onclick="return false;" onsubmit="return false;" class="navbar-form navbar-left">
 
 			<!--version 1-->
 			<!--<div class="form-group">
