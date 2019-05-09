@@ -46,11 +46,25 @@ public class RedirectController {
     }
 
 //    返回文章页面
-//    还要含有文章的id , href="article.action/aid=***" href中拼上aid
     @RequestMapping("article.action")
     public String article(){
         return "article";
     }
+
+    @RequestMapping("search_article.action")
+    public String search_article(){
+        return "search-article";
+    }
+
+//    @RequestMapping("search_user.action")
+//    public String search_user(HttpServletRequest httpServletRequest){
+//        String text = httpServletRequest.getParameter("text");
+//        System.out.println(text);
+//        if (text != null && text != "") {
+//            return "redirect:/html/search-user.html?text=" + text;
+//        }
+//        return "search-user";
+//    }
 
 
 }

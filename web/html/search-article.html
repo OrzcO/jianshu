@@ -14,6 +14,11 @@
 
             var login = false;
 
+
+            var uid;
+
+            var hotCnt = 0;
+
             var text ;
 
             function getSession() {
@@ -21,12 +26,14 @@
                 $.ajax({
                     url : "/user/getSession.action",
                     type : "get",
+                    async : false,
                     dataType : "json",
                     success : function (data) {
                         if (data != null) {
 //                        alert("id : " + data.id + " username : " + data.username + " info : " + data.info);
 
                             login = true;
+                            uid = data.id;
 
 //				        隐藏nav的按钮
                             $(".logIn").show();
@@ -68,7 +75,7 @@
 					dataType : "json",
 					success : function (data) {
 						if (data == null || data.length == 0) {
-						    alert("在页面哪里显示数据为空 or ...");
+//						    alert("在页面哪里显示数据为空 or ...");
 						} else {
 
 
@@ -111,6 +118,7 @@
 					success : function (data) {
 
 
+                        $("div.result").text(data.length + " 个结果");
                         $("ul.note-list li").remove();
 
 
@@ -151,6 +159,71 @@
 				});
             }
 
+
+
+            function getSearch() {
+                if (uid == undefined) {
+                    return ;
+                }
+
+                $.ajax({
+                    url : "/search/getSearch.action",
+                    type : "get",
+                    data : {
+                        id : uid
+                    },
+                    dataType : "json",
+                    success : function (data) {
+
+                        $("ul.search-recent-item-wrap li").remove();
+
+                        var $cur = $("ul.search-recent-item-wrap")
+                        if (data != null && data != undefined) {
+                            console.log("getSearch");
+                            console.log(data);
+                            for (var i in data) {
+                                $cur.append($('<li data-id="' + data[i].id +'">\n' +
+                                    '\t\t\t\t\t\t\t\t<a>\n' +
+                                    '\t\t\t\t\t\t\t\t\t<i class="icon-time"></i>\n' +
+                                    '\t\t\t\t\t\t\t\t\t<span>' + data[i].info +'</span>\n' +
+                                    '\t\t\t\t\t\t\t\t\t<i class="icon-remove"></i>\n' +
+                                    '\t\t\t\t\t\t\t\t</a>\n' +
+                                    '\t\t\t\t\t\t\t</li>'));
+                            }
+                        }
+                    }
+                });
+            }
+
+            function getHotSearch() {
+
+                $.ajax({
+                    url : "/search/getHotSearch.action",
+                    type : "get",
+                    data : {
+                        cnt : hotCnt
+                    },
+                    dataType : "json",
+                    success : function (data) {
+
+                        $("ul.search-trending-tag-wrap li").remove();
+
+                        var $cur = $("ul.search-trending-tag-wrap")
+                        if (data != null && data != undefined) {
+                            console.log("getHotSearch");
+                            console.log(data);
+                            for (var i in data) {
+                                $cur.append($('<li>\n' +
+                                    '\t\t\t\t\t\t\t\t<a href="/html/search-article.html?text="' + data[i] + '>' + data[i] + '</a>\n' +
+                                    '\t\t\t\t\t\t\t</li>'));
+                            }
+                        }
+                    }
+                });
+            }
+
+
+
             $(function () {
 
                 getSession();
@@ -159,9 +232,9 @@
 
 //                    decodeURI()来解决中文乱码问题
                     text = decodeURI(location.search.substring(location.search.indexOf("=")+1));
-                    alert(text);
+//                    alert(text);
                 } else {
-                    alert("text 为空");
+//                    alert("text 为空");
                 }
 
 
@@ -169,17 +242,42 @@
 
                 searchArticle();
 
+                getSearch();
 
+                getHotSearch();
+
+
+                $("ul.menu li").click(function () {
+                    if (text == undefined || text == "") {
+                        return ;
+					}
+
+					if ($(this).hasClass("active")) {
+					    return ;
+					} else {
+					    if ($(this).data("type") == "user") {
+					        location.href = "/html/search-user.html?text=" + text;
+						} else {
+                            location.href = "/html/search-article.html?text=" + text;
+						}
+					}
+                });
 
 
 
                 $(".search-btn").click(function () {
                     var text = $(".search-input").val();
 
-                    alert(text);
+                    $.ajax({
+                        url : "/search/searchInsert.action",
+                        type : "post",
+                        async : false,
+                        data :{
+                            info : text ,
+                            id : uid
+                        }
+                    });
 
-                    var href = "/search_user.action?text=" + text;
-//                    alert(href);
                     if (text != undefined && text != "") {
                         location.href = "/html/search-article.html?text=" + text;
                     }
@@ -204,6 +302,57 @@
                     if (login == true) {
                         window.location = "/user/logout.action";
                     }
+                });
+
+
+                $(".search-trending-header a").click(function () {
+
+                    hotCnt++;
+                    getHotSearch();
+                });
+
+
+                $(document).on("click" , ".icon-remove" , function () {
+
+                    var id = $(this).parents("li").data("id");
+
+                    $.ajax({
+                        url : "/search/clear.action",
+                        type : "post",
+                        async : false,
+                        data : {
+                            id : id
+                        },
+                        success : function (data) {
+                            if (data == 1) {
+                                getSearch();
+                            }
+                        }
+
+                    });
+                });
+
+
+                $(document).on("click" , ".search-recent-header a" , function () {
+
+                    if (uid == undefined) {
+                        return ;
+                    }
+
+                    $.ajax({
+                        url : "/search/clearAll.action",
+                        type : "post",
+                        async : false,
+                        data : {
+                            uid : uid
+                        },
+                        success : function (data) {
+                            if (data == 1) {
+                                getSearch();
+                            }
+                        }
+
+                    });
                 });
 
             });
@@ -298,7 +447,7 @@
 				<div class="aside">
 					<div>
 						<ul class="menu">
-							<li class="active">
+							<li class="active" data-type="article">
 								<a>
 									<div class="setting-icon">
 										<i class="icon-file-alt"></i>
@@ -307,7 +456,7 @@
 								</a>
 							</li>
 							
-							<li>
+							<li data-type="user">
 								<a>
 									<div class="setting-icon">
 										<i class="icon-user"></i>
@@ -329,27 +478,27 @@
 						</div>
 						
 						<ul class="search-trending-tag-wrap">
-							<li>
-								<a href="#">手账</a>
-							</li>
-							<li>
-								<a href="#">书法</a>
-							</li>
-							<li>
-								<a href="#">PPT</a>
-							</li>
-							<li>
-								<a href="#">穿搭</a>
-							</li>
-							<li>
-								<a href="#">简书</a>
-							</li>
-							<li>
-								<a href="#">打碗碗花</a>
-							</li>
-							<li>
-								<a href="#">设计</a>
-							</li>
+							<!--<li>-->
+								<!--<a href="#">手账</a>-->
+							<!--</li>-->
+							<!--<li>-->
+								<!--<a href="#">书法</a>-->
+							<!--</li>-->
+							<!--<li>-->
+								<!--<a href="#">PPT</a>-->
+							<!--</li>-->
+							<!--<li>-->
+								<!--<a href="#">穿搭</a>-->
+							<!--</li>-->
+							<!--<li>-->
+								<!--<a href="#">简书</a>-->
+							<!--</li>-->
+							<!--<li>-->
+								<!--<a href="#">打碗碗花</a>-->
+							<!--</li>-->
+							<!--<li>-->
+								<!--<a href="#">设计</a>-->
+							<!--</li>-->
 						</ul>
 					</div>
 					
@@ -360,21 +509,21 @@
 							<a>清空</a>
 						</div>
 						<ul class="search-recent-item-wrap">
-							<li>
-								<a>
-									<i class="icon-time"></i>
-									<span>区块链</span>
-									<i class="icon-remove"></i>
-								</a>
-							</li>
-							
-							<li>
-								<a>
-									<i class="icon-time"></i>
-									<span>qq</span>
-									<i class="icon-remove"></i>
-								</a>
-							</li>
+							<!--<li>-->
+								<!--<a>-->
+									<!--<i class="icon-time"></i>-->
+									<!--<span>区块链</span>-->
+									<!--<i class="icon-remove"></i>-->
+								<!--</a>-->
+							<!--</li>-->
+							<!---->
+							<!--<li>-->
+								<!--<a>-->
+									<!--<i class="icon-time"></i>-->
+									<!--<span>qq</span>-->
+									<!--<i class="icon-remove"></i>-->
+								<!--</a>-->
+							<!--</li>-->
 						</ul>
 					</div>
 					
@@ -395,7 +544,7 @@
 										<img src="../img/author.jpg" />
 									</a>
 									<div class="info">
-										<a class="name"></a>
+										<a class="name"> xxx </a>
 										<div class="meta">
 											写了  字・ 喜欢
 										</div>
@@ -406,7 +555,7 @@
 										<img src="../img/author.jpg" />
 									</a>
 									<div class="info">
-										<a class="name"></a>
+										<a class="name"> xxx </a>
 										<div class="meta">
 											写了  字・ 喜欢
 										</div>
@@ -417,7 +566,7 @@
 										<img src="../img/author.jpg" />
 									</a>
 									<div class="info">
-										<a class="name"></a>
+										<a class="name"> xxx </a>
 										<div class="meta">
 											写了  字・ 喜欢
 										</div>

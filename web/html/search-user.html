@@ -13,6 +13,10 @@
 		<script type="text/javascript">
 
             var login = false;
+            
+            var uid;
+
+            var hotCnt = 0;
 
             var text ;
 
@@ -22,11 +26,13 @@
                     url : "/user/getSession.action",
                     type : "get",
                     dataType : "json",
+					async : false,
                     success : function (data) {
                         if (data != null) {
 //                        alert("id : " + data.id + " username : " + data.username + " info : " + data.info);
 
                             login = true;
+                            uid = data.id;
 
 //				        隐藏nav的按钮
                             $(".logIn").show();
@@ -68,17 +74,30 @@
                     },
                     dataType : "json",
                     success : function (data) {
+
+                        $("ul.user-list li").remove();
+
+                        $("div.result").text(data.length + " 个结果");
+
                         if (data == null || data.length == 0) {
-                            alert("在页面哪里显示数据为空 or ...");
+//						    alert("在页面哪里显示数据为空 or ...");
                         } else {
 
+//                            通过粉丝和喜欢数量、和写文章的数量进行排序
+                            data.sort(function (a , b) {
+                                var x = parseInt(a.fanCount) * 10 + parseInt(a.likeCount) *5  + parseInt(a.articleCount);
+                                var y = parseInt(b.fanCount) * 10 + parseInt(b.likeCount) *5  + parseInt(a.articleCount);
 
-                            $("ul.user-list li").remove();
+                                return y - x;
+                            });
+
+                            console.log("search user 综合排序");
+                            console.log(data);
 
                             $cur = $("ul.user-list");
                             for (var i in data) {
 
-                                $cur.append($('<li>\n' +
+                                $cur.append($('<li data-id="' + data[i].id + '">\n' +
                                     '\t\t\t\t\t\t\t\t<a class="avatar">\n' +
                                     '\t\t\t\t\t\t\t\t\t<img src="../img/author.jpg" />\n' +
                                     '\t\t\t\t\t\t\t\t</a>\n' +
@@ -91,7 +110,7 @@
                                     '\t\t\t\t\t\t\t\t\t\t<span>文章 ' + data[i].articleCount + '</span>\n' +
                                     '\t\t\t\t\t\t\t\t\t</div>\n' +
                                     '\t\t\t\t\t\t\t\t\t<div class="meta">\n' +
-                                    '\t\t\t\t\t\t\t\t\t\t<span>写了  ' + data[i].writeCount + '字，获得了 '+ data[i].likeCount +' 个喜欢</span>\n' +
+                                    '\t\t\t\t\t\t\t\t\t\t<span>写了 ' + data[i].writeCount + ' 字，获得了 ' + data[i].likeCount + ' 个喜欢</span>\n' +
                                     '\t\t\t\t\t\t\t\t\t</div>\n' +
                                     '\t\t\t\t\t\t\t\t</div>\n' +
                                     '\t\t\t\t\t\t\t\t\n' +
@@ -101,12 +120,111 @@
                                     '\t\t\t\t\t\t\t\t</a>\n' +
                                     '\t\t\t\t\t\t\t</li>'));
 
+                                if (uid == undefined) {
+                                    continue;
+								}
+
+                                $p = $("ul.user-list li:last");
+                                if (uid == data[i].id) {
+                                    $p.find("a.btn").remove();
+								} else {
+
+//                                    判断uid 与 该用户是不是粉丝关系
+                                    $.ajax({
+										url : "/follow/getFollowed.action",
+										type : "get",
+										async:false,
+										data : {
+										    from : uid,
+											to : data[i].id
+										},
+										dataType : "text",
+										success : function (data) {
+											if (data == 0) {
+
+											    $p.find("a.btn").removeClass("btn-default");
+											    $p.find("a.btn").removeClass("following");
+											    $p.find("a.btn").addClass("btn-success");
+											    $p.find("a.btn").addClass("follow");
+											    $p.find("a.btn i").removeClass("icon-ok");
+											    $p.find("a.btn i").addClass("icon-plus");
+                                                $p.find("a.btn span").text("关注");
+											}
+                                        }
+									});
+								}
+
                             }
 
                         }
                     }
                 });
             }
+
+
+            function getSearch() {
+                if (uid == undefined) {
+                    return ;
+                }
+
+                $.ajax({
+                    url : "/search/getSearch.action",
+                    type : "get",
+                    data : {
+                        id : uid
+                    },
+                    dataType : "json",
+                    success : function (data) {
+
+                        $("ul.search-recent-item-wrap li").remove();
+
+                        var $cur = $("ul.search-recent-item-wrap")
+                        if (data != null && data != undefined) {
+                            console.log("getSearch");
+                            console.log(data);
+                            for (var i in data) {
+                                $cur.append($('<li data-id="' + data[i].id +'">\n' +
+                                    '\t\t\t\t\t\t\t\t<a>\n' +
+                                    '\t\t\t\t\t\t\t\t\t<i class="icon-time"></i>\n' +
+                                    '\t\t\t\t\t\t\t\t\t<span>' + data[i].info +'</span>\n' +
+                                    '\t\t\t\t\t\t\t\t\t<i class="icon-remove"></i>\n' +
+                                    '\t\t\t\t\t\t\t\t</a>\n' +
+                                    '\t\t\t\t\t\t\t</li>'));
+                            }
+                        }
+                    }
+                });
+            }
+
+            function getHotSearch() {
+
+                $.ajax({
+                    url : "/search/getHotSearch.action",
+                    type : "get",
+                    data : {
+                        cnt : hotCnt
+                    },
+                    dataType : "json",
+                    success : function (data) {
+
+                        $("ul.search-trending-tag-wrap li").remove();
+
+                        var $cur = $("ul.search-trending-tag-wrap")
+                        if (data != null && data != undefined) {
+                            console.log("getHotSearch");
+                            console.log(data);
+                            for (var i in data) {
+                                $cur.append($('<li>\n' +
+                                    '\t\t\t\t\t\t\t\t<a href="/html/search-article.html?text="' + data[i] + '>' + data[i] + '</a>\n' +
+                                    '\t\t\t\t\t\t\t</li>'));
+                            }
+                        }
+                    }
+                });
+            }
+
+
+
 
             $(function () {
 
@@ -115,13 +233,36 @@
                 if (location.search.indexOf("text") != -1) {
 
 //                    decodeURI()来解决中文乱码问题
-                    text = decodeURI(location.search.substring(location.search.indexOf("=")+1));
-                    alert(text);
-				} else {
-                    alert("text 为空");
-				}
+                    text = decodeURI(location.search.substring(location.search.indexOf("=") + 1));
+//                    alert(text);
+                } else {
+//                    alert("text 为空");
+                }
+
 
                 searchUser();
+
+                getSearch();
+
+                getHotSearch();
+
+
+                $("ul.menu li").click(function () {
+                    if (text == undefined || text == "") {
+                        return;
+                    }
+
+                    if ($(this).hasClass("active")) {
+                        return;
+                    } else {
+                        if ($(this).data("type") == "user") {
+                            location.href = "/html/search-user.html?text=" + text;
+                        } else {
+                            location.href = "/html/search-article.html?text=" + text;
+                        }
+                    }
+                });
+
 
                 $("#logout-btn").click(function () {
 
@@ -136,15 +277,251 @@
                 $(".search-btn").click(function () {
                     var text = $(".search-input").val();
 
-                    alert(text);
+                    $.ajax({
+                        url: "/search/searchInsert.action",
+                        type: "post",
+                        async: false,
+                        data: {
+                            info: text,
+                            id: uid
+                        }
+                    });
 
-                    var href = "/search_user.action?text=" + text;
-                    alert(href);
                     if (text != undefined && text != "") {
                         location.href = "/html/search-article.html?text=" + text;
                     }
                 });
 
+
+                $(".search-trending-header a").click(function () {
+
+                    hotCnt++;
+                    getHotSearch();
+                });
+
+
+                $(document).on("click", ".icon-remove", function () {
+
+                    var id = $(this).parents("li").data("id");
+
+                    $.ajax({
+                        url: "/search/clear.action",
+                        type: "post",
+                        async: false,
+                        data: {
+                            id: id
+                        },
+                        success: function (data) {
+                            if (data == 1) {
+                                getSearch();
+                            }
+                        }
+
+                    });
+                });
+
+
+                $(document).on("click", ".search-recent-header a", function () {
+
+                    if (uid == undefined) {
+                        return;
+                    }
+
+                    $.ajax({
+                        url: "/search/clearAll.action",
+                        type: "post",
+                        async: false,
+                        data: {
+                            uid: uid
+                        },
+                        success: function (data) {
+                            if (data == 1) {
+                                getSearch();
+                            }
+                        }
+
+                    });
+                });
+
+
+                $(document).on("click", ".following , .follow", function () {
+                    if (uid == undefined) {
+                        alert("请登录啊！！！");
+                        return;
+                    }
+
+                    var id = $(this).parents("li").data("id");
+
+                    var $p = $(this);
+                    if ($(this).hasClass("following")) {
+                        $.ajax({
+                            url: "/follow/unlike.action",
+                            type: "post",
+                            async: false,
+                            data: {
+                                from: uid,
+                                to: id
+                            },
+                            dataType: "text",
+                            success: function (data) {
+                                if (data == 1) {
+//                                    alert("unlike return 1");
+                                    $p.removeClass("following");
+                                    $p.addClass("follow");
+                                    $p.removeClass("btn-default");
+                                    $p.addClass("btn-success");
+                                    $p.find("i").removeClass("icon-ok");
+                                    $p.find("i").addClass("icon-plus");
+                                    $p.find("span").text("关注");
+                                } else {
+                                    alert(uid + " 取消关注 " + id + "失败");
+                                }
+                            }
+
+                        });
+                    } else {
+                        $.ajax({
+                            url: "/follow/like.action",
+                            type: "post",
+                            async: false,
+                            data: {
+                                from: uid,
+                                to: id
+                            },
+                            dataType: "text",
+                            success: function (data) {
+                                if (data == 1) {
+//                                    alert("like return 1");
+                                    $p.removeClass("follow");
+                                    $p.addClass("following");
+                                    $p.removeClass("btn-success");
+                                    $p.addClass("btn-default");
+                                    $p.find("i").removeClass("icon-plus");
+                                    $p.find("i").addClass("icon-ok");
+                                    $p.find("span").text("已关注");
+                                } else {
+                                    alert(uid + " 关注 " + id + "失败");
+                                }
+                            }
+
+                        });
+                    }
+                });
+
+
+                $("div.sort-type a").click(function () {
+					if (text == undefined) {
+					    return;
+					}
+
+					if ($(this).hasClass("active")) {
+					    return;
+					}
+
+					if ($(this).text() == "综合排序") {
+					    alert("综合排序");
+					    searchUser();
+
+					} else {
+
+//					    类似于searchUser()的function，只是排序规则不同
+
+
+					    alert("时间排序");
+                        $.ajax({
+                            url : "/user/searchUser.action",
+                            type : "get",
+                            data : {
+                                text : text
+                            },
+                            dataType : "json",
+                            success : function (data) {
+
+                                $("ul.user-list li").remove();
+
+                                $("div.result").text(data.length + " 个结果");
+
+                                if (data == null || data.length == 0) {
+//						    alert("在页面哪里显示数据为空 or ...");
+                                } else {
+
+                                    data.sort(function (a , b) {
+                                        return Date.parse(a.time) - Date.parse(b.time);
+                                    });
+
+                                    console.log("search user 时间排序");
+                                    console.log(data);
+
+                                    $cur = $("ul.user-list");
+                                    for (var i in data) {
+
+                                        $cur.append($('<li data-id="' + data[i].id + '">\n' +
+                                            '\t\t\t\t\t\t\t\t<a class="avatar">\n' +
+                                            '\t\t\t\t\t\t\t\t\t<img src="../img/author.jpg" />\n' +
+                                            '\t\t\t\t\t\t\t\t</a>\n' +
+                                            '\t\t\t\t\t\t\t\t\n' +
+                                            '\t\t\t\t\t\t\t\t<div class="info">\n' +
+                                            '\t\t\t\t\t\t\t\t\t<a class="name">' + data[i].username + '</a>\n' +
+                                            '\t\t\t\t\t\t\t\t\t<div class="meta">\n' +
+                                            '\t\t\t\t\t\t\t\t\t\t<span>关注 ' + data[i].followCount + '</span>\n' +
+                                            '\t\t\t\t\t\t\t\t\t\t<span>粉丝 ' + data[i].fanCount + '</span>\n' +
+                                            '\t\t\t\t\t\t\t\t\t\t<span>文章 ' + data[i].articleCount + '</span>\n' +
+                                            '\t\t\t\t\t\t\t\t\t</div>\n' +
+                                            '\t\t\t\t\t\t\t\t\t<div class="meta">\n' +
+                                            '\t\t\t\t\t\t\t\t\t\t<span>写了 ' + data[i].writeCount + ' 字，获得了 ' + data[i].likeCount + ' 个喜欢</span>\n' +
+                                            '\t\t\t\t\t\t\t\t\t</div>\n' +
+                                            '\t\t\t\t\t\t\t\t</div>\n' +
+                                            '\t\t\t\t\t\t\t\t\n' +
+                                            '\t\t\t\t\t\t\t\t<a class="btn btn-default following">\n' +
+                                            '\t\t\t\t\t\t\t\t\t<i class="icon-ok"></i>\n' +
+                                            '\t\t\t\t\t\t\t\t\t<span>已关注</span>\n' +
+                                            '\t\t\t\t\t\t\t\t</a>\n' +
+                                            '\t\t\t\t\t\t\t</li>'));
+
+                                        if (uid == undefined) {
+                                            continue;
+                                        }
+
+                                        $p = $("ul.user-list li:last");
+                                        if (uid == data[i].id) {
+                                            $p.find("a.btn").remove();
+                                        } else {
+
+//                                    判断uid 与 该用户是不是粉丝关系
+                                            $.ajax({
+                                                url : "/follow/getFollowed.action",
+                                                type : "get",
+                                                async:false,
+                                                data : {
+                                                    from : uid,
+                                                    to : data[i].id
+                                                },
+                                                dataType : "text",
+                                                success : function (data) {
+                                                    if (data == 0) {
+
+                                                        $p.find("a.btn").removeClass("btn-default");
+                                                        $p.find("a.btn").removeClass("following");
+                                                        $p.find("a.btn").addClass("btn-success");
+                                                        $p.find("a.btn").addClass("follow");
+                                                        $p.find("a.btn i").removeClass("icon-ok");
+                                                        $p.find("a.btn i").addClass("icon-plus");
+                                                        $p.find("a.btn span").text("关注");
+                                                    }
+                                                }
+                                            });
+                                        }
+
+                                    }
+
+                                }
+                            }
+                        });
+					}
+
+                    $(this).addClass("active");
+                    $(this).siblings("a").removeClass("active");
+                });
             });
 		</script>
 	
@@ -267,27 +644,27 @@
 						</div>
 						
 						<ul class="search-trending-tag-wrap">
-							<li>
-								<a href="#">手账</a>
-							</li>
-							<li>
-								<a href="#">书法</a>
-							</li>
-							<li>
-								<a href="#">PPT</a>
-							</li>
-							<li>
-								<a href="#">穿搭</a>
-							</li>
-							<li>
-								<a href="#">简书</a>
-							</li>
-							<li>
-								<a href="#">打碗碗花</a>
-							</li>
-							<li>
-								<a href="#">设计</a>
-							</li>
+							<!--<li>-->
+								<!--<a href="#">手账</a>-->
+							<!--</li>-->
+							<!--<li>-->
+								<!--<a href="#">书法</a>-->
+							<!--</li>-->
+							<!--<li>-->
+								<!--<a href="#">PPT</a>-->
+							<!--</li>-->
+							<!--<li>-->
+								<!--<a href="#">穿搭</a>-->
+							<!--</li>-->
+							<!--<li>-->
+								<!--<a href="#">简书</a>-->
+							<!--</li>-->
+							<!--<li>-->
+								<!--<a href="#">打碗碗花</a>-->
+							<!--</li>-->
+							<!--<li>-->
+								<!--<a href="#">设计</a>-->
+							<!--</li>-->
 						</ul>
 					</div>
 					
@@ -298,21 +675,21 @@
 							<a>清空</a>
 						</div>
 						<ul class="search-recent-item-wrap">
-							<li>
-								<a>
-									<i class="icon-time"></i>
-									<span>区块链</span>
-									<i class="icon-remove"></i>
-								</a>
-							</li>
-							
-							<li>
-								<a>
-									<i class="icon-time"></i>
-									<span>qq</span>
-									<i class="icon-remove"></i>
-								</a>
-							</li>
+							<!--<li>-->
+								<!--<a>-->
+									<!--<i class="icon-time"></i>-->
+									<!--<span>区块链</span>-->
+									<!--<i class="icon-remove"></i>-->
+								<!--</a>-->
+							<!--</li>-->
+							<!---->
+							<!--<li>-->
+								<!--<a>-->
+									<!--<i class="icon-time"></i>-->
+									<!--<span>qq</span>-->
+									<!--<i class="icon-remove"></i>-->
+								<!--</a>-->
+							<!--</li>-->
 						</ul>
 					</div>
 					
@@ -327,195 +704,195 @@
 							<a>时间排序</a>
 						</div>
 						
-						<div class="result">3001 个结果</div>
+						<div class="result"> 个结果</div>
 						
 						<ul class="user-list">
-							<li>
-								<a href="#" class="avatar">
-									<img src="img/author.jpg" />
-								</a>
-								
-								<div class="info">
-									<a href="#" class="name">区块链</a>
-									<div class="meta">
-										<span>关注 0</span>
-										<span>粉丝 1411</span>
-										<span>文章 1</span>
-									</div>
-									<div class="meta">
-										<span>写了 1139 字，获得了 48 个喜欢</span>
-									</div>
-								</div>
-								
-								<a class="btn btn-default following">
-									<i class="icon-ok"></i>
-									<span>已关注</span>
-									<!--<span>X取消关注</span>-->
-								</a>
-							</li>
-							
-							<li>
-								<a href="#" class="avatar">
-									<img src="img/search-item1.jpg" />
-								</a>
-								
-								<div class="info">
-									<a href="#" class="name">区块链传播者</a>
-									<div class="meta">
-										<span>关注 28</span>
-										<span>粉丝 11</span>
-										<span>文章 0</span>
-									</div>
-									<div class="meta">
-										<span>写了 0 字，获得了 0 个喜欢</span>
-									</div>
-								</div>
-								
-								<a class="btn btn-success follow">
-									<i class="icon-plus"></i>
-									<span>关注</span>
-								</a>
-							</li>
-							
-							<li>
-								<a href="#" class="avatar">
-									<img src="img/author.jpg" />
-								</a>
-								
-								<div class="info">
-									<a href="#" class="name">区块链</a>
-									<div class="meta">
-										<span>关注 0</span>
-										<span>粉丝 1411</span>
-										<span>文章 1</span>
-									</div>
-									<div class="meta">
-										<span>写了 1139 字，获得了 48 个喜欢</span>
-									</div>
-								</div>
-								
-								<a class="btn btn-default following">
-									<i class="icon-ok"></i>
-									<span>已关注</span>
-									<!--<span>X取消关注</span>-->
-								</a>
-							</li>
-							
-							<li>
-								<a href="#" class="avatar">
-									<img src="img/search-item1.jpg" />
-								</a>
-								
-								<div class="info">
-									<a href="#" class="name">区块链传播者</a>
-									<div class="meta">
-										<span>关注 28</span>
-										<span>粉丝 11</span>
-										<span>文章 0</span>
-									</div>
-									<div class="meta">
-										<span>写了 0 字，获得了 0 个喜欢</span>
-									</div>
-								</div>
-								
-								<a class="btn btn-success follow">
-									<i class="icon-plus"></i>
-									<span>关注</span>
-								</a>
-							</li>
-							
-							<li>
-								<a href="#" class="avatar">
-									<img src="img/author.jpg" />
-								</a>
-								
-								<div class="info">
-									<a href="#" class="name">区块链</a>
-									<div class="meta">
-										<span>关注 0</span>
-										<span>粉丝 1411</span>
-										<span>文章 1</span>
-									</div>
-									<div class="meta">
-										<span>写了 1139 字，获得了 48 个喜欢</span>
-									</div>
-								</div>
-								
-								<a class="btn btn-default following">
-									<i class="icon-ok"></i>
-									<span>已关注</span>
-									<!--<span>X取消关注</span>-->
-								</a>
-							</li>
-							
-							<li>
-								<a href="#" class="avatar">
-									<img src="img/search-item1.jpg" />
-								</a>
-								
-								<div class="info">
-									<a href="#" class="name">区块链传播者</a>
-									<div class="meta">
-										<span>关注 28</span>
-										<span>粉丝 11</span>
-										<span>文章 0</span>
-									</div>
-									<div class="meta">
-										<span>写了 0 字，获得了 0 个喜欢</span>
-									</div>
-								</div>
-								
-								<a class="btn btn-success follow">
-									<i class="icon-plus"></i>
-									<span>关注</span>
-								</a>
-							</li>
-							
-							<li>
-								<a class="avatar">
-									<img src="../img/author.jpg" />
-								</a>
-								
-								<div class="info">
-									<a class="name">区块链</a>
-									<div class="meta">
-										<span>关注 </span>
-										<span>粉丝 </span>
-										<span>文章 </span>
-									</div>
-									<div class="meta">
-										<span>写了  字，获得了  个喜欢</span>
-									</div>
-								</div>
-								
-								<a class="btn btn-default following">
-									<i class="icon-ok"></i>
-									<span>已关注</span>
-								</a>
-							</li>
-							
-							<li>
-								<a href="#" class="avatar">
-									<img src="img/search-item1.jpg" />
-								</a>
-								
-								<div class="info">
-									<a href="#" class="name">区块链传播者</a>
-									<div class="meta">
-										<span>关注 28</span>
-										<span>粉丝 11</span>
-										<span>文章 0</span>
-									</div>
-									<div class="meta">
-										<span>写了 0 字，获得了 0 个喜欢</span>
-									</div>
-								</div>
-								
-								<a class="btn btn-success follow">
-									<i class="icon-plus"></i>
-									<span>关注</span>
-								</a>
-							</li>
+							<!--<li>-->
+								<!--<a href="#" class="avatar">-->
+									<!--<img src="img/author.jpg" />-->
+								<!--</a>-->
+								<!---->
+								<!--<div class="info">-->
+									<!--<a href="#" class="name">区块链</a>-->
+									<!--<div class="meta">-->
+										<!--<span>关注 0</span>-->
+										<!--<span>粉丝 1411</span>-->
+										<!--<span>文章 1</span>-->
+									<!--</div>-->
+									<!--<div class="meta">-->
+										<!--<span>写了 1139 字，获得了 48 个喜欢</span>-->
+									<!--</div>-->
+								<!--</div>-->
+								<!---->
+								<!--<a class="btn btn-default following">-->
+									<!--<i class="icon-ok"></i>-->
+									<!--<span>已关注</span>-->
+									<!--&lt;!&ndash;<span>X取消关注</span>&ndash;&gt;-->
+								<!--</a>-->
+							<!--</li>-->
+							<!---->
+							<!--<li>-->
+								<!--<a href="#" class="avatar">-->
+									<!--<img src="img/search-item1.jpg" />-->
+								<!--</a>-->
+								<!---->
+								<!--<div class="info">-->
+									<!--<a href="#" class="name">区块链传播者</a>-->
+									<!--<div class="meta">-->
+										<!--<span>关注 28</span>-->
+										<!--<span>粉丝 11</span>-->
+										<!--<span>文章 0</span>-->
+									<!--</div>-->
+									<!--<div class="meta">-->
+										<!--<span>写了 0 字，获得了 0 个喜欢</span>-->
+									<!--</div>-->
+								<!--</div>-->
+								<!---->
+								<!--<a class="btn btn-success follow">-->
+									<!--<i class="icon-plus"></i>-->
+									<!--<span>关注</span>-->
+								<!--</a>-->
+							<!--</li>-->
+							<!---->
+							<!--<li>-->
+								<!--<a href="#" class="avatar">-->
+									<!--<img src="img/author.jpg" />-->
+								<!--</a>-->
+								<!---->
+								<!--<div class="info">-->
+									<!--<a href="#" class="name">区块链</a>-->
+									<!--<div class="meta">-->
+										<!--<span>关注 0</span>-->
+										<!--<span>粉丝 1411</span>-->
+										<!--<span>文章 1</span>-->
+									<!--</div>-->
+									<!--<div class="meta">-->
+										<!--<span>写了 1139 字，获得了 48 个喜欢</span>-->
+									<!--</div>-->
+								<!--</div>-->
+								<!---->
+								<!--<a class="btn btn-default following">-->
+									<!--<i class="icon-ok"></i>-->
+									<!--<span>已关注</span>-->
+									<!--&lt;!&ndash;<span>X取消关注</span>&ndash;&gt;-->
+								<!--</a>-->
+							<!--</li>-->
+							<!---->
+							<!--<li>-->
+								<!--<a href="#" class="avatar">-->
+									<!--<img src="img/search-item1.jpg" />-->
+								<!--</a>-->
+								<!---->
+								<!--<div class="info">-->
+									<!--<a href="#" class="name">区块链传播者</a>-->
+									<!--<div class="meta">-->
+										<!--<span>关注 28</span>-->
+										<!--<span>粉丝 11</span>-->
+										<!--<span>文章 0</span>-->
+									<!--</div>-->
+									<!--<div class="meta">-->
+										<!--<span>写了 0 字，获得了 0 个喜欢</span>-->
+									<!--</div>-->
+								<!--</div>-->
+								<!---->
+								<!--<a class="btn btn-success follow">-->
+									<!--<i class="icon-plus"></i>-->
+									<!--<span>关注</span>-->
+								<!--</a>-->
+							<!--</li>-->
+							<!---->
+							<!--<li>-->
+								<!--<a href="#" class="avatar">-->
+									<!--<img src="img/author.jpg" />-->
+								<!--</a>-->
+								<!---->
+								<!--<div class="info">-->
+									<!--<a href="#" class="name">区块链</a>-->
+									<!--<div class="meta">-->
+										<!--<span>关注 0</span>-->
+										<!--<span>粉丝 1411</span>-->
+										<!--<span>文章 1</span>-->
+									<!--</div>-->
+									<!--<div class="meta">-->
+										<!--<span>写了 1139 字，获得了 48 个喜欢</span>-->
+									<!--</div>-->
+								<!--</div>-->
+								<!---->
+								<!--<a class="btn btn-default following">-->
+									<!--<i class="icon-ok"></i>-->
+									<!--<span>已关注</span>-->
+									<!--&lt;!&ndash;<span>X取消关注</span>&ndash;&gt;-->
+								<!--</a>-->
+							<!--</li>-->
+							<!---->
+							<!--<li>-->
+								<!--<a href="#" class="avatar">-->
+									<!--<img src="img/search-item1.jpg" />-->
+								<!--</a>-->
+								<!---->
+								<!--<div class="info">-->
+									<!--<a href="#" class="name">区块链传播者</a>-->
+									<!--<div class="meta">-->
+										<!--<span>关注 28</span>-->
+										<!--<span>粉丝 11</span>-->
+										<!--<span>文章 0</span>-->
+									<!--</div>-->
+									<!--<div class="meta">-->
+										<!--<span>写了 0 字，获得了 0 个喜欢</span>-->
+									<!--</div>-->
+								<!--</div>-->
+								<!---->
+								<!--<a class="btn btn-success follow">-->
+									<!--<i class="icon-plus"></i>-->
+									<!--<span>关注</span>-->
+								<!--</a>-->
+							<!--</li>-->
+							<!---->
+							<!--<li>-->
+								<!--<a class="avatar">-->
+									<!--<img src="../img/author.jpg" />-->
+								<!--</a>-->
+								<!---->
+								<!--<div class="info">-->
+									<!--<a class="name">区块链</a>-->
+									<!--<div class="meta">-->
+										<!--<span>关注 </span>-->
+										<!--<span>粉丝 </span>-->
+										<!--<span>文章 </span>-->
+									<!--</div>-->
+									<!--<div class="meta">-->
+										<!--<span>写了  字，获得了  个喜欢</span>-->
+									<!--</div>-->
+								<!--</div>-->
+								<!---->
+								<!--<a class="btn btn-default following">-->
+									<!--<i class="icon-ok"></i>-->
+									<!--<span>已关注</span>-->
+								<!--</a>-->
+							<!--</li>-->
+							<!---->
+							<!--<li>-->
+								<!--<a href="#" class="avatar">-->
+									<!--<img src="img/search-item1.jpg" />-->
+								<!--</a>-->
+								<!---->
+								<!--<div class="info">-->
+									<!--<a href="#" class="name">区块链传播者</a>-->
+									<!--<div class="meta">-->
+										<!--<span>关注 28</span>-->
+										<!--<span>粉丝 11</span>-->
+										<!--<span>文章 0</span>-->
+									<!--</div>-->
+									<!--<div class="meta">-->
+										<!--<span>写了 0 字，获得了 0 个喜欢</span>-->
+									<!--</div>-->
+								<!--</div>-->
+								<!---->
+								<!--<a class="btn btn-success follow">-->
+									<!--<i class="icon-plus"></i>-->
+									<!--<span>关注</span>-->
+								<!--</a>-->
+							<!--</li>-->
 							
 						</ul>
 						
