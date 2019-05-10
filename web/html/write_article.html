@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>editor</title>
+    <meta charset="utf-8">
+    
+
+		
+	<link rel="stylesheet" href="../css/platform.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap-markdown.min.css">
+
+	<link rel="stylesheet" href="../css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="../font-awesome/css/font-awesome.min.css">
+
+    
+    <!-- 该jquery文件必须在bootstrap.min.js之前引入 -->
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/markdown.js"></script>
+    <script src="../js/to-markdown.js"></script>
+    <script src="../js/bootstrap-markdown.js"></script>
+    <script src="../js/bootstrap-markdown.fr.js"></script>
+    <script type="text/javascript">
+
+
+        var login = false;
+
+        var uid;
+        var username;
+
+        function getSession() {
+
+            $.ajax({
+                url : "/user/getSession.action",
+                type : "get",
+                dataType : "json",
+                success : function (data) {
+                    if (data != null) {
+//                        alert("id : " + data.id + " username : " + data.username + " info : " + data.info);
+
+                        login = true;
+                        uid = data.id;
+                        username = data.username;
+
+//				        隐藏nav的按钮
+                        $(".logIn").show();
+                        $(".logOut").hide();
+                    } else {
+
+                        login = false;
+
+                        $(".logIn").hide();
+                        $(".logOut").show();
+                    }
+                },
+                error : function (data) {
+
+
+                    login = false;
+
+                    $(".logIn").hide();
+                    $(".logOut").show();
+
+//                    alert(data);
+//                    alert("get session failed");
+//					返回登录页面 / or ...改变一些 display 元素
+                }
+            });
+        }
+
+
+        function enterPress() {
+            if (event.keyCode == 13 ) {
+                var text = $(".search-input").val();
+
+                $.ajax({
+                    url : "/search/searchInsert.action",
+                    type : "post",
+                    async : false,
+                    data :{
+                        info : text ,
+                        id : uid
+                    }
+                });
+
+                if (text != undefined && text != "") {
+                    location.href = "/html/search-article.html?text=" + text;
+                }
+            }
+        }
+
+
+        function showText() {
+    		var text = $(".md-preview").html();
+    		alert(text);
+    	}
+    	
+    	function loadFile(){
+		    $("#filename").html($('#file')[0].files[0].name);
+		}
+    	
+    	$(function(){
+
+
+            getSession();
+
+
+            $("#logout-btn").click(function () {
+
+//			    强制刷新重新获取session数据，防止多个浏览器窗口一个退出，其他未退出的情况
+                getSession();
+
+                if (login == true) {
+                    window.location = "/user/logout.action";
+                }
+            });
+
+
+            $(".search-btn").click(function () {
+                var text = $(".search-input").val();
+
+                $.ajax({
+                    url : "/search/searchInsert.action",
+                    type : "post",
+                    async : false,
+                    data :{
+                        info : text ,
+                        id : uid
+                    }
+                });
+
+                if (text != undefined && text != "") {
+                    location.href = "/html/search-article.html?text=" + text;
+                }
+            });
+
+
+
+
+
+
+
+    		$("#sub-btn").click(function(){
+    			showText();
+    		});
+    		
+    		
+    		$('textarea').keyup(function () {
+			    $(this).height(this.scrollHeight);
+			});
+
+
+
+//    		上传文章按钮
+            $('#submit').click(function () {
+
+
+                var html = $(".md-preview").html();
+                var text = $(".md-preview").text();
+
+
+                $p = $(html);
+                var title = $p.find("h1").text();
+
+
+//				默认截取 text里的30字
+                var introduction = text.substring(text.indexOf("title") + 1, 30);
+
+                $.ajax({
+					url : "",
+                    data : {
+                        uid : uid,
+                        author : username,
+                        title : title,
+                        introduction : introduction,
+                        content : html
+                    },
+                    success : function (data) {
+						if (data != null && data != "" ) {
+						    console.log("图片上传的markdown写法");
+						    console.log(data);
+						    alert("图片上传成功")
+						}
+                    }
+				});
+
+
+
+            });
+
+
+//            上传图片按钮
+            $("#file-btn").click(function () {
+                var file = $('#file')[0].files[0];
+
+                // 判断文件是否为空
+                if($("#file").val().length == 0){
+                    alert("请上传文件");
+                    return ;
+                }
+
+                var formdata = new FormData();
+
+                formdata.append("file" , file);
+
+//            // 判断希望得到的文件名必须带.***后缀
+
+
+//				java端对filename再进行判重和修改
+                if($('#filename').val().indexOf(".") != -1){
+                    formdata.append("name" , $('#filename').val());
+                }else{
+                    alert("文件名需要带后缀，请重新输入");
+                    return ;
+                }
+
+//                formdata.append("content" , $(".md-preview").html());
+
+
+
+                $.ajax({
+                    url :   '/article/upload.action',
+                    data : formdata,
+                    type : "POST" ,
+                    dataType : "json",
+
+                    processData : false,
+                    contentType : false,
+                    success : function (data) {
+                        alert("上传文件成功");
+                        window.location.href = "/file/toMain.action"
+                    }
+
+                });
+            });
+
+
+
+    	});
+    	
+		//显示中文提示
+		(function ($) {
+		  $.fn.markdown.messages.zh = {
+			'Bold': "粗体",
+			'Italic': "斜体",
+			'Heading': "标题",
+			'URL/Link': "链接",
+			'Image': "图片",
+			'List': "列表",
+			'Unordered List': "无序列表",
+			'Ordered List': "有序列表",
+			'Code': "代码",
+			'Quote': "引用",
+			'Preview': "预览",
+			'strong text': "粗体",
+			'emphasized text': "强调",
+			'heading text': "标题",
+			'enter link description here': "输入链接说明",
+			'Insert Hyperlink': "URL地址",
+			'enter image description here': "输入图片说明",
+			'Insert Image Hyperlink': "图片URL地址",
+			'enter image title here': "在这里输入图片标题",
+			'list text here': "这里是列表文本",
+			'code text here': "这里输入代码",
+			'quote here': "这里输入引用文本"
+		  };
+		}(jQuery));
+		//初始化编辑器
+		$("#editor").markdown({
+			autofocus: true,
+			language: 'zh',
+		})
+    </script>
+    
+</head>
+<body>
+
+<!--导航栏部分-->
+	<div class="navbar navbar-default navbar-fixed-top" role="navigation" style="background-color: #FFFFFF; font-size: 20px; ">
+		<div class="navbar-header" style="margin-left: 50px; width: 300px;" >
+			<!--version 1  ： 一个LOGO -->
+			<a href="/index.action" class="navbar-brand" style="font-size: 25px; color: #ea6f5a; font-family:'微软雅黑' ;">文章创作交流网站</a>
+
+		</div>
+
+		<ul class="nav navbar-nav">
+			<!--<li class="active"><a href="#">hah1</a></li>-->
+			<li><a href="/index.action"><i class="icon-home"></i>首页</a></li>
+			<li class="logIn"><a href="/user_main.action"><i class="icon-bell-alt"></i>消息</a></li>
+			<li class="logIn"><a href="/followFan.action"><i class="icon-file"></i>关注</a></li>
+		</ul>
+
+
+		<form onkeydown="enterPress()" onclick="return false;" onsubmit="return false;" class="navbar-form navbar-left">
+
+			<!--version 1-->
+			<!--<div class="form-group">
+                <input type="text" class="form-control" placeholder="搜索" />
+                <button type="submit" class="btn btn-default">搜索</button>
+            </div>-->
+
+			<!--version 2 搜索框 + icon-->
+			<!--<div class="form-group">
+                <input type="text" class="form-control" placeholder="搜索" />
+                <a href="#"><i class="icon-search"></i></a>
+            </div>-->
+
+			<!--version 3 搜索框里 包含icon -->
+			<div class="input-group">
+				<input type="text" class="search-input" placeholder="搜索"  />
+				<a class="search-btn" >
+					<i class="icon-search"></i>
+				</a>
+			</div>
+		</form>
+
+
+		<ul class="nav navbar-nav navbar-right">
+			<li class="logOut"><a class="log-in" href="/login.action">登录</a></li>
+
+			<li class="logOut"><a class="btn sign-up" href="/register.action" style="color:#ec6149 ;">注册</a></li>
+
+			<li class="dropdown logIn">
+				<a class="dropdown-toggle"  data-toggle="dropdown" style="padding: 5px 15px" >
+					<img src="../img/profile.jpg" class="img-circle" width="40px" height="40px">
+					<span class="caret"></span>
+				</a>
+
+				<ul class="dropdown-menu" style="position: absolute; left: 0px; top: 50px; font-size: 17px;">
+					<li style="padding: 5px 20px 5px 0px;"><a href="/user_main.action"><i class="icon-user"></i>我的主页</a></li>
+					<li style="padding: 5px 20px 5px 0px;"><a href="user_main.html"><i class="icon-heart"></i>喜欢的文章</a></li>
+					<li style="padding: 5px 20px 5px 0px;"><a href="help.html"><i class="icon-wrench"></i>帮助与反馈</a></li>
+					<li style="padding: 5px 20px 5px 0px;"><a id="logout-btn" ><i class="icon-signout"></i>退出</a></li>
+				</ul>
+
+			</li>
+			<!--<li><img src="img/调档函.JPG" class="img-circle" width="40px" height="40px" style="margin-top: 5px;"></li>-->
+			<!--<li><a href="#">123</a></li>-->
+
+
+			<!--版本一 ： 直接一个写文章的li-->
+			<!--<li style="margin-right: 80px;"><a href="#"><i class="icon-pencil"></i>写文章</a></li>-->
+
+			<!--版本二： 拿button封装起来的写文章，且自带红色背景-->
+			<li style="margin-right: 80px;">
+				<a href="#" class="write-block" style="padding-top: 5px; padding-bottom: 5px;">
+					<button class="btn write-btn">
+						<i class="icon-pencil"></i>写文章
+					</button>
+				</a>
+			</li>
+		</ul>
+
+	</div>
+
+
+	<div style="margin: 70px 70px;">
+		
+	
+	    <form style="margin-bottom: 20px;">
+	        <textarea name="content" data-provide="markdown" data-iconlibrary="fa" rows="15" id="editor"></textarea>
+	    </form> 
+	    
+	    
+	    <button style="float: right;" class="btn btn-default" id="sub-btn">上传文章</button>
+
+		<div class="file-container" style="display:inline-block;position:relative;overflow: hidden;vertical-align:middle">
+	        <button class="btn btn-success fileinput-button" type="button">上传图片</button>
+	        <input type="file" id="file" onchange="loadFile()" style="position:absolute;top:0;left:0;font-size:34px; opacity:0">
+	    </div>
+	    <span id="filename" style="vertical-align: middle">未上传文件</span>
+	    <input id="file-btn" type="submit" class="btn btn-danger" style="margin-left: 5px;" value="提交图片" />
+
+
+    </div>
+</body>
+</html>
