@@ -41,7 +41,9 @@ public class ArticleService {
         return articleMapper.getArticleLikeCount(id);
     }
 
-
+    public int insertSelective(Article article) {
+        return articleMapper.insertSelective(article);
+    }
 
 
 //    commentMapper

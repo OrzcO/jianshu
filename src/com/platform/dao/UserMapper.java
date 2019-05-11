@@ -50,4 +50,9 @@ public interface UserMapper {
     List<User> searchUser(String text);
     List<User> searchUserLimit(String text);
 
+
+//    更新用户写字、文章数量
+    int updateWordCnt(int id , int word_cnt);
+    int updateArticleCnt(int id);
+
 }

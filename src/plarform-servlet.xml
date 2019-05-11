@@ -14,6 +14,14 @@
     <context:component-scan base-package="com.platform.action" />
 
 
+    <!--不然用multiPartFile上传文件时会异常-->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="defaultEncoding" value="utf-8"></property>
+        <property name="maxUploadSize" value="52428800"></property> <!-- 最大上传文件大小 1024*1024*50 50MB，注意是多个文件的和-->
+        <property name="maxInMemorySize" value="10960"></property>
+    </bean>
+
+
     <bean id="jspViewResolver"
           class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/html/" />

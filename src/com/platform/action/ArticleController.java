@@ -277,4 +277,35 @@ public class ArticleController {
         return list;
     }
 
+    @ResponseBody
+    @RequestMapping("insert.action")
+    public int insert(HttpServletRequest httpServletRequest) {
+
+        Article article = new Article();
+
+        if (httpServletRequest.getParameter("uid") != null && httpServletRequest.getParameter("uid") != "") {
+            article.setUid(Integer.parseInt(httpServletRequest.getParameter("uid")));
+        }
+        String author = httpServletRequest.getParameter("author");
+        String title = httpServletRequest.getParameter("title");
+        String introduction = httpServletRequest.getParameter("introduction");
+        String content = httpServletRequest.getParameter("content");
+
+        if (httpServletRequest.getParameter("url") != null) {
+            article.setUrl(httpServletRequest.getParameter("url"));
+        }
+
+        article.setAuthor(author);
+        article.setTitle(title);
+        article.setIntroduction(introduction);
+        article.setContent(content);
+        article.setTime(new Date());
+
+
+        int ans = articleService.insertSelective(article);
+
+
+        return ans;
+    }
+
 }

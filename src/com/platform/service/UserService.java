@@ -117,4 +117,13 @@ public class UserService {
         return userMapper.searchUserLimit(text);
     }
 
+
+    public int updateWordCnt(int id , int word_cnt) {
+        return userMapper.updateWordCnt(id , word_cnt);
+    }
+
+    public int updateArticleCnt(int id) {
+        return userMapper.updateArticleCnt(id);
+    }
+
 }

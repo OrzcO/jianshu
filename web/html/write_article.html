@@ -6,9 +6,9 @@
     
 
 		
-	<link rel="stylesheet" href="../css/platform.css" />
     <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="../css/bootstrap-markdown.min.css">
+	<link rel="stylesheet" href="../css/platform.css" />
 
 	<link rel="stylesheet" href="../css/font-awesome.min.css" />
     <link rel="stylesheet" type="text/css" href="../font-awesome/css/font-awesome.min.css">
@@ -156,31 +156,80 @@
             $('#submit').click(function () {
 
 
-                var html = $(".md-preview").html();
-                var text = $(".md-preview").text();
+                if (uid == undefined) {
+                    alert("请登录");
+                    return ;
+				}
+
+				if ($(".md-preview").length == 0) {
+                    alert("请点击 preview");
+                    return;
+				}
 
 
-                $p = $(html);
-                var title = $p.find("h1").text();
+//				去除回车、换行
+                var html = $(".md-preview").html().replace(/[\r\n]/g,"");
+                var text = $(".md-preview").text().replace(/[\r\n]/g,"");
+
+
+                $p = $("<div>" + html + "</div>");
+                var title = $p.find("h1").html();
+
+//				var title = html.substring(html.indexOf("<h1>")+4 , html.indexOf("</h1>"));
+
+                console.log(title);
+
+                if (title == undefined || title == "") {
+                    alert("title 为空");
+                    return ;
+				}
+
+
+                var img ;
+                var url;
+				if ($p.find("img").length > 0) {
+				     img = $p.find("img:eq(0)").prop('src');
+				     url = img.substring(img.indexOf("8080")+4);
+				}
 
 
 //				默认截取 text里的30字
-                var introduction = text.substring(text.indexOf("title") + 1, 30);
+                var introduction = text.substring(text.indexOf(title), 30);
+
+                console.log("word_count "  + text.length );
+
+
+
 
                 $.ajax({
-					url : "",
+					url : "/article/insert.action",
                     data : {
                         uid : uid,
                         author : username,
                         title : title,
                         introduction : introduction,
-                        content : html
+                        content : html,
+						url : url
                     },
+					async : false,
                     success : function (data) {
-						if (data != null && data != "" ) {
-						    console.log("图片上传的markdown写法");
-						    console.log(data);
-						    alert("图片上传成功")
+						if (data == 1) {
+						    alert("文章创建成功");
+
+
+//						    修改对应的user 表中的 word_cnt , article_cnt
+						    $.ajax({
+								url : "/user/updateInfo.action",
+								data : {
+								    word_cnt : text.length,
+									id : uid
+								},
+								dataType : "text",
+								success : function (data) {
+
+								}
+							});
+
 						}
                     }
 				});
@@ -195,7 +244,7 @@
                 var file = $('#file')[0].files[0];
 
                 // 判断文件是否为空
-                if($("#file").val().length == 0){
+                if($("#file").val() == ""){
                     alert("请上传文件");
                     return ;
                 }
@@ -204,32 +253,37 @@
 
                 formdata.append("file" , file);
 
-//            // 判断希望得到的文件名必须带.***后缀
+//                利用type来判断是用户头像还是文章图片
+				formdata.append("type" , "article");
+//				formdata.append("id" , uid);
+
 
 
 //				java端对filename再进行判重和修改
-                if($('#filename').val().indexOf(".") != -1){
-                    formdata.append("name" , $('#filename').val());
-                }else{
+                if($('#filename').html().indexOf(".") == -1){
                     alert("文件名需要带后缀，请重新输入");
                     return ;
                 }
 
-//                formdata.append("content" , $(".md-preview").html());
 
 
 
                 $.ajax({
-                    url :   '/article/upload.action',
+                    url :   '/user/upload.action',
                     data : formdata,
                     type : "POST" ,
-                    dataType : "json",
+                    dataType : "text",
 
                     processData : false,
                     contentType : false,
                     success : function (data) {
-                        alert("上传文件成功");
-                        window.location.href = "/file/toMain.action"
+                        if (data.indexOf("!") != -1) {
+                            alert("上传图片成功");
+                            alert(data);
+                            console.log(data);
+						}
+
+//                        window.location.href = ""
                     }
 
                 });
@@ -276,7 +330,7 @@
 </head>
 <body>
 
-<!--导航栏部分-->
+	<!--导航栏部分-->
 	<div class="navbar navbar-default navbar-fixed-top" role="navigation" style="background-color: #FFFFFF; font-size: 20px; ">
 		<div class="navbar-header" style="margin-left: 50px; width: 300px;" >
 			<!--version 1  ： 一个LOGO -->
@@ -296,15 +350,15 @@
 
 			<!--version 1-->
 			<!--<div class="form-group">
-                <input type="text" class="form-control" placeholder="搜索" />
-                <button type="submit" class="btn btn-default">搜索</button>
-            </div>-->
+				<input type="text" class="form-control" placeholder="搜索" />
+				<button type="submit" class="btn btn-default">搜索</button>
+			</div>-->
 
 			<!--version 2 搜索框 + icon-->
 			<!--<div class="form-group">
-                <input type="text" class="form-control" placeholder="搜索" />
-                <a href="#"><i class="icon-search"></i></a>
-            </div>-->
+				<input type="text" class="form-control" placeholder="搜索" />
+				<a href="#"><i class="icon-search"></i></a>
+			</div>-->
 
 			<!--version 3 搜索框里 包含icon -->
 			<div class="input-group">
@@ -354,16 +408,15 @@
 
 	</div>
 
-
 	<div style="margin: 70px 70px;">
 		
 	
 	    <form style="margin-bottom: 20px;">
-	        <textarea name="content" data-provide="markdown" data-iconlibrary="fa" rows="15" id="editor"></textarea>
+	        <textarea name="content" data-provide="markdown" data-iconlibrary="fa" rows="12" id="editor"></textarea>
 	    </form> 
 	    
 	    
-	    <button style="float: right;" class="btn btn-default" id="sub-btn">上传文章</button>
+	    <button id="submit" style="float: right;" class="btn btn-default" id="sub-btn">上传文章</button>
 
 		<div class="file-container" style="display:inline-block;position:relative;overflow: hidden;vertical-align:middle">
 	        <button class="btn btn-success fileinput-button" type="button">上传图片</button>
@@ -373,6 +426,20 @@
 	    <input id="file-btn" type="submit" class="btn btn-danger" style="margin-left: 5px;" value="提交图片" />
 
 
+		<!--<img src="../upload/article-2019-05-11%2015.09.31.jpg">-->
+		<!--<img src="file:\F:\upload\article-2019-05-11 15.04.27.jpg">-->
+
+
+		<!--用这种写法来加载图片-->
+		<!--用这种写法来加载图片-->
+		<!--用这种写法来加载图片-->
+		<!--用这种写法来加载图片-->
+		<!--用这种写法来加载图片-->
+		<!--用这种写法来加载图片-->
+		<!--用这种写法来加载图片-->
+		<!--用这种写法来加载图片-->
+		<!--用这种写法来加载图片-->
+		<!--<img alt="" src="/upload/1.jpg">-->
     </div>
 </body>
 </html>

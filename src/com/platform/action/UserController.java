@@ -4,13 +4,19 @@ import com.platform.entity.Article;
 import com.platform.entity.Comment;
 import com.platform.entity.User;
 import com.platform.service.UserService;
+import org.junit.Test;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -266,6 +272,90 @@ public class UserController {
 
         return list;
     }
+
+
+    @ResponseBody
+    @RequestMapping("upload.action")
+    public String upload(@RequestParam("file") MultipartFile file , HttpServletRequest httpServletRequest) throws IOException {
+
+
+//        图片 : E:\\ideaProjects\\ArticlePlatform\\web\\upload\\** 下面
+//        图片命名方式 user-id.jpg / article-时间戳.jpg
+
+        String basePath = "F:\\upload";
+        String path = "";
+        String filename = "";
+
+
+        String type = httpServletRequest.getParameter("type");
+
+//        System.out.println("getName : " + file.getName());
+        System.out.println("getOriginalFilename : " + file.getOriginalFilename());
+
+        if (type.equals("article")) {
+//            传file  type
+
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd.HH.mm.ss");
+            filename = "article-" + format.format(new Date()) + file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+            path = basePath + File.separator + filename;
+
+
+        } else if (type.equals("user")) {
+//            传file type id(用户id)
+
+            int id = 0;
+            if (httpServletRequest.getParameter("id") != null && !httpServletRequest.getParameter("id").equals("")) {
+                id = Integer.parseInt(httpServletRequest.getParameter("id"));
+            }
+
+            filename = "user-" + id  +  file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+            path = basePath + File.separator + filename;
+        }
+
+        System.out.println("filename : " + filename);
+        System.out.println("path : " + path);
+        File FILE = new File(path);
+        if (!FILE.exists()) {
+            file.transferTo(FILE);
+        }
+
+
+
+//        return path;
+//        返回路径里面需要有http://localhost
+        return "![](http://localhost:8080/upload/" + filename + ")" ;
+    }
+
+
+
+    @ResponseBody
+    @RequestMapping("updateInfo.action")
+    public int updateInfo(HttpServletRequest httpServletRequest) {
+
+        int id = Integer.parseInt(httpServletRequest.getParameter("id"));
+        int word_cnt = Integer.parseInt(httpServletRequest.getParameter("word_cnt"));
+
+        int ans = userService.updateWordCnt(id , word_cnt) + userService.updateArticleCnt(id);
+
+        System.out.println("updateInfo.action - updateWordCnt " + id + " - " + word_cnt);
+        System.out.println("updateInfo.action - updateArticleCnt " + id );
+
+
+        return ans;
+    }
+
+
+
+
+    @Test
+    public void test(){
+        System.out.println("hhh" + 123 + ".jpg");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH.mm.ss");
+        System.out.println(format.format(new Date()));
+    }
+
+
+
 
 
 

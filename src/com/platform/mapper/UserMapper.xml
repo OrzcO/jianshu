@@ -352,4 +352,18 @@
     limit 3
   </select>
 
+
+  <update id="updateWordCnt">
+    update user
+    set write_count = write_count + #{1}
+    where id = #{0}
+  </update>
+
+  <update id="updateArticleCnt" parameterType="java.lang.Integer">
+    update user
+    set article_count =
+    (select count(*) from article where user.id = article.uid)
+    where id = #{0}
+  </update>
+
 </mapper>
