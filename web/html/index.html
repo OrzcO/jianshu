@@ -26,6 +26,9 @@
 
 		var uid;
 
+		var cnt = 0;
+		var user_cnt = 0;
+
 		function getSession() {
 
             $.ajax({
@@ -87,10 +90,103 @@
             }
         }
 
+        function getArticleList() {
+
+		    $.ajax({
+				url : "/article/getArticleList.action",
+				type : "get",
+				data : {
+				    cnt : cnt
+				},
+				dataType : "json",
+				success : function (data) {
+					if (data == null || data.length == 0) {
+					    alert("没有更多文章了");
+					    $("#more-btn").hide();
+					    return ;
+					}
+
+
+					for (var i in data) {
+					    $("ul.note-list").append($('<li class="have-img">\n' +
+                            '\t\t\t\t\t\t\t<a class="wrap-img" href="/article.action?id=' + data[i].id + '">\n' +
+                            '\t\t\t\t\t\t\t\t<img src="" />\n' +
+                            '\t\t\t\t\t\t\t</a>\n' +
+                            '\t\t\t\t\t\t\t<div class="content">\n' +
+                            '\t\t\t\t\t\t\t\t<a href="/article.action?id=' + data[i].id + '" class="title">'+ data[i].title + '</a>\n' +
+                            '\t\t\t\t\t\t\t\t<p class="abstract">' + data[i].introduction + '...\n' +
+                            '\t\t\t\t\t\t\t\t</p>\n' +
+                            '\t\t\t\t\t\t\t\t<div class="meta">\n' +
+                            '\t\t\t\t\t\t\t\t\t<span><i class="icon-eye-open"></i>' + data[i].readCount +'</span>\n' +
+                            '\t\t\t\t\t\t\t\t\t<a href="/html/user_main.html?user_id=' + data[i].uid + '">' + data[i].author + '</a>\n' +
+                            '\t\t\t\t\t\t\t\t\t<a href="/article.action?id="' + data[i].id + '><i class="icon-comment"></i>' + data[i].commentCount + '</a>\n' +
+                            '\t\t\t\t\t\t\t\t\t<span><i class="icon-heart"></i>' + data[i].likeCount +'</span>\n' +
+                            '\t\t\t\t\t\t\t\t</div>\n' +
+                            '\t\t\t\t\t\t\t</div>\n' +
+                            '\t\t\t\t\t\t</li>'));
+
+					    if (data[i].url == null) {
+                            $("ul.note-list li:last").removeClass("have-img");
+                            $("ul.note-list li:last").find("a.wrap-img").remove();
+						} else {
+                            $("ul.note-list li:last").find("img").attr("src" , data[i].url);
+						}
+					}
+
+                }
+			});
+
+        }
+
+
+        function recommendUserList() {
+
+            $.ajax({
+                url : "/user/recommendUserList.action",
+                type : "get",
+                data : {
+                    cnt : user_cnt
+                },
+                dataType : "json",
+                success : function (data) {
+                    if (data == null || data.length == 0) {
+                        alert("没有更多用户了");
+                        $(".page-change").hide();
+                        return ;
+                    }
+
+                    $("ul.list li").remove();
+
+
+                    for (var i in data) {
+                        if (data[i].username == "admin") {
+                            continue;
+						}
+
+                        $("ul.list").append($('<li>\n' +
+                            '\t\t\t\t\t\t\t\t\t<a href="/html/user_main.action?user_id=' + data[i].id + '" class="avatar">\n' +
+                            '\t\t\t\t\t\t\t\t\t\t<img src="' + data[i].url + '" />\n' +
+//                            '\t\t\t\t\t\t\t\t\t\t<a class="follow">\n' +
+//                            '\t\t\t\t\t\t\t\t\t\t\t+关注\n' +
+//                            '\t\t\t\t\t\t\t\t\t\t</a>\n' +
+                            '\t\t\t\t\t\t\t\t\t\t<a href="/html/user_main.action?user_id=' + data[i].id +'">' + data[i].username + '</a>\n' +
+                            '\t\t\t\t\t\t\t\t\t\t<p>写了' + data[i].writeCount +'字 · ' + data[i].likeCount +'喜欢</p>\n' +
+                            '\t\t\t\t\t\t\t\t\t</a>\n' +
+                            '\t\t\t\t\t\t\t\t</li>'));
+
+                    }
+
+                }
+            });
+
+        }
 
 		$(function () {
 
 			getSession();
+
+			$("ul.note-list li").remove();
+			$("ul.list li").remove();
 
             if (uid != undefined) {
                 $.ajax({
@@ -105,6 +201,13 @@
                     }
                 });
             }
+
+
+            getArticleList();
+            cnt++;
+
+            recommendUserList();
+            user_cnt++;
 
 
 			$("#logout-btn").click(function () {
@@ -136,6 +239,15 @@
                 }
             });
 
+            $("#more-btn").click(function () {
+                getArticleList();
+                cnt++;
+            });
+
+            $(".page-change").click(function () {
+                recommendUserList();
+                user_cnt++;
+            });
         });
 		
 	</script>
@@ -337,7 +449,7 @@
 						</li>
 					</ul>
 					
-					<a href="#" class="load-more" style="display: block;">阅读更多</a>
+					<a id="more-btn" href="#" class="load-more" style="display: block;">阅读更多</a>
 				</div>
 				
 				
