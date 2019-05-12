@@ -325,6 +325,14 @@
                                 '\t\t\t\t\t\t\t\t\t\t</div>\n' +
                                 '\t\t\t\t\t\t\t\t\t</li>').insertBefore($cur);
 
+
+				            if (data[i].url == null) {
+				                $cur.prev().find("a.wrap-img").remove();
+				                $cur.prev().find("div.content").removeClass("content");
+							} else {
+                                $cur.prev().find("a.wrap-img img").attr("src",data[i].url);
+							}
+
 						} else if (data[i].hasOwnProperty("depth")) {
 
 				            var aid = data[i].aid;
@@ -433,6 +441,8 @@
                                 '\t\t\t\t\t\t\t\t\t</li>').insertBefore($cur);
 
 
+
+
                             $.ajax({
                                 url :"/article/getArticleById.action",
                                 type:"get",
@@ -448,6 +458,8 @@
                                     if (data.url == null || data.url == "") {
                                         $p.find("a.wrap-img").hide();
                                         $p.find("div:eq(0)").removeClass("content");
+									} else {
+                                        $p.find("a.wrap-img img").attr("src" , data.url);
 									}
 
                                     $p.find("a.title").text(data.title);
@@ -576,6 +588,8 @@
                         if (data[i].url == null || data[i].url == "" || data[i].url == undefined) {
                             $p.find("a.wrap-img").hide();
                             $p.find("div:eq(0)").removeClass("content");
+                        } else {
+                            $p.find("a.wrap-img img").attr("src" , data[i].url);
                         }
 					}
                 }
@@ -748,6 +762,8 @@
                         if (data[i].url == null || data[i].url == "" || data[i].url == undefined) {
                             $p.find("a.wrap-img").hide();
                             $p.find("div:eq(0)").removeClass("content");
+                        } else {
+                            $p.find("a.wrap-img img").attr("src" , data[i].url);
                         }
                     }
                 }
