@@ -15,7 +15,12 @@
 
 
 			<!--article information 初始化部分 -->
-			var aid = 1;
+//			var aid = 7;
+			var aid;
+			var author_id;
+
+//			当前用户是否关注了这个文章的作者
+			var author_like = 0;
 
 			var uid ;
 			var comment_from;
@@ -72,6 +77,268 @@
                     }
                 });
             }
+
+
+            function getArticleInfo() {
+				if (aid == undefined) {
+				    alert("aid 有误 :" + aid);
+				    return ;
+				}
+				$.ajax({
+					url : "/article/getArticleById.action",
+					type : "get",
+					async : false,
+					dataType : "json",
+					data :{
+					    id : aid
+					},
+					success : function (data) {
+						if (data == null || data == undefined) {
+						    alert("读取文章失败");
+						    return ;
+						}
+
+                        author_id = data.uid;
+
+//						清除所有内容
+						$("div.article").empty();
+
+                        $("div.article").append($('<h1 class="title">' + data.title + '</h1>'));
+
+
+                        $p = $('<div class="show-content"> <p> ' + data.time + '</p>' + data.content + "</div>");
+
+                        $("div.article").append($p);
+
+
+//                        对于每个img 在外面包一层<div>
+                        $("p img").each(function () {
+                            $img = $(this);
+                            if ($(this).parent().prev().length == 0) {
+//                                如果外层的p 是第一个节点的话
+                                $(this).parent().remove();
+                                $out = $('<div class="image-container"></div>');
+                                $out.append($img);
+
+                                $(".show-content").prepend($out);
+							} else {
+                                $prev = $(this).parent().prev();
+                                $(this).parent().remove();
+                                $out = $('<div class="image-container"></div>');
+                                $out.append($img);
+
+                                $out.insertAfter($prev);
+							}
+                        });
+
+//                        对于每个blockquote在里面加一个<b>
+                        $("blockquote").each(function () {
+							if ($(this).find("p").length != 0) {
+							    $(this).html('<p><b>' + $(this).text() + '</b></p>');
+							}
+                        });
+
+
+//                        去除<div class="show-content">里面的h1
+                        $("h1").not(".title").remove();
+
+
+
+
+//            获取作者信息，头像，关注，以及基本信息
+                        if (author_id == undefined) {
+                            alert("该文章没有作者");
+                            return;
+                        }
+
+                        $.ajax({
+                            url : "/user/getUserById.action",
+                            data : {
+                                id : author_id
+                            },
+                            dataType : "json",
+                            type : "get",
+							async : false,
+                            success : function (userData) {
+                                if (userData == null) {
+                                    return ;
+								}
+                                $('<div class="author">\n' +
+                                    '\t\t\t\t\t\t<a class="avatar">\n' +
+                                    '\t\t\t\t\t\t\t<img src="../img/author.jpg" />\n' +
+                                    '\t\t\t\t\t\t</a>\n' +
+                                    '\t\t\t\t\t\t<div class="info">\n' +
+                                    '\t\t\t\t\t\t\t<span>\n' +
+                                    '\t\t\t\t\t\t\t\t<a href="#">' + userData.username + '</a>\n' +
+                                    '\t\t\t\t\t\t\t</span>\n' +
+                                    '\t\t\t\t\t\t\t<a id="user-follow-button" class="btn btn-success follow">\n' +
+                                    '\t\t\t\t\t\t\t\t<i class="icon-plus"></i>\n' +
+                                    '\t\t\t\t\t\t\t\t<span>关注</span>\n' +
+                                    '\t\t\t\t\t\t\t</a>\n' +
+                                    '\t\t\t\t\t\t\t<div class="meta">\n' +
+                                    '\t\t\t\t\t\t\t\t<span>' + data.time +'</span>\n' +
+                                    '\t\t\t\t\t\t\t\t<span>阅读 ' + data.readCount +'</span>\n' +
+                                    '\t\t\t\t\t\t\t\t<span>评论 ' + data.commentCount +'</span>\n' +
+                                    '\t\t\t\t\t\t\t\t<span>喜欢 ' + data.likeCount +'</span>\n' +
+                                    '\t\t\t\t\t\t\t</div>\n' +
+                                    '\t\t\t\t\t\t</div>\n' +
+                                    '\t\t\t\t\t</div>').insertAfter($("h1.title"));
+                            }
+
+
+
+
+
+                        });
+
+
+
+//                      获取uid 与 author_id之间的关系
+
+						if (author_id == uid) {
+                            $("#user-follow-button").remove();
+                        }
+
+
+                        if (uid == undefined || uid == 0 ) {
+                            return ;
+                        }
+
+
+                        $.ajax({
+                            url : "/follow/getFollowed.action",
+                            type : "get",
+                            data : {
+                                from : uid ,
+                                to : author_id
+                            },
+                            async : false,
+                            dataType : "text",
+                            success: function (data) {
+
+                                if (data == 1) {
+                                    $("#user-follow-button").removeClass("btn-success");
+                                    $("#user-follow-button").addClass("btn-default");
+                                    $("#user-follow-button").removeClass("follow");
+                                    $("#user-follow-button").addClass("following");
+                                    $("#user-follow-button i").removeClass("icon-plus");
+                                    $("#user-follow-button i").addClass("icon-ok");
+                                    $("#user-follow-button span").text("已关注");
+
+                                    author_like = 1;
+
+                                } else {
+                                    $("#user-follow-button").addClass("btn-success");
+                                    $("#user-follow-button").removeClass("btn-default");
+                                    $("#user-follow-button").removeClass("following");
+                                    $("#user-follow-button").addClass("follow");
+                                    $("#user-follow-button i").addClass("icon-plus");
+                                    $("#user-follow-button i").removeClass("icon-ok");
+                                    $("#user-follow-button span").text("关注");
+
+                                    author_like = 0;
+                                }
+                            }
+                        });
+                    }
+				});
+
+            }
+
+
+            function updateFollow() {
+                if (uid == undefined || uid == 0 ) {
+                    return ;
+                }
+
+                $.ajax({
+                    url : "/follow/updateFollow.action",
+                    type :"post",
+                    dataType : "text",
+                    data : {
+                        id : uid
+                    },
+                    success : function (data) {
+                        if (data == 1) {
+//					    update 第i个的user 的数据 or ....
+//                        alert("update " + id + " Follow info ok");
+                        }
+                    }
+                });
+            }
+
+            function updateFan(id) {
+                if (id == undefined || id == 0 ) {
+                    return ;
+                }
+
+                $.ajax({
+                    url : "/follow/updateFan.action",
+                    type :"post",
+                    dataType : "text",
+                    data : {
+                        id : id
+                    },
+                    success : function (data) {
+                        if (data == 1) {
+//					    update 第i个的user 的数据 or ....
+//                        alert("update " + id + " Fan info ok");
+                        }
+                    }
+                });
+            }
+
+            function updateReadCount() {
+                $.ajax({
+					url : "/article/updateReadCount.action",
+					data : {
+					    id : aid
+					},
+					dataType : "text",
+					success : function (data) {
+
+                    }
+				});
+            }
+
+            function updateCommentCount() {
+                $.ajax({
+                    url : "/article/updateCommentCount.action",
+                    data : {
+                        id : aid
+                    },
+                    dataType : "text",
+                    success : function (data) {
+
+                    }
+                });
+            }
+
+            function updatelikeCount() {
+                $.ajax({
+                    url : "/article/updatelikeCount.action",
+                    data : {
+                        id : aid
+                    },
+					async : false,
+                    dataType : "text",
+                    success : function (data) {
+
+                    }
+                });
+
+                $.ajax({
+                    url : "/user/updatelikeCount.action",
+                    data : {
+                        id : author_id
+                    },
+                    dataType : "text",
+                    success : function (data) {
+
+                    }
+				});
+            }
+
 
             function getMaxDepth() {
                 $.ajax({
@@ -371,6 +638,9 @@
                     }
 				});
 
+
+                updateCommentCount();
+
             }
 
 
@@ -496,6 +766,7 @@
                     });
 
                 }
+                updatelikeCount();
                 getLikeCount();
             }
 
@@ -652,6 +923,17 @@
 			$(function () {
 
 			    getSession();
+
+
+//			    从url里切割出来aid
+                if (window.location.search.indexOf("id") != -1) {
+                    aid = location.search.substring(location.search.indexOf("=")+1);
+                    console.log("aid " + aid);
+                }
+
+			    getArticleInfo();
+
+                updateReadCount();
 
 			    showComment();
 
@@ -960,7 +1242,80 @@
                         location.href = "/html/search-article.html?text=" + text;
                     }
                 });
-            });
+
+                $(document).on("click", "#user-follow-button" ,function () {
+
+                    if (uid == undefined) {
+                        alert("请登录啊！！！");
+                        return ;
+                    }
+
+                    if (author_id == undefined) {
+                        alert("没有author_id ！！！");
+                        return ;
+                    }
+
+                    if (author_like == 0) {
+
+                        $.ajax({
+                            url : "/follow/like.action",
+                            type : "post",
+                            async : false,
+                            dataType : "text",
+                            data : {
+                                from : uid,
+                                to : author_id
+                            },
+                            success : function (data) {
+                                if (data == 1) {
+                                    $("#user-follow-button").removeClass("btn-success");
+                                    $("#user-follow-button").addClass("btn-default");
+                                    $("#user-follow-button").removeClass("follow");
+                                    $("#user-follow-button").addClass("following");
+                                    $("#user-follow-button i").removeClass("icon-plus");
+                                    $("#user-follow-button i").addClass("icon-ok");
+                                    $("#user-follow-button span").text("已关注");
+
+                                    author_like = 1;
+                                } else {
+                                    alert("喜欢" + author_id + " 失败");
+                                }
+                            }
+                        });
+
+                    } else {
+                        $.ajax({
+                            url : "/follow/unlike.action",
+                            type : "post",
+                            async : false,
+                            dataType : "text",
+                            data : {
+                                from : uid,
+                                to : author_id
+                            },
+                            success : function (data) {
+                                if (data == 1) {
+                                    $("#user-follow-button").addClass("btn-success");
+                                    $("#user-follow-button").removeClass("btn-default");
+                                    $("#user-follow-button").removeClass("following");
+                                    $("#user-follow-button").addClass("follow");
+                                    $("#user-follow-button i").addClass("icon-plus");
+                                    $("#user-follow-button i").removeClass("icon-ok");
+                                    $("#user-follow-button span").text("关注");
+
+                                    author_like = 0;
+                                } else {
+                                    alert("不喜欢" + author_id + " 失败");
+                                }
+                            }
+                        });
+                    }
+
+                    updateFan(author_id);
+                    updateFollow();
+                });
+
+			});
 
 		</script>
 	

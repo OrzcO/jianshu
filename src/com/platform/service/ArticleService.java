@@ -46,6 +46,19 @@ public class ArticleService {
     }
 
 
+    public int updateReadCount(int id){
+        return articleMapper.updateReadCount(id);
+    }
+
+    public int updateCommentCount(int id){
+        return articleMapper.updateCommentCount(id);
+    }
+
+    public int updatelikeCount(int id){
+        return articleMapper.updatelikeCount(id);
+    }
+
+
 //    commentMapper
 
 

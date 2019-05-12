@@ -308,4 +308,41 @@ public class ArticleController {
         return ans;
     }
 
+
+    @ResponseBody
+    @RequestMapping("updateReadCount.action")
+    public int updateReadCount(HttpServletRequest httpServletRequest) {
+        int id = Integer.parseInt(httpServletRequest.getParameter("id"));
+
+        int ans = articleService.updateReadCount(id);
+
+        System.out.println("updateReadCount.action - " + id + " : " + ans);
+
+        return ans;
+    }
+
+    @ResponseBody
+    @RequestMapping("updateCommentCount.action")
+    public int updateCommentCount(HttpServletRequest httpServletRequest) {
+        int id = Integer.parseInt(httpServletRequest.getParameter("id"));
+
+        int ans = articleService.updateCommentCount(id);
+
+        System.out.println("updateCommentCount.action - " + id + " : " + ans);
+
+        return ans;
+    }
+
+    @ResponseBody
+    @RequestMapping("updatelikeCount.action")
+    public int updatelikeCount(HttpServletRequest httpServletRequest) {
+        int id = Integer.parseInt(httpServletRequest.getParameter("id"));
+
+        int ans = articleService.updatelikeCount(id);
+
+        System.out.println("updatelikeCount.action - " + id + " : " + ans);
+
+        return ans;
+    }
+
 }

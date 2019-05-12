@@ -1948,3 +1948,15 @@ ul {
 .search-btn:hover{
     text-decoration: none;
 }
+
+
+
+/*文章页面里 文章作者的关注/已关注按钮样式*/
+.note .post .article .following {
+    padding: 0 7px 0 5px;
+    font-size: 12px;
+    margin-left: 5px;
+    float: inherit;
+    width: 70px;
+    margin-top: 0px;
+}

@@ -126,4 +126,8 @@ public class UserService {
         return userMapper.updateArticleCnt(id);
     }
 
+    public int updatelikeCount(int id) {
+        return userMapper.updatelikeCount(id);
+    }
+
 }

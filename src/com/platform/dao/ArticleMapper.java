@@ -27,4 +27,11 @@ public interface ArticleMapper {
 
 
     List<Article> searchArticle(String text);
+
+    int updateReadCount(int id);
+
+    int updateCommentCount(int id);
+
+    int updatelikeCount(int id);
+
 }

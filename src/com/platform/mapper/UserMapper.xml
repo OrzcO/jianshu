@@ -366,4 +366,14 @@
     where id = #{0}
   </update>
 
+
+  <update id="updatelikeCount" parameterType="java.lang.Integer">
+    update USER
+    set like_count =
+    (select count(*) from article_likes , article
+    where user.id = article.uid and article.id = article_likes.aid and user.id = #{0})
+    where user.id = #{0}
+  </update>
+
+
 </mapper>

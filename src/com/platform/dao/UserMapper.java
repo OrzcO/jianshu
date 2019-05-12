@@ -55,4 +55,8 @@ public interface UserMapper {
     int updateWordCnt(int id , int word_cnt);
     int updateArticleCnt(int id);
 
+
+//    更新用户喜欢数量
+    int updatelikeCount(int id);
+
 }

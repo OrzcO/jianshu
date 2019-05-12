@@ -279,7 +279,7 @@ public class UserController {
     public String upload(@RequestParam("file") MultipartFile file , HttpServletRequest httpServletRequest) throws IOException {
 
 
-//        图片 : E:\\ideaProjects\\ArticlePlatform\\web\\upload\\** 下面
+//        图片 : F://upload//** 下面
 //        图片命名方式 user-id.jpg / article-时间戳.jpg
 
         String basePath = "F:\\upload";
@@ -343,6 +343,19 @@ public class UserController {
 
         return ans;
     }
+
+    @ResponseBody
+    @RequestMapping("updatelikeCount.action")
+    public int updatelikeCount(HttpServletRequest httpServletRequest) {
+        int id = Integer.parseInt(httpServletRequest.getParameter("id"));
+
+        int ans = userService.updatelikeCount(id);
+
+        System.out.println("updatelikeCount.action - " + id + " : " + ans);
+
+        return ans;
+    }
+
 
 
 

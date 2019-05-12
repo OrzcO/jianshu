@@ -213,4 +213,27 @@
     </if>
   </select>
 
+
+  <update id="updateReadCount" parameterType="java.lang.Integer">
+    update article
+    set read_count = read_count + 1
+    where id = #{0}
+  </update>
+
+  <update id="updateCommentCount" parameterType="java.lang.Integer">
+    update article
+    set comment_count =
+    (select count(*) from comment
+    where article.id = comment.aid)
+    where article.id = #{0}
+  </update>
+
+  <update id="updatelikeCount" parameterType="java.lang.Integer">
+    update article
+    set like_count =
+    (select count(*) from article_likes
+    where article.id = article_likes.aid)
+    where article.id = #{0}
+  </update>
+
 </mapper>
