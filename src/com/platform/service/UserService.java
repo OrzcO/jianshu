@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Service(value = "userService")
 public class UserService {
@@ -130,4 +129,13 @@ public class UserService {
         return userMapper.updatelikeCount(id);
     }
 
+
+
+    public int updateUrl(int id , String url) {
+        return userMapper.updateUrl(id , url);
+    }
+
+    public String getImgUrl(int id) {
+        return userMapper.getImgUrl(id);
+    }
 }

@@ -95,6 +95,9 @@ public class UserController {
         user.setPasswd(passwd);
         user.setCreatetime(new Date());
 
+//        初始化为/upload/init.jpg
+        user.setUrl("/upload/init.jpg");
+
         int ans = userService.insertSelective(user);
 
         System.out.println( "register : " +  username + " - " + phone + " - " + passwd + " --->> ans : " + ans);
@@ -315,15 +318,30 @@ public class UserController {
         System.out.println("filename : " + filename);
         System.out.println("path : " + path);
         File FILE = new File(path);
-        if (!FILE.exists()) {
-            file.transferTo(FILE);
-        }
+
+        file.transferTo(FILE);
 
 
 
 //        return path;
 //        返回路径里面需要有http://localhost
-        return "![](http://localhost:8080/upload/" + filename + ")" ;
+        if (type.equals("article")){
+            return "![](http://localhost:8080/upload/" + filename + ")" ;
+        } else {
+
+            int id = 0;
+            if (httpServletRequest.getParameter("id") != null && !httpServletRequest.getParameter("id").equals("")) {
+                id = Integer.parseInt(httpServletRequest.getParameter("id"));
+            }
+
+
+            int ans = userService.updateUrl(id , "/upload/" + filename);
+
+            System.out.println("updateUrl - id : " + filename);
+
+            return String.valueOf(ans);
+        }
+
     }
 
 
@@ -356,6 +374,19 @@ public class UserController {
         return ans;
     }
 
+
+
+    @ResponseBody
+    @RequestMapping("getImgUrl.action")
+    public String getImgUrl(HttpServletRequest httpServletRequest) {
+        int id = Integer.parseInt(httpServletRequest.getParameter("id"));
+
+        String ans = userService.getImgUrl(id);
+
+        System.out.println("getImgUrl.action : " + id + " : " + ans);
+
+        return ans;
+    }
 
 
 

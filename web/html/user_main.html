@@ -115,6 +115,22 @@
         }
 
         
+        function getImgUrl(id) {
+			
+			$.ajax({
+				url : "/user/getImgUrl.action",
+				type : "get",
+				data :{
+				    id : id
+				},
+				success : function (data) {
+				    console.log("user img url : " + data);
+					$("#img").attr("src" , data);
+                }
+			});
+        }
+        
+        
 
 //        初始化 user_id 用户的关注/粉丝/文章 以及是否关注
         function init() {
@@ -131,6 +147,7 @@
 			}
 
 
+            getImgUrl(user_id);
 
             $.ajax({
                 url : "/user/getUsernameById.action",
@@ -802,6 +819,24 @@
                 alert("user_id " + user_id);
             }
 
+            if (user_id != uid) {
+                $(".file-container").hide();
+            }
+
+            if (uid != undefined) {
+                $.ajax({
+                    url : "/user/getImgUrl.action",
+                    type : "get",
+                    data :{
+                        id : uid
+                    },
+                    success : function (data) {
+                        console.log("nav img url : " + data);
+                        $("#navImg").attr("src" , data);
+                    }
+                });
+			}
+
             init();
 
             getAllInfo();
@@ -972,6 +1007,56 @@
                     location.href = "/html/search-article.html?text=" + text;
                 }
             });
+
+
+
+            $("#file").change(function () {
+                var file = $('#file')[0].files[0];
+
+                // 判断文件是否为空
+                if($("#file").val() == ""){
+                    alert("请上传文件");
+                    return ;
+                }
+
+                var formdata = new FormData();
+
+                formdata.append("file" , file);
+
+//                利用type来判断是用户头像还是文章图片
+                formdata.append("type" , "user");
+				formdata.append("id" , uid);
+
+
+//				java端对filename再进行判重和修改
+                var suffix =$("#file").val().substring($("#file").val().indexOf(".")+1).toUpperCase();
+                if(suffix != "JPG" && suffix != "BMP" && suffix != "JPEG" && suffix != "PNG" && suffix != "GIF"){
+                    alert("请上传图片格式的文件");
+                    return ;
+                }
+                console.log(formdata);
+
+
+
+                $.ajax({
+                    url :   '/user/upload.action',
+                    data : formdata,
+                    type : "POST" ,
+                    dataType : "text",
+					async : false,
+                    processData : false,
+                    contentType : false,
+                    success : function (data) {
+                        if (data == 1) {
+                            alert("上传图片成功");
+                        }
+
+                        getImgUrl(user_id);
+
+                    }
+
+                });
+            });
         });
 
 	</script>
@@ -1025,7 +1110,7 @@
 
 			<li class="dropdown logIn">
 				<a class="dropdown-toggle"  data-toggle="dropdown" style="padding: 5px 15px" >
-					<img src="../img/profile.jpg" class="img-circle" width="40px" height="40px">
+					<img id="navImg" src="../img/profile.jpg" class="img-circle" width="40px" height="40px">
 					<span class="caret"></span>
 				</a>
 
@@ -1065,7 +1150,7 @@
 					<div class="col-md-8" >
 						<div class="main-top">
 							<a class="avatar" href="#">
-								<img src="../img/profile.jpg" />
+								<img id="img" src="../img/profile.jpg" />
 							</a>
 
 							<button id="user-follow-btn" class="off user-follow-button">
@@ -1082,7 +1167,11 @@
 							<!--</button>-->
 
 							<div class="title">
-								<a class="name" href="#">OrzcO</a>
+								<a class="name" href="#"></a>
+                                <div class="file-container" style="display:inline-block;position:relative;overflow: hidden;vertical-align:middle">
+                                    <button class="btn btn-success" type="button">上传图片</button>
+                                    <input type="file" id="file" style="position:absolute;top:0;left:0;font-size:34px; opacity:0">
+                                </div>
 							</div>
 							<div class="info">
 								<ul>

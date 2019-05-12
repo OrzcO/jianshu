@@ -59,4 +59,8 @@ public interface UserMapper {
 //    更新用户喜欢数量
     int updatelikeCount(int id);
 
+
+    int updateUrl(int id ,String url);
+    String getImgUrl(int id);
+
 }

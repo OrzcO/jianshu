@@ -13,10 +13,11 @@
     <result column="article_count" jdbcType="INTEGER" property="articleCount" />
     <result column="createTime" jdbcType="TIMESTAMP" property="createtime" />
     <result column="info" jdbcType="VARCHAR" property="info" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List">
     id, username, phone, passwd, fan_count, follow_count, write_count, like_count, article_count,
-    createTime, info
+    createTime, info, url
   </sql>
 
 
@@ -102,7 +103,7 @@
     values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR},
     #{passwd,jdbcType=VARCHAR}, #{fanCount,jdbcType=INTEGER}, #{followCount,jdbcType=INTEGER},
     #{writeCount,jdbcType=INTEGER}, #{likeCount,jdbcType=INTEGER}, #{articleCount,jdbcType=INTEGER},
-    #{createtime,jdbcType=TIMESTAMP}, #{info,jdbcType=VARCHAR})
+    #{createtime,jdbcType=TIMESTAMP}, #{info,jdbcType=VARCHAR}), #{url,jdbcType=VARCHAR}
   </insert>
   <insert id="insertSelective" parameterType="com.platform.entity.User">
     insert into user
@@ -140,6 +141,9 @@
       <if test="info != null">
         info,
       </if>
+      <if test="url != null" >
+        url,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -174,6 +178,9 @@
       </if>
       <if test="info != null">
         #{info,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        #{url,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -210,6 +217,9 @@
       <if test="info != null">
         info = #{info,jdbcType=VARCHAR},
       </if>
+      <if test="url != null" >
+        url = #{url,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -224,7 +234,8 @@
     like_count = #{likeCount,jdbcType=INTEGER},
     article_count = #{articleCount,jdbcType=INTEGER},
     createTime = #{createtime,jdbcType=TIMESTAMP},
-    info = #{info,jdbcType=VARCHAR}
+    info = #{info,jdbcType=VARCHAR},
+    url = #{url,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 
@@ -375,5 +386,18 @@
     where user.id = #{0}
   </update>
 
+
+
+  <update id="updateUrl">
+    update user
+    set url = #{1}
+    where id = #{0}
+  </update>
+
+
+  <select id="getImgUrl" parameterType="java.lang.Integer" resultType="java.lang.String">
+    select url from USER
+    where id = #{0}
+  </select>
 
 </mapper>

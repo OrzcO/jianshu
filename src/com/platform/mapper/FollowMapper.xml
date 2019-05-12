@@ -25,10 +25,11 @@
     <result column="article_count" jdbcType="INTEGER" property="articleCount" />
     <result column="createTime" jdbcType="TIMESTAMP" property="createtime" />
     <result column="info" jdbcType="VARCHAR" property="info" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="User_List">
     id, username, phone, passwd, fan_count, follow_count, write_count, like_count, article_count,
-    createTime, info
+    createTime, info, url
   </sql>
 
 

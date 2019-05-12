@@ -257,6 +257,20 @@
 //                    alert("text 为空");
                 }
 
+                if (uid != undefined) {
+                    $.ajax({
+                        url : "/user/getImgUrl.action",
+                        type : "get",
+                        data :{
+                            id : uid
+                        },
+                        success : function (data) {
+                            console.log("nav img url : " + data);
+                            $("#navImg").attr("src" , data);
+                        }
+                    });
+                }
+
 
                 searchUser();
 
@@ -428,7 +442,7 @@
 
 			<li class="dropdown logIn">
 				<a class="dropdown-toggle"  data-toggle="dropdown" style="padding: 5px 15px" >
-					<img src="../img/profile.jpg" class="img-circle" width="40px" height="40px">
+					<img id="navImg" src="../img/profile.jpg" class="img-circle" width="40px" height="40px">
 					<span class="caret"></span>
 				</a>
 
