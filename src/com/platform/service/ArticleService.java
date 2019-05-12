@@ -129,4 +129,9 @@ public class ArticleService {
     public List<Article> searchArticle(String text) {
         return articleMapper.searchArticle(text);
     }
+
+
+    public List<Article> getArticleList(int cnt) {
+        return articleMapper.getArticleList(cnt);
+    }
 }

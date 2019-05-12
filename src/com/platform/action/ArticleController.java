@@ -345,4 +345,19 @@ public class ArticleController {
         return ans;
     }
 
+    @ResponseBody
+    @RequestMapping("getArticleList.action")
+    public List<Article> getArticleList(HttpServletRequest httpServletRequest) {
+
+        int cnt = Integer.parseInt(httpServletRequest.getParameter("cnt")) * 5;
+
+        List<Article> list = articleService.getArticleList(cnt);
+
+        System.out.println("getArticleList.action : " + cnt + " : " + list.size());
+
+        return list;
+
+
+    }
+
 }

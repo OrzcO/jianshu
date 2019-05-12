@@ -400,4 +400,13 @@
     where id = #{0}
   </select>
 
+
+  <select id="recommendUserList" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from USER
+    order by createTime desc
+    limit #{0} , 5
+  </select>
+
 </mapper>

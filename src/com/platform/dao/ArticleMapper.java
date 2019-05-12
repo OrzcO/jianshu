@@ -34,4 +34,7 @@ public interface ArticleMapper {
 
     int updatelikeCount(int id);
 
+
+    List<Article> getArticleList(int cnt);
+
 }

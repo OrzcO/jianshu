@@ -63,4 +63,7 @@ public interface UserMapper {
     int updateUrl(int id ,String url);
     String getImgUrl(int id);
 
+
+    List<User> recommendUserList(int cnt);
+
 }

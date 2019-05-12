@@ -389,6 +389,22 @@ public class UserController {
     }
 
 
+    @ResponseBody
+    @RequestMapping("recommendUserList.action")
+    public List<User> recommendUserList(HttpServletRequest httpServletRequest) {
+
+        int cnt = Integer.parseInt(httpServletRequest.getParameter("cnt")) * 5;
+
+        List<User> list = userService.recommendUserList(cnt);
+
+        System.out.println("recommendUserList.action : " + cnt + " : " + list.size());
+
+        return list;
+
+    }
+
+
+
 
 
     @Test

@@ -236,4 +236,13 @@
     where article.id = #{0}
   </update>
 
+
+  <select id="getArticleList" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from article
+    order by time desc
+    limit #{0} , 5
+  </select>
+
 </mapper>

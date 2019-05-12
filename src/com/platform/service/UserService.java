@@ -138,4 +138,8 @@ public class UserService {
     public String getImgUrl(int id) {
         return userMapper.getImgUrl(id);
     }
+
+    public List<User> recommendUserList(int cnt) {
+        return userMapper.recommendUserList(cnt);
+    }
 }
