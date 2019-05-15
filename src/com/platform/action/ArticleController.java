@@ -360,4 +360,50 @@ public class ArticleController {
 
     }
 
+
+    @ResponseBody
+    @RequestMapping("getArticleTableInfo.action")
+    public List<Article> getArticleTableInfo(){
+        List<Article> list = articleService.getArticleTableInfo();
+
+        System.out.println("getArticleTableInfo : " + list.size());
+
+        return list;
+    }
+
+
+    @ResponseBody
+    @RequestMapping("getCommentTableInfo.action")
+    public List<Comment> getCommentTableInfo(){
+        List<Comment> list = articleService.getCommentTableInfo();
+
+        System.out.println("getCommentTableInfo : " + list.size());
+
+        return list;
+    }
+
+
+    @ResponseBody
+    @RequestMapping("deleteArticleById.action")
+    public int deleteSearchById(HttpServletRequest httpServletRequest) {
+        int id = Integer.parseInt(httpServletRequest.getParameter("id"));
+
+        int ans = articleService.deleteArticleById(id);
+
+        System.out.println("deleteArticleById - " + id + " : " + ans);
+
+        return ans;
+    }
+
+    @ResponseBody
+    @RequestMapping("deleteCommentById.action")
+    public int deleteCommentById(HttpServletRequest httpServletRequest) {
+        int id = Integer.parseInt(httpServletRequest.getParameter("id"));
+
+        int ans = articleService.deleteCommentById(id);
+
+        System.out.println("deleteCommentById - " + id + " : " + ans);
+
+        return ans;
+    }
 }

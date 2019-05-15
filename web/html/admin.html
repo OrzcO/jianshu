@@ -1,12 +1,1607 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
 
-<h1>ADMIN PAGE</h1>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Purple Admin</title>
+  <link rel="stylesheet" href="../vendors/iconfonts/mdi/css/materialdesignicons.min.css">
+  <!--<link rel="stylesheet" href="../vendors/css/vendor.bundle.base.css">-->
+  <link rel="stylesheet" href="../css/style.css">
+
+  
+  <script src="../vendors/js/vendor.bundle.base.js"></script>
+  <script src="../vendors/js/vendor.bundle.addons.js"></script>
+  <!--<script src="../js/off-canvas.js"></script>-->
+  <!--<script src="../js/misc.js"></script>-->
+  <script type="text/javascript" src="../js/jquery.min.js" ></script>
+  
+  
+  
+  <script type="text/javascript">
+
+
+      var login = false;
+
+      var uid;
+      var username;
+      var url;
+      
+      var type = "all";
+      
+      function getSession() {
+
+          $.ajax({
+              url : "/user/getSession.action",
+              type : "get",
+              dataType : "json",
+              async : false,
+              success : function (data) {
+                  if (data != null) {
+
+                      console.log("getSession " + data);
+                      
+                      login = true;
+                      uid = data.id;
+                      username = data.username;
+                      url = data.url;
+                      
+                      if (username != "admin" || uid != 0) {
+                          window.location = "/index.action";
+                      }
+
+                      $("#profile1").attr("src" , url);
+                      $("#profile2").attr("src" , url);
+
+                  } else {
+                      login = false;
+                      window.location = "/index.action";
+                  }
+              },
+              error : function (data) {
+                  login = false;
+                  window.location = "/index.action";
+              }
+          });
+      }
+
+
+      
+      function getUserTableInfoTiny() {
+          $.ajax({
+              url : "/user/getUserTableInfo.action",
+              type : "get",
+              dataType : "json",
+              async : false,
+              success : function (data) {
+
+
+                  $("div.row").append($('<div class="col-lg-6 grid-margin stretch-card">\n' +
+                      '              <div class="card">\n' +
+                      '                <div class="card-body">\n' +
+                      '                  <h4 class="card-title">User Table</h4>\n' +
+                      '                  <p class="card-description">\n' +
+                      '                    Brief Info\n' +
+                      '                  </p>\n' +
+                      '                  <table class="table table-hover">\n' +
+                      '                    <thead>\n' +
+                      '                    <tr>\n' +
+                      '                      <th>Id</th>\n' +
+                      '                      <th>User</th>\n' +
+                      '                      <th>info</th>\n' +
+                      '                      <th>createTime</th>\n' +
+                      '                    </tr>\n' +
+                      '                    </thead>\n' +
+                      '                    <tbody>\n' +
+                      '                    </tbody>\n' +
+                      '                  </table>\n' +
+                      '                </div>\n' +
+                      '              </div>\n' +
+                      '            </div>'));
+
+
+                  for (var i in data) {
+                      $position = $("div.row tr:last");
+
+                      if (data[i].info == null) {
+                          data[i].info = " ";
+                      }
+
+                      if (i >= 5) {
+                          break;
+                      }
+                      $('<tr>\n' +
+                          '                <td>' + data[i].id +'</td>\n' +
+                          '                <td>' + data[i].username + '</td>\n' +
+                          '                <td>' + data[i].info + '</td>\n' +
+                          '                <td><label class="badge badge-success">' + data[i].createtime +'</label></td>\n' +
+                          '              </tr>').insertAfter($position);
+                  }
+                  console.log(data);
+
+
+             } 
+          });
+      }
+
+      function getSearchTableInfoTiny() {
+          $.ajax({
+              url : "/search/getSearchTableInfo.action",
+              type : "get",
+              dataType : "json",
+              async : false,
+              success : function (data) {
+//                   $("div.row div").remove();
+
+                  $("div.row").append($('<div class="col-lg-6 grid-margin stretch-card">\n' +
+                      '              <div class="card">\n' +
+                      '                <div class="card-body">\n' +
+                      '                  <h4 class="card-title">Search Table</h4>\n' +
+                      '                  <p class="card-description">\n' +
+                      '                    Brief Info\n' +
+                      '                  </p>\n' +
+                      '                  <table class="table table-hover">\n' +
+                      '                    <thead>\n' +
+                      '                    <tr>\n' +
+                      '                      <th>UserId</th>\n' +
+                      '                      <th>Search Info\t</th>\n' +
+                      '                      <th>Time</th>\n' +
+                      '                    </tr>\n' +
+                      '                    </thead>\n' +
+                      '                    <tbody>\n' +
+                      '                    </tbody>\n' +
+                      '                  </table>\n' +
+                      '                </div>\n' +
+                      '              </div>\n' +
+                      '            </div>'));
+
+
+                  for (var i in data) {
+                      $position = $("div.row tr:last");
+                      if (data[i].uid == null || data[i].uid == undefined) {
+                          data[i].uid == " ";
+                      }
+                      if (i >= 5) {
+                          break;
+                      }
+                      $('<tr>\n' +
+                          '                <td>' + data[i].uid +'</td>\n' +
+                          '                <td>' + data[i].info + '</td>\n' +
+                          '                <td><label class="badge badge-warning">' + data[i].time +'</label></td>\n' +
+                          '              </tr>').insertAfter($position);
+                  }
+
+                  console.log(data);
+
+
+              }
+          });
+      }
+
+      function getArticleTableInfoTiny() {
+          $.ajax({
+              url : "/article/getArticleTableInfo.action",
+              type : "get",
+              dataType : "json",
+              async : false,
+              success : function (data) {
+//                   $("div.row div").remove();
+
+                  $("div.row").append($('<div class="col-lg-6 grid-margin stretch-card">\n' +
+                      '              <div class="card">\n' +
+                      '                <div class="card-body">\n' +
+                      '                  <h4 class="card-title">Article Table</h4>\n' +
+                      '                  <p class="card-description">\n' +
+                      '                    Brief Info\n' +
+                      '                  </p>\n' +
+                      '                  <table class="table table-hover">\n' +
+                      '                    <thead>\n' +
+                      '                    <tr>\n' +
+                      '                      <th>Id</th>\n' +
+                      '                      <th>Title</th>\n' +
+                      '                      <th>Author</th>\n' +
+                      '                      <th>Time</th>\n' +
+                      '                    </tr>\n' +
+                      '                    </thead>\n' +
+                      '                    <tbody>\n' +
+                      '                    </tbody>\n' +
+                      '                  </table>\n' +
+                      '                </div>\n' +
+                      '              </div>\n' +
+                      '            </div>'));
+
+
+                  for (var i in data) {
+                      $position = $("div.row tr:last");
+                      if (i >= 5) {
+                          break;
+                      }
+                      $('<tr>\n' +
+                          '                <td>' + data[i].id +'</td>\n' +
+                          '                <td>' + data[i].title + '</td>\n' +
+                          '                <td>' + data[i].author + '</td>\n' +
+                          '                <td><label class="badge badge-danger">' + data[i].time +'</label></td>\n' +
+                          '              </tr>').insertAfter($position);
+                  }
+
+                  console.log(data);
+
+
+              }
+          });
+      }
+
+      function getCommentTableInfoTiny() {
+          $.ajax({
+              url : "/article/getCommentTableInfo.action",
+              type : "get",
+              dataType : "json",
+              async : false,
+              success : function (data) {
+//                   $("div.row div").remove();
+
+                  $("div.row").append($('<div class="col-lg-6 grid-margin stretch-card">\n' +
+                      '              <div class="card">\n' +
+                      '                <div class="card-body">\n' +
+                      '                  <h4 class="card-title">Comment Table</h4>\n' +
+                      '                  <p class="card-description">\n' +
+                      '                    Brief Info\n' +
+                      '                  </p>\n' +
+                      '                  <table class="table table-hover">\n' +
+                      '                    <thead>\n' +
+                      '                    <tr>\n' +
+                      '                      <th>From</th>\n' +
+                      '                      <th>To</th>\n' +
+                      '                      <th>info</th>\n' +
+                      '                      <th>Time</th>\n' +
+                      '                    </tr>\n' +
+                      '                    </thead>\n' +
+                      '                    <tbody>\n' +
+                      '                    </tbody>\n' +
+                      '                  </table>\n' +
+                      '                </div>\n' +
+                      '              </div>\n' +
+                      '            </div>'));
+
+
+                  for (var i in data) {
+                      $position = $("div.row tr:last");
+                      if (i >= 5) {
+                          break;
+                      }
+                      $('<tr>\n' +
+                          '                <td>' + data[i].commentFrom +'</td>\n' +
+                          '                <td>' + data[i].commentTo + '</td>\n' +
+                          '                <td>' + data[i].info + '</td>\n' +
+                          '                <td><label class="badge badge-info">' + data[i].time +'</label></td>\n' +
+                          '              </tr>').insertAfter($position);
+                  }
+
+                  console.log(data);
+
+
+              }
+          });
+      }
+
+
+
+      function getUserTableInfo() {
+
+          $("div.row div").remove();
+          $.ajax({
+              url : "/user/getUserTableInfo.action",
+              type : "get",
+              dataType : "json",
+              async : false,
+              success : function (data) {
+
+
+                  $("div.row").append($('<div class="col-lg-12 grid-margin stretch-card">\n' +
+                      '              <div class="card">\n' +
+                      '                <div class="card-body">\n' +
+                      '                  <h4 class="card-title">User Table</h4>\n' +
+                      '                  <p class="card-description">\n' +
+                      '                    Detailed Info\n' +
+                      '                  </p>\n' +
+                      '                  <table class="table table-striped">\n' +
+                      '                    <thead>\n' +
+                      '                      <tr>\n' +
+                      '                        <th>\n' +
+                      '                          User\n' +
+                      '                        </th>\n' +
+                      '                        <th>\n' +
+                      '                          Username\n' +
+                      '                        </th>\n' +
+                      '                        <th>\n' +
+                      '                          Phone\n' +
+                      '                        </th>\n' +
+                      '                        <th>\n' +
+                      '                          Info\n' +
+                      '                        </th>\n' +
+                      '                        <th>\n' +
+                      '                          CreateTime\n' +
+                      '                        </th>\n' +
+                      '                        <th>\n' +
+                      '                          Option\n' +
+                      '                        </th>\n' +
+                      '                      </tr>\n' +
+                      '                    </thead>\n' +
+                      '                    <tbody>\n' +
+                      '                      \n' +
+                      '                    </tbody>\n' +
+                      '                  </table>\n' +
+                      '                </div>\n' +
+                      '              </div>\n' +
+                      '            </div>'));
+
+
+                  for (var i in data) {
+                      $position = $("div.row tr:last");
+
+                      $('<tr data-id="' + data[i].id + '">\n' +
+                          '              <td class="py-1">\n' +
+                          '                <img src="' + data[i].url +'" alt="image"/>\n' +
+                          '              </td>\n' +
+                          '              <td>\n' + data[i].username +
+                          '              </td>\n' +
+                          '              <td>\n' + data[i].phone +
+                          '              </td>\n' +
+                          '              <td>\n' + data[i].info +
+                          '              </td>\n' +
+                          '              <td>\n' + data[i].createtime +
+                          '              </td>\n' +
+                          '              <td>\n' +
+                          '                <label class="badge badge-gradient-success" style="cursor:pointer">Del</label>\n' +
+                          '              </td>\n' +
+                          '            </tr>').insertAfter($position);
+                      if (data[i].username == "admin") {
+                          $("div.row tr:last").find("label").hide();
+                      }
+                  }
+
+
+              }
+          });
+      }
+
+      function getSearchTableInfo() {
+
+          $("div.row div").remove();
+          $.ajax({
+              url : "/search/getSearchTableInfo.action",
+              type : "get",
+              dataType : "json",
+              async : false,
+              success : function (data) {
+
+
+                  $("div.row").append($('<div class="col-lg-12 grid-margin stretch-card">\n' +
+                      '              <div class="card">\n' +
+                      '                <div class="card-body">\n' +
+                      '                  <h4 class="card-title">Search Table</h4>\n' +
+                      '                  <p class="card-description">\n' +
+                      '                    Detailed Info\n' +
+                      '                  </p>\n' +
+                      '                  <table class="table table-striped">\n' +
+                      '                    <thead>\n' +
+                      '                      <tr>\n' +
+                      '                        <th>\n' +
+                      '                          Id\n' +
+                      '                        </th>\n' +
+                      '                        <th>\n' +
+                      '                          Uid\n' +
+                      '                        </th>\n' +
+                      '                        <th>\n' +
+                      '                          Info\n' +
+                      '                        </th>\n' +
+                      '                        <th>\n' +
+                      '                          Time\n' +
+                      '                        </th>\n' +
+                      '                        <th>\n' +
+                      '                          Option\n' +
+                      '                        </th>\n' +
+                      '                      </tr>\n' +
+                      '                    </thead>\n' +
+                      '                    <tbody>\n' +
+                      '                      \n' +
+                      '                    </tbody>\n' +
+                      '                  </table>\n' +
+                      '                </div>\n' +
+                      '              </div>\n' +
+                      '            </div>'));
+
+
+                  for (var i in data) {
+                      $position = $("div.row tr:last");
+                      if (data[i].uid == null || data[i].uid == undefined) {
+                          data[i].uid == "";
+                      }
+                      $('<tr data-id="' + data[i].id +'">\n' +
+                          '              <td>\n' + data[i].id +
+                          '              </td>\n' +
+                          '              <td>\n' + data[i].uid +
+                          '              </td>\n' +
+                          '              <td>\n' + data[i].info +
+                          '              </td>\n' +
+                          '              <td>\n' + data[i].time +
+                          '              </td>\n' +
+                          '              <td>\n' +
+                          '                <label class="badge badge-gradient-success" style="cursor:pointer">Del</label>\n' +
+                          '              </td>\n' +
+                          '            </tr>').insertAfter($position);
+                  }
+
+
+              }
+          });
+      }
+
+      function getArticleTableInfo() {
+
+          $("div.row div").remove();
+          $.ajax({
+              url : "/article/getArticleTableInfo.action",
+              type : "get",
+              dataType : "json",
+              async : false,
+              success : function (data) {
+
+
+                  $("div.row").append($('<div class="col-lg-12 grid-margin stretch-card">\n' +
+                      '              <div class="card">\n' +
+                      '                <div class="card-body">\n' +
+                      '                  <h4 class="card-title">Article Table</h4>\n' +
+                      '                  <p class="card-description">\n' +
+                      '                    Detailed Info\n' +
+                      '                  </p>\n' +
+                      '                  <table class="table table-striped">\n' +
+                      '                    <thead>\n' +
+                      '                      <tr>\n' +
+                      '                        <th>\n' +
+                      '                          Id\n' +
+                      '                        </th>\n' +
+                      '                        <th>\n' +
+                      '                          Author\n' +
+                      '                        </th>\n' +
+                      '                        <th>\n' +
+                      '                          Title\n' +
+                      '                        </th>\n' +
+                      '                        <th>\n' +
+                      '                          Introduction\n' +
+                      '                        </th>\n' +
+                      '                        <th>\n' +
+                      '                          Time\n' +
+                      '                        </th>\n' +
+                      '                        <th>\n' +
+                      '                          Option\n' +
+                      '                        </th>\n' +
+                      '                      </tr>\n' +
+                      '                    </thead>\n' +
+                      '                    <tbody>\n' +
+                      '                      \n' +
+                      '                    </tbody>\n' +
+                      '                  </table>\n' +
+                      '                </div>\n' +
+                      '              </div>\n' +
+                      '            </div>'));
+
+
+                  for (var i in data) {
+                      $position = $("div.row tr:last");
+                      $('<tr data-id="' + data[i].id +'">\n' +
+                          '              <td>\n' + data[i].id +
+                          '              </td>\n' +
+                          '              <td>\n' + data[i].author +
+                          '              </td>\n' +
+                          '              <td>\n' + data[i].title +
+                          '              </td>\n' +
+                          '              <td>\n' + data[i].introduction +
+                          '              </td>\n' +
+                          '              <td>\n' + data[i].time +
+                          '              </td>\n' +
+                          '              <td>\n' +
+                          '                <label class="badge badge-gradient-success" style="cursor:pointer">Del</label>\n' +
+                          '              </td>\n' +
+                          '            </tr>').insertAfter($position);
+                  }
+
+
+              }
+          });
+      }
+
+      function getCommentTableInfo() {
+
+          $("div.row div").remove();
+          $.ajax({
+              url : "/article/getCommentTableInfo.action",
+              type : "get",
+              dataType : "json",
+              async : false,
+              success : function (data) {
+
+
+                  $("div.row").append($('<div class="col-lg-12 grid-margin stretch-card">\n' +
+                      '              <div class="card">\n' +
+                      '                <div class="card-body">\n' +
+                      '                  <h4 class="card-title">Comment Table</h4>\n' +
+                      '                  <p class="card-description">\n' +
+                      '                    Detailed Info\n' +
+                      '                  </p>\n' +
+                      '                  <table class="table table-striped">\n' +
+                      '                    <thead>\n' +
+                      '                      <tr>\n' +
+                      '                        <th>\n' +
+                      '                          Aid\n' +
+                      '                        </th>\n' +
+                      '                        <th>\n' +
+                      '                          From\n' +
+                      '                        </th>\n' +
+                      '                        <th>\n' +
+                      '                          To\n' +
+                      '                        </th>\n' +
+                      '                        <th>\n' +
+                      '                          Info\n' +
+                      '                        </th>\n' +
+                      '                        <th>\n' +
+                      '                          Depth\n' +
+                      '                        </th>\n' +
+                      '                        <th>\n' +
+                      '                          Time\n' +
+                      '                        </th>\n' +
+                      '                        <th>\n' +
+                      '                          Option\n' +
+                      '                        </th>\n' +
+                      '                      </tr>\n' +
+                      '                    </thead>\n' +
+                      '                    <tbody>\n' +
+                      '                      \n' +
+                      '                    </tbody>\n' +
+                      '                  </table>\n' +
+                      '                </div>\n' +
+                      '              </div>\n' +
+                      '            </div>'));
+
+
+                  for (var i in data) {
+                      $position = $("div.row tr:last");
+                      $('<tr data-id="' + data[i].id +'" data-aid="' + data[i].aid + '">\n' +
+                          '              <td>\n' + data[i].aid +
+                          '              </td>\n' +
+                          '              <td>\n' + data[i].commentFrom +
+                          '              </td>\n' +
+                          '              <td>\n' + data[i].commentTo +
+                          '              </td>\n' +
+                          '              <td>\n' + data[i].info +
+                          '              </td>\n' +
+                          '              <td>\n' + data[i].depth +
+                          '              </td>\n' +
+                          '              <td>\n' + data[i].time +
+                          '              </td>\n' +
+                          '              <td>\n' +
+                          '                <label class="badge badge-gradient-success" style="cursor:pointer">Del</label>\n' +
+                          '              </td>\n' +
+                          '            </tr>').insertAfter($position);
+                  }
+
+
+              }
+          });
+      }
+
+
+      function reload() {
+          if (type == "all") {
+              $("div.row div").remove();
+
+              getUserTableInfoTiny();
+              getSearchTableInfoTiny();
+              getArticleTableInfoTiny();
+              getCommentTableInfoTiny();
+
+          } else if (type == "user") {
+              getUserTableInfo();
+          } else if (type == "search") {
+              getSearchTableInfo();
+          } else if (type == "article") {
+              getArticleTableInfo();
+          } else if (type == "comment") {
+              getCommentTableInfo();
+          }
+      }
+
+      $(function () {
+        
+          getSession();
+          
+//          获取url中的type参数
+          if (window.location.search.indexOf("type") != -1) {
+              type = location.search.substring(location.search.indexOf("=")+1);
+              console.log("type " + type);
+          }
+
+          $("ul.nav").find("li").removeClass("active");
+          if (type == "all") {
+              $("ul.nav").find("li:eq(1)").addClass("active");
+          } else if (type == "user") {
+              $("ul.nav").find("li:eq(2)").addClass("active");
+          } else if (type == "article") {
+              $("ul.nav").find("li:eq(3)").addClass("active");
+          } else if (type == "search") {
+              $("ul.nav").find("li:eq(4)").addClass("active");
+          } else if (type == "comment") {
+              $("ul.nav").find("li:eq(5)").addClass("active");
+          }
+
+          reload();
+
+
+          $("#logout-btn").click(function () {
+
+//			    强制刷新重新获取session数据，防止多个浏览器窗口一个退出，其他未退出的情况
+              getSession();
+
+              if (login == true) {
+                  window.location = "/user/logout.action";
+              }
+          });
+
+          $(document).on("click" , "label.badge" , function () {
+              if (type == "user") {
+                  var id = $(this).parents("tr").data("id");
+                  $.ajax({
+                     url : "/user/deleteUserById.action" ,
+                      data : {
+                         id : id
+                      },
+                      async : false,
+                      dataType : "text",
+                      success : function (data) {
+                          if (data == 1) {
+                              alert("删除用户成功");
+                              reload();
+                          } else {
+                              alert("删除用户失败");
+                          }
+                      }
+                  });
+              } else if (type == "article") {
+                  var id = $(this).parents("tr").data("id");
+                  $.ajax({
+                      url : "/article/deleteArticleById.action" ,
+                      data : {
+                          id : id
+                      },
+                      async : false,
+                      dataType : "text",
+                      success : function (data) {
+                          if (data == 1) {
+                              alert("删除文章成功");
+                              reload();
+                          } else {
+                              alert("删除文章失败");
+                          }
+                      }
+                  });
+
+
+              } else if (type == "search") {
+                  var id = $(this).parents("tr").data("id");
+                  $.ajax({
+                      url : "/search/deleteSearchById.action" ,
+                      data : {
+                          id : id
+                      },
+                      async : false,
+                      dataType : "text",
+                      success : function (data) {
+                          if (data == 1) {
+                              alert("删除搜索记录成功");
+                              reload();
+                          } else {
+                              alert("删除搜索记录失败");
+                          }
+                      }
+                  });
+              } else if (type == "comment") {
+                  var id = $(this).parents("tr").data("id");
+                  $.ajax({
+                      url : "/article/deleteCommentById.action" ,
+                      data : {
+                          id : id
+                      },
+                      async : false,
+                      dataType : "text",
+                      success : function (data) {
+                          if (data == 1) {
+                              alert("删除评论成功");
+                              reload();
+                          } else {
+                              alert("删除评论失败");
+                          }
+                      }
+                  });
+
+                  var aid = $(this).parents("tr").data("aid");
+                  $.ajax({
+                      url : "/article/updateCommentCount.action",
+                      data : {
+                          id : aid
+                      },
+                      dataType : "text",
+                      success : function (data) {
+
+                      }
+                  });
+              }
+              alert($(this).parents("tr").data("id"));
+          });
+          
+    });
+    
+  </script>
+</head>
+
+<body>
+  <div class="container-scroller">
+    <!-- partial:../../partials/_navbar.html -->
+    <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+      <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+        <a class="navbar-brand brand-logo" href="/index.action">
+        	文章创作分享平台
+        </a>
+      </div>
+      
+      <div class="navbar-menu-wrapper d-flex align-items-stretch">
+        
+        <ul class="navbar-nav navbar-nav-right">
+          <li class="nav-item nav-profile dropdown">
+            <a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
+              <div class="nav-profile-img">
+                <img id="profile2" src="" alt="image">
+                <span class="availability-status online"></span>             
+              </div>
+              <div class="nav-profile-text">
+                <p class="mb-1 text-black">admin</p>
+              </div>
+            </a>
+            <div class="dropdown-menu navbar-dropdown" aria-labelledby="profileDropdown">
+              
+              <a id="logout-btn" class="dropdown-item">
+                <i class="mdi mdi-logout mr-2 text-primary"></i>
+                Signout
+              </a>
+            </div>
+          </li>
+          <li class="nav-item d-none d-lg-block full-screen-link">
+            <a class="nav-link">
+              <i class="mdi mdi-fullscreen" id="fullscreen-button"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    
+    
+    
+    <div class="container-fluid page-body-wrapper">
+      <!-- partial:../../partials/_sidebar.html -->
+      <nav class="sidebar sidebar-offcanvas" id="sidebar">
+        <ul class="nav">
+          <li class="nav-item nav-profile">
+            <a  class="nav-link">
+              <div class="nav-profile-image">
+                <img id="profile1" src="" alt="profile">
+                <span class="login-status online"></span> <!--change to offline or busy as needed-->              
+              </div>
+              <div class="nav-profile-text d-flex flex-column">
+                <span class="font-weight-bold mb-2">admin</span>
+                <span class="text-secondary text-small">web admin</span>
+              </div>
+              <i class="mdi mdi-bookmark-check text-success nav-profile-badge"></i>
+            </a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="/html/admin.html">
+              <span class="menu-title">Home</span>
+              <i class="mdi mdi-home menu-icon"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/html/admin.html?type=user">
+              <span class="menu-title">User</span>
+              <i class="mdi mdi-contacts menu-icon"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/html/admin.html?type=article">
+              <span class="menu-title">Article</span>
+              <i class="mdi mdi-format-list-bulleted menu-icon"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/html/admin.html?type=search">
+              <span class="menu-title">Search</span>
+              <i class="mdi mdi-chart-bar menu-icon"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/html/admin.html?type=comment">
+              <span class="menu-title">Comment</span>
+              <i class="mdi mdi-table-large menu-icon"></i>
+            </a>
+          </li>
+          
+          <li class="nav-item sidebar-actions">
+            <span class="nav-link">
+              <div class="border-bottom">
+                <h6 class="font-weight-normal mb-3">Artcile Platform</h6>                
+              </div>
+              
+            </span>
+          </li>
+        </ul>
+      </nav>
+      <!-- partial -->
+      <div class="main-panel">
+        <div class="content-wrapper">
+          <div class="page-header">
+            <h3 class="page-title">
+              Home Tables
+            </h3>
+          </div>
+          
+          <div class="row">
+          	
+          	<div class="col-lg-6 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">User Table</h4>
+                  <p class="card-description">
+                    Brief Info
+                  </p>
+                  <table class="table table-hover">
+                    <thead>
+                    <tr>
+                      <th>User</th>
+                      <th>info</th>
+                      <th>createTime</th>
+                      <th>type</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                      <td>admin</td>
+                      <td>admin</td>
+                      <!--<td class="text-danger"> 28.76% <i class="mdi mdi-arrow-down"></i></td>-->
+                      <td class="text-danger">2019-05-12 20:46:22</td>
+                      <td><label class="badge badge-warning">admin</label></td>
+                    </tr>
+                    <tr>
+                      <td>rzc</td>
+                      <td>=w= qwq ^^</td>
+                      <td class="text-danger">2019-05-12 14:56:28</td>
+                      <td><label class="badge badge-success">user</label></td>
+                    </tr>
+                    <tr>
+                      <td>rzc</td>
+                      <td>=w= qwq ^^</td>
+                      <td class="text-danger">2019-05-12 14:56:28</td>
+                      <td><label class="badge badge-success">user</label></td>
+                    </tr>
+                    <tr>
+                      <td>rzc</td>
+                      <td>=w= qwq ^^</td>
+                      <td class="text-danger">2019-05-12 14:56:28</td>
+                      <td><label class="badge badge-success">user</label></td>
+                    </tr>
+                    <tr>
+                      <td>rzc</td>
+                      <td>=w= qwq ^^</td>
+                      <td class="text-danger">2019-05-12 14:56:28</td>
+                      <td><label class="badge badge-success">user</label></td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Search Table</h4>
+                  <p class="card-description">
+                    Brief Info
+                  </p>
+                  
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th>User</th>
+                        <th>Search Info</th>
+                        <th>Time</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>rzc</td>
+                        <td>Photoshop</td>
+                        <td><label class="badge badge-warning">2019-05-09 12:13:00</label></td>
+                      </tr>
+                      <tr>
+                        <td>rzc</td>
+                        <td>Photoshop</td>
+                        <td><label class="badge badge-warning">2019-05-09 12:13:00</label></td>
+                      </tr>
+                      <tr>
+                        <td>rzc</td>
+                        <td>Photoshop</td>
+                        <td><label class="badge badge-warning">2019-05-09 12:13:00</label></td>
+                      </tr>
+                      <tr>
+                        <td>rzc</td>
+                        <td>Photoshop</td>
+                        <td><label class="badge badge-warning">2019-05-09 12:13:00</label></td>
+                      </tr>
+                      <tr>
+                        <td>rzc</td>
+                        <td>Photoshop</td>
+                        <td><label class="badge badge-warning">2019-05-09 12:13:00</label></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Article Table</h4>
+                  <p class="card-description">
+                    Brief Info 
+                  </p>
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th>Id</th>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>Time</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>1</td>
+                        <td>rzc</td>
+                        <td>湖人总冠军</td>
+                        <td><label class="badge badge-danger">2019-05-12 14:55:32</label></td>
+                      </tr>
+                      <tr>
+                        <td>1</td>
+                        <td>Photoshop</td>
+                        <td>湖人总冠军</td>
+                        <td><label class="badge badge-danger">2019-05-12 14:55:32</label></td>
+                      </tr>
+                      <tr>
+                        <td>1</td>
+                        <td>Photoshop</td>
+                        <td>湖人总冠军</td>
+                        <td><label class="badge badge-danger">2019-05-12 14:55:32</label></td>
+                      </tr>
+                      <tr>
+                        <td>1</td>
+                        <td>Photoshop</td>
+                        <td>湖人总冠军</td>
+                        <td><label class="badge badge-danger">2019-05-12 14:55:32</label></td>
+                      </tr>
+                      <tr>
+                        <td>1</td>
+                        <td>Photoshop</td>
+                        <td>湖人总冠军</td>
+                        <td><label class="badge badge-danger">2019-05-12 14:55:32</label></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Comment Table</h4>
+                  <p class="card-description">
+                    Brief Info
+                  </p>
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th>Article</th>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Info</th>
+                        <th>Time</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>南京大学人工智能学院</td>
+                        <td>abc</td>
+                        <td>rzc</td>
+                        <td>测试depth</td>
+                        <td><label class="badge badge-info">2019-05-03 11:04:15</label></td>
+                      </tr>
+                      <tr>
+                        <td>南京大学人工智能学院</td>
+                        <td>abc</td>
+                        <td>rzc</td>
+                        <td>测试depth</td>
+                        <td><label class="badge badge-info">2019-05-03 11:04:15</label></td>
+                      </tr>
+                      <tr>
+                        <td>南京大学人工智能学院</td>
+                        <td>abc</td>
+                        <td>rzc</td>
+                        <td>测试depth</td>
+                        <td><label class="badge badge-info">2019-05-03 11:04:15</label></td>
+                      </tr>
+                      <tr>
+                        <td>南京大学人工智能学院</td>
+                        <td>abc</td>
+                        <td>rzc</td>
+                        <td>测试depth</td>
+                        <td><label class="badge badge-info">2019-05-03 11:04:15</label></td>
+                      </tr>
+                      <tr>
+                        <td>南京大学人工智能学院</td>
+                        <td>abc</td>
+                        <td>rzc</td>
+                        <td>测试depth</td>
+                        <td><label class="badge badge-info">2019-05-03 11:04:15</label></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            
+            
+            <div class="col-lg-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">User Table</h4>
+                  <p class="card-description">
+                    Detailed Info
+                  </p>
+                  <table class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th>
+                          User
+                        </th>
+                        <th>
+                          Username
+                        </th>
+                        <th>
+                          Phone
+                        </th>
+                        <th>
+                          Info
+                        </th>
+                        <th>
+                          CreateTime
+                        </th>
+                        <th>
+                          Option
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                      <td class="py-1">
+                        <!--<img src="../../images/faces-clipart/pic-1.png" alt="image"/>-->
+                      </td>
+                      <td>
+                        rzc
+                      </td>
+                      <td>
+                        15804037293
+                      </td>
+                      <td>
+                        I'm admin
+                      </td>
+                      <td>
+                        2019-05-12 20:46:22
+                      </td>
+                      <td>
+                        <label class="badge badge-gradient-success">Del</label>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td class="py-1">
+                        <!--<img src="../../images/faces-clipart/pic-1.png" alt="image"/>-->
+                      </td>
+                      <td>
+                        rzc
+                      </td>
+                      <td>
+                        15804037293
+                      </td>
+                      <td>
+                        I'm admin
+                      </td>
+                      <td>
+                        2019-05-12 20:46:22
+                      </td>
+                      <td>
+                        <label class="badge badge-gradient-success">Del</label>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td class="py-1">
+                        <!--<img src="../../images/faces-clipart/pic-1.png" alt="image"/>-->
+                      </td>
+                      <td>
+                        rzc
+                      </td>
+                      <td>
+                        15804037293
+                      </td>
+                      <td>
+                        I'm admin
+                      </td>
+                      <td>
+                        2019-05-12 20:46:22
+                      </td>
+                      <td>
+                        <label class="badge badge-gradient-success">Del</label>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td class="py-1">
+                        <!--<img src="../../images/faces-clipart/pic-1.png" alt="image"/>-->
+                      </td>
+                      <td>
+                        rzc
+                      </td>
+                      <td>
+                        15804037293
+                      </td>
+                      <td>
+                        I'm admin
+                      </td>
+                      <td>
+                        2019-05-12 20:46:22
+                      </td>
+                      <td>
+                        <label class="badge badge-gradient-success">Del</label>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td class="py-1">
+                        <!--<img src="../../images/faces-clipart/pic-1.png" alt="image"/>-->
+                      </td>
+                      <td>
+                        rzc
+                      </td>
+                      <td>
+                        15804037293
+                      </td>
+                      <td>
+                        I'm admin
+                      </td>
+                      <td>
+                        2019-05-12 20:46:22
+                      </td>
+                      <td>
+                        <label class="badge badge-gradient-success">Del</label>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td class="py-1">
+                        <!--<img src="../../images/faces-clipart/pic-1.png" alt="image"/>-->
+                      </td>
+                      <td>
+                        rzc
+                      </td>
+                      <td>
+                        15804037293
+                      </td>
+                      <td>
+                        I'm admin
+                      </td>
+                      <td>
+                        2019-05-12 20:46:22
+                      </td>
+                      <td>
+                        <label class="badge badge-gradient-success">Del</label>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td class="py-1">
+                        <!--<img src="../../images/faces-clipart/pic-1.png" alt="image"/>-->
+                      </td>
+                      <td>
+                        rzc
+                      </td>
+                      <td>
+                        15804037293
+                      </td>
+                      <td>
+                        I'm admin
+                      </td>
+                      <td>
+                        2019-05-12 20:46:22
+                      </td>
+                      <td>
+                        <label class="badge badge-gradient-success">Del</label>
+                      </td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Search Table</h4>
+                  <p class="card-description">
+                    Detailed Info
+                  </p>
+                  <table class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th>
+                          Id
+                        </th>
+                        <th>
+                          Username
+                        </th>
+                        <th>
+                          Info
+                        </th>
+                        <th>
+                          Time
+                        </th>
+                        <th>
+                          Option
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          1
+                        </td>
+                        <td>
+                          rzc
+                        </td>
+                        <td>
+                          form的锅
+                        </td>
+                        <td>
+                          2019-05-12 20:46:22
+                        </td>
+                        <td>
+                        	<label class="badge badge-gradient-success">Del</label>
+                        </td>
+                      </tr>
+                      
+                      <tr>
+                        <td>
+                          1
+                        </td>
+                        <td>
+                          rzc
+                        </td>
+                        <td>
+                          form的锅
+                        </td>
+                        <td>
+                          2019-05-12 20:46:22
+                        </td>
+                        <td>
+                        	<label class="badge badge-gradient-success">Del</label>
+                        </td>
+                      </tr>
+                      
+                      <tr>
+                        <td>
+                          1
+                        </td>
+                        <td>
+                          rzc
+                        </td>
+                        <td>
+                          form的锅
+                        </td>
+                        <td>
+                          2019-05-12 20:46:22
+                        </td>
+                        <td>
+                        	<label class="badge badge-gradient-success">Del</label>
+                        </td>
+                      </tr>
+                      
+                      <tr>
+                        <td>
+                          1
+                        </td>
+                        <td>
+                          rzc
+                        </td>
+                        <td>
+                          form的锅
+                        </td>
+                        <td>
+                          2019-05-12 20:46:22
+                        </td>
+                        <td>
+                        	<label class="badge badge-gradient-success">Del</label>
+                        </td>
+                      </tr>
+                      
+                      <tr>
+                        <td>
+                          1
+                        </td>
+                        <td>
+                          rzc
+                        </td>
+                        <td>
+                          form的锅
+                        </td>
+                        <td>
+                          2019-05-12 20:46:22
+                        </td>
+                        <td>
+                        	<label class="badge badge-gradient-success">Del</label>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+           
+            <div class="col-lg-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Article Table</h4>
+                  <p class="card-description">
+                    Detailed Info
+                  </p>
+                  <table class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th>
+                          Id
+                        </th>
+                        <th>
+                          Author
+                        </th>
+                        <th>
+                          Title
+                        </th>
+                        <th>
+                          Introduction
+                        </th>
+                        <th>
+                          Time
+                        </th>
+                        <th>
+                          Option
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          1
+                        </td>
+                        <td>
+                          rzc
+                        </td>
+                        <td>
+                         	南京大学人工智能学院
+                        </td>
+                        <td>
+                                                     南京大学人工智能学院从书目目录来看，《培养体系》的主体内容实
+                        </td>
+                        <td>
+                           2019-05-12 14:55:57
+                        </td>
+                        <td>
+                        	<label class="badge badge-gradient-success">Del</label>
+                        </td>
+                      </tr>
+                      
+                      <tr>
+                        <td>
+                          1
+                        </td>
+                        <td>
+                          rzc
+                        </td>
+                        <td>
+                         	南京大学人工智能学院
+                        </td>
+                        <td>
+                                                     南京大学人工智能学院从书目目录来看，《培养体系》的主体内容实
+                        </td>
+                        <td>
+                           2019-05-12 14:55:57
+                        </td>
+                        <td>
+                        	<label class="badge badge-gradient-success">Del</label>
+                        </td>
+                      </tr>
+                      
+                      <tr>
+                        <td>
+                          1
+                        </td>
+                        <td>
+                          rzc
+                        </td>
+                        <td>
+                         	南京大学人工智能学院
+                        </td>
+                        <td>
+                                                     南京大学人工智能学院从书目目录来看，《培养体系》的主体内容实
+                        </td>
+                        <td>
+                           2019-05-12 14:55:57
+                        </td>
+                        <td>
+                        	<label class="badge badge-gradient-success">Del</label>
+                        </td>
+                      </tr>
+                      
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+           
+            <div class="col-lg-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Comment Table</h4>
+                  <p class="card-description">
+                    Detailed Info
+                  </p>
+                  <table class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th>
+                          Article
+                        </th>
+                        <th>
+                          From
+                        </th>
+                        <th>
+                          To
+                        </th>
+                        <th>
+                          Info
+                        </th>
+                        <th>
+                          Depth
+                        </th>
+                        <th>
+                          Time
+                        </th>
+                        <th>
+                          Option
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                                                    南京大学人工智能学院
+                        </td>
+                        <td>
+                          rzc
+                        </td>
+                        <td>
+                         	abc
+                        </td>
+                        <td>
+                                                     哦哈哈哈哈，呃呃呃
+                        </td>
+                        <td>
+                           1
+                        </td>
+                        <td>
+                           2019-05-12 14:55:57
+                        </td>
+                        <td>
+                        	<label class="badge badge-gradient-success">Del</label>
+                        </td>
+                      </tr>
+                      
+                      <tr>
+                        <td>
+                                                    南京大学人工智能学院
+                        </td>
+                        <td>
+                          rzc
+                        </td>
+                        <td>
+                         	abc
+                        </td>
+                        <td>
+                                                     哦哈哈哈哈，呃呃呃
+                        </td>
+                        <td>
+                           1
+                        </td>
+                        <td>
+                           2019-05-12 14:55:57
+                        </td>
+                        <td>
+                        	<label class="badge badge-gradient-success">Del</label>
+                        </td>
+                      </tr>
+                      
+                      <tr>
+                        <td>
+                            	南京大学人工智能学院
+                        </td>
+                        <td>
+                          rzc
+                        </td>
+                        <td>
+                         	abc
+                        </td>
+                        <td>
+                             	哦哈哈哈哈，呃呃呃
+                        </td>
+                        <td>
+                           1
+                        </td>
+                        <td>
+                           2019-05-12 14:55:57
+                        </td>
+                        <td>
+                        	<label class="badge badge-gradient-success">Del</label>
+                        </td>
+                      </tr>
+                      
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+           
+          </div>
+        </div>
+        <!-- content-wrapper ends -->
+        <!-- partial:../../partials/_footer.html -->
+        <footer class="footer">
+          <div class="d-sm-flex justify-content-center justify-content-sm-between">
+            <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">2019 文章创作交流网站</span>
+          </div>
+        </footer>
+        <!-- partial -->
+      </div>
+      <!-- main-panel ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+  </div>
+
+  
 
 </body>
+
 </html>

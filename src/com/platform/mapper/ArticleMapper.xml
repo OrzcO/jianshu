@@ -245,4 +245,12 @@
     limit #{0} , 5
   </select>
 
+
+
+  <select id="getArticleTableInfo" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from article
+  </select>
+
 </mapper>

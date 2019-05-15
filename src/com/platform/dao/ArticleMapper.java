@@ -37,4 +37,6 @@ public interface ArticleMapper {
 
     List<Article> getArticleList(int cnt);
 
+    List<Article> getArticleTableInfo();
+
 }

@@ -137,6 +137,7 @@ public class UserController {
         map.put("id" , String.valueOf(user.getId())) ;
         map.put("username" , user.getUsername());
         map.put("info" , user.getInfo());
+        map.put("url" , user.getUrl());
 
         return map;
     }
@@ -403,6 +404,30 @@ public class UserController {
 
     }
 
+
+    @ResponseBody
+    @RequestMapping("getUserTableInfo.action")
+    public List<User> getUserTableInfo(HttpServletRequest httpServletRequest){
+        List <User> list = userService.getUserTableInfo();
+
+        System.out.println("getUserTableInfo : " + list.size());
+
+        return list;
+    }
+
+
+
+    @ResponseBody
+    @RequestMapping("deleteUserById.action")
+    public int deleteUserById(HttpServletRequest httpServletRequest) {
+        int id = Integer.parseInt(httpServletRequest.getParameter("id"));
+
+        int ans = userService.deleteUserById(id);
+
+        System.out.println("deleteUserById : " + id + " : " + ans);
+
+        return ans;
+    }
 
 
 

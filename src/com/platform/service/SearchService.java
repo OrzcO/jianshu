@@ -33,4 +33,12 @@ public class SearchService {
     public int clearAll(int uid) {
         return searchMapper.clearAll(uid);
     }
+
+    public List<Search> getSearchTableInfo(){
+        return searchMapper.getSearchTableInfo();
+    }
+
+    public int deleteSearchById(int id) {
+        return searchMapper.deleteByPrimaryKey(id);
+    }
 }

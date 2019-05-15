@@ -66,4 +66,6 @@ public interface UserMapper {
 
     List<User> recommendUserList(int cnt);
 
+    List<User> getUserTableInfo();
+
 }

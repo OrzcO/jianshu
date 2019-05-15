@@ -409,4 +409,11 @@
     limit #{0} , 5
   </select>
 
+
+  <select id="getUserTableInfo" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from USER
+  </select>
+
 </mapper>

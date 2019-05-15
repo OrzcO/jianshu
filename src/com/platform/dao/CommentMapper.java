@@ -26,4 +26,7 @@ public interface CommentMapper {
     int getCommentCount(int aid);
 
     List<Comment> search(int aid , int offet , int order);
+
+
+    List<Comment> getCommentTableInfo();
 }

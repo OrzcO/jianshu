@@ -127,4 +127,12 @@
     where uid = #{0}
   </update>
 
+
+
+  <select id="getSearchTableInfo" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from search
+  </select>
+
 </mapper>

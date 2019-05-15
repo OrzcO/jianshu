@@ -134,4 +134,21 @@ public class ArticleService {
     public List<Article> getArticleList(int cnt) {
         return articleMapper.getArticleList(cnt);
     }
+
+
+    public List<Article> getArticleTableInfo(){
+        return articleMapper.getArticleTableInfo();
+    }
+    public List<Comment> getCommentTableInfo(){
+        return commentMapper.getCommentTableInfo();
+    }
+
+
+    public int deleteArticleById(int id) {
+        return articleMapper.deleteByPrimaryKey(id);
+    }
+
+    public int deleteCommentById(int id) {
+        return commentMapper.deleteByPrimaryKey(id);
+    }
 }

@@ -28,4 +28,6 @@ public interface SearchMapper {
 
     int clearAll(int uid);
 
+    List<Search> getSearchTableInfo();
+
 }

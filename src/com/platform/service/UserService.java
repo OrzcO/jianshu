@@ -142,4 +142,13 @@ public class UserService {
     public List<User> recommendUserList(int cnt) {
         return userMapper.recommendUserList(cnt);
     }
+
+    public List<User> getUserTableInfo() {
+        return userMapper.getUserTableInfo();
+    }
+
+
+    public int deleteUserById(int id) {
+        return userMapper.deleteByPrimaryKey(id);
+    }
 }

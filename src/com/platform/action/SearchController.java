@@ -99,4 +99,28 @@ public class SearchController {
         return ans;
     }
 
+
+    @ResponseBody
+    @RequestMapping("getSearchTableInfo.action")
+    public List<Search> getSearchTableInfo(HttpServletRequest httpServletRequest) {
+        List<Search> list = searchService.getSearchTableInfo();
+
+        System.out.println("getSearchTableInfo : " + list.size());
+
+        return list;
+    }
+
+
+
+    @ResponseBody
+    @RequestMapping("deleteSearchById.action")
+    public int deleteSearchById(HttpServletRequest httpServletRequest) {
+        int id = Integer.parseInt(httpServletRequest.getParameter("id"));
+
+        int ans = searchService.deleteSearchById(id);
+
+        System.out.println("deleteSearchById - " + id + " : " + ans);
+
+        return ans;
+    }
 }
