@@ -37,6 +37,8 @@
 //				        隐藏nav的按钮
                             $(".logIn").show();
                             $(".logOut").hide();
+                            $("#follow-fan-btn").attr("href","/html/followFan.html?user_id=" + uid);
+                            $("#my-home").attr("href","/html/user_main.html?user_id=" + uid);
                         } else {
 
                             login = false;
@@ -556,6 +558,15 @@
                     $(this).addClass("active");
                     $(this).siblings("a").removeClass("active");
                 });
+
+                $("#write-btn").click(function () {
+                    if (uid == undefined || uid < 0) {
+                        alert("请进行登录再写文章");
+                    } else {
+                        window.location = "/html/write_article.html";
+                    }
+                });
+
             });
 		</script>
 	
@@ -573,7 +584,7 @@
 		<ul class="nav navbar-nav">
 			<!--<li class="active"><a href="#">hah1</a></li>-->
 			<li><a href="/index.action"><i class="icon-home"></i>首页</a></li>
-			<li class="logIn"><a href="/user_main.action"><i class="icon-bell-alt"></i>消息</a></li>
+			<li class="logIn"><a id="follow-fan-btn" href="/user_main.action"><i class="icon-bell-alt"></i>消息</a></li>
 			<li class="logIn"><a href="/followFan.action"><i class="icon-file"></i>关注</a></li>
 		</ul>
 
@@ -614,7 +625,7 @@
 				</a>
 
 				<ul class="dropdown-menu" style="position: absolute; left: 0px; top: 50px; font-size: 17px;">
-					<li style="padding: 5px 20px 5px 0px;"><a href="/user_main.action"><i class="icon-user"></i>我的主页</a></li>
+					<li style="padding: 5px 20px 5px 0px;"><a id="my-home" href="/user_main.action"><i class="icon-user"></i>我的主页</a></li>
 					<li style="padding: 5px 20px 5px 0px;"><a href="user_main.html"><i class="icon-heart"></i>喜欢的文章</a></li>
 					<li style="padding: 5px 20px 5px 0px;"><a href="help.html"><i class="icon-wrench"></i>帮助与反馈</a></li>
 					<li style="padding: 5px 20px 5px 0px;"><a id="logout-btn" ><i class="icon-signout"></i>退出</a></li>
@@ -630,7 +641,7 @@
 
 			<!--版本二： 拿button封装起来的写文章，且自带红色背景-->
 			<li style="margin-right: 80px;">
-				<a href="#" class="write-block" style="padding-top: 5px; padding-bottom: 5px;">
+				<a id="write-btn" class="write-block" style="padding-top: 5px; padding-bottom: 5px;">
 					<button class="btn write-btn">
 						<i class="icon-pencil"></i>写文章
 					</button>
